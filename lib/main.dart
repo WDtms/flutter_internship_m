@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/pages/tasks_page.dart';
+import 'package:flutter_internship_v2/pages/tasks.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title: "Internship_v2",
       theme: ThemeData(
-          primaryColor: Colors.indigo[600],
           textTheme: TextTheme(
               bodyText2: TextStyle(
                   fontSize: 16
@@ -24,3 +23,4 @@ class MyApp extends StatelessWidget{
     );
   }
 }
+

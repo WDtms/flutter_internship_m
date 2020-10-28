@@ -1,67 +1,103 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/pages/tasks_page.dart';
-import 'package:flutter_internship_v2/services/tasks_service.dart';
+import 'package:flutter_internship_v2/models/task.dart';
+import 'package:flutter_internship_v2/services/image.dart';
+import 'package:flutter_internship_v2/styles/my_images.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class TasksViews extends StatefulWidget{
+class TaskList extends StatefulWidget{
 
-  bool isHideFiltred;
-  TasksViews({this.isHideFiltred});
+  final Color iconsColor;
+  final List<TaskModel> tasks;
+  final bool isHidden;
+  final List<TaskModel> tasksHidden;
+
+  TaskList({this.isHidden, this.tasks, this.iconsColor, this.tasksHidden});
 
   @override
-  _TasksViewsState createState() => _TasksViewsState(isHideFiltred: isHideFiltred);
+  _TaskListState createState() => _TaskListState();
 }
 
-class _TasksViewsState extends State<TasksViews>{
+class _TaskListState extends State<TaskList>{
 
-  bool isHideFiltred;
-  _TasksViewsState({this.isHideFiltred});
+  final List<SvgPicture> images = ImageService.images;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-      itemCount: TaskService.tasks.length,
-      itemBuilder: (_, index) {
+    if (widget.tasks.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(home_image),
+            Container(
+              height: 3,
+            ),
+            SvgPicture.asset(home_text),
+          ],
+        ),
+      );
+    } else {
+      return ListView.builder(
+        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+        itemCount: widget.tasks.length,
+        itemBuilder: (_, index) {
+          if (widget.isHidden == true){
+            if (widget.tasksHidden.contains(widget.tasks[index])){
+              return displayNothing();
+            } else {
+              return displayTask(index);
+            }
+          } else {
+            return displayTask(index);
+          }
+        }
+      );
+    }
+  }
 
-        return Padding(
-          padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius:BorderRadius.circular(5),
-                color: Colors.white
+
+   displayTask(int index){
+    return Padding(
+      padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius:BorderRadius.circular(5),
+            color: Colors.white
+        ),
+        child: Row(
+          children: [
+            Checkbox(
+              value: widget.tasks[index].IsDone,
+              activeColor: widget.iconsColor,
+              onChanged: (bool value) {
+                setState(() {
+                  widget.tasks[index].IsDone = value;
+                });
+              },
             ),
-            child: Row(
-              children: [
-                Checkbox(
-                  value: TaskService.tasks[index].taskIsDone,
-                  activeColor: Colors.indigo[600],
-                  onChanged: (bool value) {
-                    setState(() {
-                      TaskService.tasks[index].taskIsDone = value;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(TaskService.tasks[index].taskTitle),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  color: Colors.indigo[600],
-                  onPressed: () {
-                    setState(() {
-                      TaskService.tasks.removeAt(index);
-                    });
-                  },
-                )
-              ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(widget.tasks[index].Title),
+              ),
             ),
-          ),
-        );
-      },
+            IconButton(
+              icon: Icon(Icons.delete),
+              color: widget.iconsColor,
+              onPressed: () {
+                setState(() {
+                  widget.tasks.removeAt(index);
+                });
+              },
+            )
+          ],
+        ),
+      ),
     );
+  }
+
+  displayNothing(){
+    return Container();
   }
 }

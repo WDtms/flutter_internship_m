@@ -1,7 +1,7 @@
-class TaskModels{
+class TaskModel{
 
-  String taskTitle;
-  bool taskIsDone;
+  String Title;
+  bool IsDone;
 
-  TaskModels({this.taskTitle, this.taskIsDone = false});
+  TaskModel({this.Title, this.IsDone = false});
 }
