@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/popup_constans.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/services/tasks_service.dart';
+import 'package:flutter_internship_v2/views/form_dialog.dart';
 import 'package:flutter_internship_v2/views/tasks_list.dart';
 
 class TasksPage extends StatefulWidget {
@@ -43,47 +44,7 @@ class _TaskPageState extends State<TasksPage>{
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return Form(
-                    key: _formKey,
-                    child: SimpleDialog(
-                      contentPadding: EdgeInsets.all(12),
-                      children: <Widget>[
-                        Text('Создать задачу'),
-                        TextFormField(
-                          onSaved: (String value) {
-                            setState(() {
-                              TaskService.tasks.add(
-                                  new TaskModels(
-                                      taskTitle: value
-                                  )
-                              );
-                            });
-                          },
-                          validator: (value){
-                            if(value.length > 40){
-                              return 'Превышена допустимая длина задачи';
-                            }
-                            return null;
-                          }
-                        ),
-                        SimpleDialogOption(
-                          child: Text('Отмена'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        SimpleDialogOption(
-                          child: Text('Создать'),
-                          onPressed: () {
-                            if (_formKey.currentState.validate()){
-                              _formKey.currentState.save();
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  );
+                  return FormDialog();
                 }
             );
           },
@@ -95,15 +56,10 @@ class _TaskPageState extends State<TasksPage>{
   }
 
   void choiceAction(String choice) {
-    if (choice == "Удалить выполненные"){
-      for (int i = 0; i<TaskService.tasks.length; i++){
-        if (TaskService.tasks[i].taskIsDone == true) {
-          setState(() {
-            TaskService.tasks.removeAt(i);
-          });
-          i--;
-        }
-      }
+    if (choice == Constants.delete){
+      setState(() {
+        TaskService.tasks.removeWhere((task) => task.taskIsDone);
+      });
     } else {
       for (TaskModels task in TaskService.tasks){
         if (task.taskIsDone == true){

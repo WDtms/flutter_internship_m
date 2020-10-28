@@ -3,13 +3,13 @@ import 'package:flutter_internship_v2/models/task.dart';
 class TaskService{
 
   static final tasks = [
-    new TaskModels(
+    TaskModels(
         taskTitle: "Дорисовать дизайн"
     ),
-    new TaskModels(
+    TaskModels(
         taskTitle: "Дописать тз на стажировку"
     ),
-    new TaskModels(
+    TaskModels(
         taskTitle: "Дописать план"
     ),
   ];

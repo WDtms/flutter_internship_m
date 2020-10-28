@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/pages/tasks_page.dart';
 import 'package:flutter_internship_v2/services/tasks_service.dart';
 
 class TasksViews extends StatefulWidget{
 
-  bool isHideFiltred;
-  TasksViews({this.isHideFiltred});
+  bool isHidden;
+  TasksViews({this.isHidden});
 
   @override
-  _TasksViewsState createState() => _TasksViewsState(isHideFiltred: isHideFiltred);
+  _TasksViewsState createState() => _TasksViewsState(isHideFiltred: isHidden);
 }
 
 class _TasksViewsState extends State<TasksViews>{
