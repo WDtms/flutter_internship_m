@@ -1,4 +1,4 @@
-import 'package:flutter_internship_v2/styles/my_colors_themes.dart';
+import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 
 class ListOfThemes{
 

@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/models/popup_constans.dart';
 import 'package:flutter_internship_v2/models/task.dart';
+import 'package:flutter_internship_v2/services/popup_constans.dart';
 import 'package:flutter_internship_v2/services/tasks.dart';
 import 'package:flutter_internship_v2/services/themes.dart';
-import 'package:flutter_internship_v2/styles/my_colors_themes.dart';
-import 'package:flutter_internship_v2/views/tasks_display/tasks_list.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/bottom_dialog/bottom_dialog.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/floating_create_button/my_floating_button.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/popup_menu/popup_appbar.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/bottom_dialog/bottom_dialog.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/floating_create_button/my_floating_button.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/popup_menu/popup_appbar.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_list.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -28,7 +27,7 @@ class _TaskPageState extends State<TasksPage>{
   void initState() {
     super.initState();
     appBarColor = Color(0xff6200EE);
-    backGroundColor = Color(0xffede7f6);
+    backGroundColor = Color.fromRGBO(181, 201, 253, 1);
     taskHidden = List<TaskModel>();
   }
 
@@ -45,15 +44,21 @@ class _TaskPageState extends State<TasksPage>{
         ],
       ),
       floatingActionButton: FloatingButton(onTaskCreate: createTask),
-      body: TaskList(isHidden: isHidden, tasks: tasks, iconsColor: appBarColor, tasksHidden: taskHidden),
+      body: TaskList(
+          isHidden: isHidden,
+          tasks: tasks,
+          iconsColor: appBarColor,
+          tasksHidden: taskHidden,
+          backGroundColor: backGroundColor),
     );
   }
 
   void createTask(String taskName){
     setState(() {
       tasks.add(
-          new TaskModel(
-              Title: taskName
+          TaskModel(
+              title: taskName,
+              innerTasks: []
           )
       );
     });
@@ -62,7 +67,7 @@ class _TaskPageState extends State<TasksPage>{
   void choiceAction(String choice) {
     if (choice == Constants.delete){
       setState(() {
-        tasks.removeWhere((task) => task.IsDone);
+        tasks.removeWhere((task) => task.isDone);
       });
     } else if (choice == Constants.changeTheme){
       showModalBottomSheet(
@@ -74,7 +79,7 @@ class _TaskPageState extends State<TasksPage>{
     }
     else if (choice == Constants.hide){
       for (int i = 0; i < tasks.length; i++) {
-        if (tasks[i].IsDone) {
+        if (tasks[i].isDone) {
           setState(() {
             taskHidden.add(tasks[i]);
           });

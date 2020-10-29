@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/models/popup_constans.dart';
+import 'package:flutter_internship_v2/services/popup_constans.dart';
 
 typedef CreateTaskCallback(String taskName);
 

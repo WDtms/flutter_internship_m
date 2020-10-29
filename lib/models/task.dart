@@ -1,7 +1,11 @@
+import 'package:flutter_internship_v2/models/inner_task.dart';
+
 class TaskModel{
 
-  String Title;
-  bool IsDone;
+  String title;
+  bool isDone;
+  var innerTasks = <InnerTask>[];
 
-  TaskModel({this.Title, this.IsDone = false});
+  TaskModel({this.title, this.isDone = false, this.innerTasks});
+
 }

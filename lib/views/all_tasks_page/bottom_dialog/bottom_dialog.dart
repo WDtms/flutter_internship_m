@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/views/bottom_dialog/choice_theme.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/bottom_dialog/choice_theme.dart';
 
 typedef ChangeThemeCallback(int value);
 
@@ -15,7 +15,6 @@ class BottomDialog extends StatefulWidget {
 
 class _BottomDialogState extends State<BottomDialog> {
 
-  // Завтра переделаю.
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -1,16 +1,20 @@
 import 'package:flutter_internship_v2/models/task.dart';
+import 'package:flutter_internship_v2/services/inner_tasks.dart';
 
 class TaskService{
 
   static final tasks = [
     TaskModel(
-        Title: "Дорисовать дизайн"
+        title: "Дорисовать дизайн",
+        innerTasks: []
     ),
     TaskModel(
-        Title: "Дописать тз на стажировку"
+      title: "Дописать тз на стажировку",
+      innerTasks: InnerTasksService.innerTasks
     ),
     TaskModel(
-        Title: "Дописать план"
+        title: "Дописать план",
+        innerTasks: []
     ),
   ];
 
