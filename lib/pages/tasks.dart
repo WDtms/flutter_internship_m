@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/popup_constans.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/services/tasks.dart';
-import 'package:flutter_internship_v2/styles/my_colors.dart';
-import 'package:flutter_internship_v2/views/bottom_dialog.dart';
-import 'package:flutter_internship_v2/views/my_floating_button.dart';
-import 'package:flutter_internship_v2/views/popup_appbar.dart';
-import 'package:flutter_internship_v2/views/tasks_list.dart';
+import 'package:flutter_internship_v2/services/themes.dart';
+import 'package:flutter_internship_v2/styles/my_colors_themes.dart';
+import 'package:flutter_internship_v2/views/tasks_display/tasks_list.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/bottom_dialog/bottom_dialog.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/floating_create_button/my_floating_button.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/popup_menu/popup_appbar.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -86,54 +87,12 @@ class _TaskPageState extends State<TasksPage>{
   }
 
   void changeTheme(int value){
-    if (value == 0){
-      setState(() {
-        for (var item in firstTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
-    if (value == 1){
-      setState(() {
-        for (var item in secondTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
-    if (value == 2){
-      setState(() {
-        for (var item in thirdTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
-    if (value == 3){
-      setState(() {
-        for (var item in fourthTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
-    if (value == 4){
-      setState(() {
-        for (var item in fifthTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
-    if (value == 5){
-      setState(() {
-        for (var item in sixTheme.entries){
-          appBarColor = item.key;
-          backGroundColor = item.value;
-        }
-      });
-    }
+    setState(() {
+      for (var item in ListOfThemes.themes[value].entries){
+        appBarColor = item.key;
+        backGroundColor = item.value;
+      }
+    });
   }
 }
 
