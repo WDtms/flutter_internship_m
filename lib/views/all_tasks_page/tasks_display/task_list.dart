@@ -47,12 +47,12 @@ class _TaskListState extends State<TaskList>{
         itemBuilder: (_, index) {
           if (widget.isHidden){
             if (widget.hiddenTask.contains(widget.tasks[index])){
-              return displayNothing();
+              return _displayNothing();
             } else {
-              return displayTask(index);
+              return _displayTask(index);
             }
           } else {
-            return displayTask(index);
+            return _displayTask(index);
           }
         }
       );
@@ -69,19 +69,19 @@ class _TaskListState extends State<TaskList>{
     });
   }
 
-  changeInnerIsDone(bool value, TaskModel task, int index){
+  _changeInnerIsDone(bool value, TaskModel task, int index){
     setState(() {
       task.innerTasks[index].isDone = value;
     });
   }
 
-  deleteInnerTask(TaskModel task, int index){
+  _deleteInnerTask(TaskModel task, int index){
     setState(() {
       task.innerTasks.removeAt(index);
     });
   }
 
-   displayTask(int index){
+   _displayTask(int index){
     return Padding(
       padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
       child: Container(
@@ -108,14 +108,14 @@ class _TaskListState extends State<TaskList>{
                     appBarColor: widget.iconsColor,
                     backGroundColor: widget.backGroundColor,
                     task: widget.tasks[index],
-                    changeIsDone: changeInnerIsDone,
-                    deleteInnerTask: deleteInnerTask,
+                    changeIsDone: _changeInnerIsDone,
+                    deleteInnerTask: _deleteInnerTask,
                     createInnerTask: _createInnerTask,
                   )));
                 },
                 child: Builder(
                   builder: (BuildContext context) {
-                    if (widget.tasks[index].innerTasks.length == 0) {
+                    if (widget.tasks[index].innerTasks.isEmpty) {
                       return Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(widget.tasks[index].title),
@@ -131,7 +131,7 @@ class _TaskListState extends State<TaskList>{
                               padding: EdgeInsets.only(bottom: 4),
                               child: Text(widget.tasks[index].title),
                             ),
-                            Text('${countCompletedInnerTasks(index)} из ${widget.tasks[index].innerTasks.length}')
+                            Text('${_countCompletedInnerTasks(index)} из ${widget.tasks[index].innerTasks.length}')
                           ],
                         ),
                       );
@@ -155,11 +155,11 @@ class _TaskListState extends State<TaskList>{
     );
   }
 
-  displayNothing(){
+  _displayNothing(){
     return Container();
   }
 
-  int countCompletedInnerTasks(index){
+  int _countCompletedInnerTasks(index){
     int count = 0;
     for (InnerTask task in widget.tasks[index].innerTasks){
       if (task.isDone){

@@ -43,14 +43,14 @@ class _MyCardState extends State<MyCard> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           for (int i = 0; i<widget.task.innerTasks.length; i++)
-            displayTask(i),
-          decideWhatToDisplay(),
+            _displayTask(i),
+          _decideWhatToDisplay(),
         ],
       ),
     );
   }
 
-  displayTask(int index){
+  _displayTask(int index){
     return  Padding(
       padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
       child: Container(
@@ -89,21 +89,21 @@ class _MyCardState extends State<MyCard> {
     );
   }
 
-  decideWhatToDisplay(){
+  _decideWhatToDisplay(){
     if (isCreating){
       return Column(
         children: <Widget>[
-          displayTextField(),
-          displayAddTask()
+          _displayTextField(),
+          _displayAddTask()
         ],
       );
     }
     else {
-      return displayAddTask();
+      return _displayAddTask();
     }
   }
 
-  displayTextField(){
+  _displayTextField(){
     return Container(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: TextField(
@@ -119,7 +119,7 @@ class _MyCardState extends State<MyCard> {
     );
   }
 
-  displayAddTask(){
+  _displayAddTask(){
     return InkWell(
       onTap: () {
         setState(() {

@@ -40,10 +40,10 @@ class _TaskPageState extends State<TasksPage>{
         leading: Icon(Icons.arrow_back_sharp),
         title: Text('Задачи'),
         actions: [
-          PopupMenu(actionChoice: choiceAction),
+          PopupMenu(actionChoice: _choiceAction),
         ],
       ),
-      floatingActionButton: FloatingButton(onTaskCreate: createTask),
+      floatingActionButton: FloatingButton(onTaskCreate: _createTask),
       body: TaskList(
           isHidden: isHidden,
           tasks: tasks,
@@ -53,7 +53,7 @@ class _TaskPageState extends State<TasksPage>{
     );
   }
 
-  void createTask(String taskName){
+  void _createTask(String taskName){
     setState(() {
       tasks.add(
           TaskModel(
@@ -64,7 +64,7 @@ class _TaskPageState extends State<TasksPage>{
     });
   }
 
-  void choiceAction(String choice) {
+  void _choiceAction(String choice) {
     if (choice == Constants.delete){
       setState(() {
         tasks.removeWhere((task) => task.isDone);
@@ -73,7 +73,7 @@ class _TaskPageState extends State<TasksPage>{
       showModalBottomSheet(
           context: context,
           builder: (_) {
-            return BottomDialog(changeTheme: changeTheme);
+            return BottomDialog(changeTheme: _changeTheme);
           }
       );
     }
@@ -91,7 +91,7 @@ class _TaskPageState extends State<TasksPage>{
     }
   }
 
-  void changeTheme(int value){
+  void _changeTheme(int value){
     setState(() {
       for (var item in ListOfThemes.themes[value].entries){
         appBarColor = item.key;
