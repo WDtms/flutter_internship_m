@@ -18,7 +18,7 @@ class TasksPage extends StatefulWidget {
 class _TaskPageState extends State<TasksPage>{
 
   final List<TaskModel> tasks = TaskService.tasks;
-  List<TaskModel> taskHidden;
+  List<TaskModel> hiddenTask;
   bool isHidden = false;
   Color appBarColor;
   Color backGroundColor;
@@ -28,7 +28,7 @@ class _TaskPageState extends State<TasksPage>{
     super.initState();
     appBarColor = Color(0xff6200EE);
     backGroundColor = Color.fromRGBO(181, 201, 253, 1);
-    taskHidden = List<TaskModel>();
+    hiddenTask = List<TaskModel>();
   }
 
   @override
@@ -48,7 +48,7 @@ class _TaskPageState extends State<TasksPage>{
           isHidden: isHidden,
           tasks: tasks,
           iconsColor: appBarColor,
-          tasksHidden: taskHidden,
+          hiddenTask: hiddenTask,
           backGroundColor: backGroundColor),
     );
   }
@@ -81,7 +81,7 @@ class _TaskPageState extends State<TasksPage>{
       for (int i = 0; i < tasks.length; i++) {
         if (tasks[i].isDone) {
           setState(() {
-            taskHidden.add(tasks[i]);
+            hiddenTask.add(tasks[i]);
           });
         }
       }

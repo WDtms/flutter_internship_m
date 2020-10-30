@@ -6,7 +6,7 @@ typedef ChangeIsDoneCallback(bool value, TaskModel task, int index);
 typedef DeleteInnerTaskCallback(TaskModel task, int index);
 typedef CreateInnerTaskCallback(TaskModel task, String value);
 
-class CurrentTask extends StatefulWidget {
+class CurrentTaskPage extends StatefulWidget {
 
   final ChangeIsDoneCallback changeIsDone;
   final DeleteInnerTaskCallback deleteInnerTask;
@@ -16,13 +16,13 @@ class CurrentTask extends StatefulWidget {
   final String taskName;
   final TaskModel task;
 
-  CurrentTask({this.taskName, this.appBarColor, this.backGroundColor, this.task, this.changeIsDone, this.deleteInnerTask, this.createInnerTask});
+  CurrentTaskPage({this.taskName, this.appBarColor, this.backGroundColor, this.task, this.changeIsDone, this.deleteInnerTask, this.createInnerTask});
 
   @override
   _CurrentTaskState createState() => _CurrentTaskState();
 }
 
-class _CurrentTaskState extends State<CurrentTask> {
+class _CurrentTaskState extends State<CurrentTaskPage> {
 
   bool isCreating = false;
 

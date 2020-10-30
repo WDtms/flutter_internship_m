@@ -15,12 +15,12 @@ class RadioButtonThemes extends StatefulWidget {
 
 class _RadioButtonThemesState extends State<RadioButtonThemes> {
 
-  int selectedRadio;
+  int _selectedRadio;
 
-  setSelectedRadio(int value){
+  void _setSelectedRadio(int value){
     setState(() {
-      selectedRadio = value;
-      widget.changeTheme(selectedRadio);
+      _selectedRadio = value;
+      widget.changeTheme(_selectedRadio);
     });
   }
 
@@ -34,7 +34,7 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
         itemCount: ListOfThemes.themes.length,
         itemBuilder: (_, index) {
           return  Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(4.0),
             child: Container(
               height: 15,
               width: 15,
@@ -45,9 +45,9 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
               child: Radio(
                 value: index,
                 activeColor: Colors.indigo,
-                groupValue: selectedRadio,
+                groupValue: _selectedRadio,
                 onChanged: (value) {
-                  setSelectedRadio(value);
+                  _setSelectedRadio(value);
                 },
               ),
             ),

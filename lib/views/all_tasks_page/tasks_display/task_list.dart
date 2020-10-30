@@ -13,9 +13,9 @@ class TaskList extends StatefulWidget{
   final Color backGroundColor;
   final List<TaskModel> tasks;
   final bool isHidden;
-  final List<TaskModel> tasksHidden;
+  final List<TaskModel> hiddenTask;
 
-  TaskList({this.isHidden, this.tasks, this.iconsColor, this.tasksHidden, this.backGroundColor});
+  TaskList({this.isHidden, this.tasks, this.iconsColor, this.hiddenTask, this.backGroundColor});
 
   @override
   _TaskListState createState() => _TaskListState();
@@ -45,8 +45,8 @@ class _TaskListState extends State<TaskList>{
         padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
         itemCount: widget.tasks.length,
         itemBuilder: (_, index) {
-          if (widget.isHidden == true){
-            if (widget.tasksHidden.contains(widget.tasks[index])){
+          if (widget.isHidden){
+            if (widget.hiddenTask.contains(widget.tasks[index])){
               return displayNothing();
             } else {
               return displayTask(index);
@@ -59,7 +59,7 @@ class _TaskListState extends State<TaskList>{
     }
   }
   
-  createInnerTask(TaskModel task, String value){
+  _createInnerTask(TaskModel task, String value){
     setState(() {
       task.innerTasks.add(
         InnerTask(
@@ -103,26 +103,24 @@ class _TaskListState extends State<TaskList>{
             Expanded(
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask(
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTaskPage(
                     taskName: widget.tasks[index].title,
                     appBarColor: widget.iconsColor,
                     backGroundColor: widget.backGroundColor,
                     task: widget.tasks[index],
                     changeIsDone: changeInnerIsDone,
                     deleteInnerTask: deleteInnerTask,
-                    createInnerTask: createInnerTask,
+                    createInnerTask: _createInnerTask,
                   )));
                 },
                 child: Builder(
                   builder: (BuildContext context) {
-
                     if (widget.tasks[index].innerTasks.length == 0) {
                       return Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(widget.tasks[index].title),
                       );
                     }
-
                     else {
                       return Padding(
                         padding: EdgeInsets.all(8.0),
