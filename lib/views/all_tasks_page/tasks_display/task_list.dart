@@ -7,6 +7,9 @@ import 'package:flutter_internship_v2/services/image.dart';
 import 'package:flutter_internship_v2/styles/my_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+typedef DeleteTaskCallBack(int index);
+typedef ChangeTaskNameCallBack(int index, String value);
+
 class TaskList extends StatefulWidget{
 
   final Color iconsColor;
@@ -14,8 +17,10 @@ class TaskList extends StatefulWidget{
   final List<TaskModel> tasks;
   final bool isHidden;
   final List<TaskModel> tasksHidden;
+  final DeleteTaskCallBack deleteTask;
+  final ChangeTaskNameCallBack changeTaskName;
 
-  TaskList({this.isHidden, this.tasks, this.iconsColor, this.tasksHidden, this.backGroundColor});
+  TaskList({this.isHidden, this.tasks, this.iconsColor, this.tasksHidden, this.backGroundColor, this.deleteTask, this.changeTaskName});
 
   @override
   _TaskListState createState() => _TaskListState();
@@ -59,12 +64,6 @@ class _TaskListState extends State<TaskList>{
     }
   }
 
-  changeTaskName(int index, String value){
-    setState(() {
-      widget.tasks[index].title = value;
-    });
-  }
-
   changeIsDoneOfTask(TaskModel task){
     setState(() {
       task.isDone = !task.isDone;
@@ -93,23 +92,41 @@ class _TaskListState extends State<TaskList>{
     });
   }
 
-   displayTask(int index){
+  displayNothing(){
+    return Container();
+  }
+
+  int countCompletedInnerTasks(index){
+    int count = 0;
+    for (InnerTask task in widget.tasks[index].innerTasks){
+      if (task.isDone){
+        count++;
+      }
+    }
+    return count;
+  }
+
+  displayTask(int index){
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
         setState(() {
-          deleteTask(index);
+          widget.deleteTask(index);
         });
       },
       background: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
+        padding: EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
           borderRadius:BorderRadius.circular(8),
           color: Colors.redAccent,
         ),
         alignment: AlignmentDirectional.centerEnd,
-        child: Icon(Icons.delete),
+        child: Icon(
+          Icons.delete,
+          color: Colors.white
+        ),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -141,10 +158,10 @@ class _TaskListState extends State<TaskList>{
                       deleteInnerTask: deleteInnerTask,
                       createInnerTask: createInnerTask,
                       changeIsDoneOfTask: changeIsDoneOfTask,
-                      deleteTask: deleteTask,
+                      deleteTask: widget.deleteTask,
                       tasks: widget.tasks,
                       index: index,
-                      changeTaskName: changeTaskName,
+                      changeTaskName: widget.changeTaskName,
                     )));
                   },
                   child: Builder(
@@ -181,25 +198,5 @@ class _TaskListState extends State<TaskList>{
         ),
       ),
     );
-  }
-
-  deleteTask(int index){
-    setState(() {
-      widget.tasks.removeAt(index);
-    });
-  }
-
-  displayNothing(){
-    return Container();
-  }
-
-  int countCompletedInnerTasks(index){
-    int count = 0;
-    for (InnerTask task in widget.tasks[index].innerTasks){
-      if (task.isDone){
-        count++;
-      }
-    }
-    return count;
   }
 }

@@ -49,12 +49,21 @@ class _TaskPageState extends State<TasksPage>{
       ),
       floatingActionButton: FloatingButton(onTaskCreate: createTask),
       body: TaskList(
-          isHidden: isHidden,
-          tasks: tasks,
-          iconsColor: widget.appBarColor,
-          tasksHidden: taskHidden,
-          backGroundColor: widget.backGroundColor),
+        isHidden: isHidden,
+        tasks: tasks,
+        iconsColor: widget.appBarColor,
+        tasksHidden: taskHidden,
+        backGroundColor: widget.backGroundColor,
+
+        deleteTask: deleteTask,
+        changeTaskName: changeTaskName,),
     );
+  }
+
+  void changeTaskName(int index, String value){
+    setState(() {
+      tasks[index].title = value;
+    });
   }
 
   void createTask(String taskName){
@@ -65,6 +74,12 @@ class _TaskPageState extends State<TasksPage>{
               innerTasks: []
           )
       );
+    });
+  }
+
+  void deleteTask(int index){
+    setState(() {
+      tasks.removeAt(index);
     });
   }
 
