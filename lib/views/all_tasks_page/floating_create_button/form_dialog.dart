@@ -38,6 +38,7 @@ class _FormDialogState extends State<FormDialog> {
               }
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SimpleDialogOption(
                 child: Text('Отмена'),

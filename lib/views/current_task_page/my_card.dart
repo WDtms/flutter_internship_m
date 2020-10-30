@@ -26,83 +26,28 @@ class _MyCardState extends State<MyCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black38,
-                spreadRadius: 3,
-                blurRadius: 2,
-                offset: Offset(0,3)
-              )
-            ]
-          ),
-          height: 200.0,
-          child: Builder(
-            builder: (_) {
-
-              if (widget.task.innerTasks.isEmpty){
-                return ListView.builder(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                  itemCount: 1,
-                  itemBuilder: (_, index){
-                    if (isCreating){
-                      return Column(
-                        children: <Widget>[
-                          displayTextField(),
-                          displayAddTask()
-                        ],
-                      );
-                    }
-                    else {
-                      return displayAddTask();
-                    }
-                    },
-                );
-              }
-              else {
-                return ListView.builder(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                    itemCount: widget.task.innerTasks.length,
-                    itemBuilder: (_, index) {
-
-                      if (isCreating){
-                        if (index == widget.task.innerTasks.length - 1){
-                          return Column(
-                            children: <Widget>[
-                              displayTask(index),
-                              displayTextField(),
-                              displayAddTask()
-                            ],
-                          );
-                        }
-                        else {
-                          return displayTask(index);
-                        }
-                      }
-                      else {
-                        if (index == widget.task.innerTasks.length - 1){
-                          return Column(
-                            children: <Widget>[
-                              displayTask(index),
-                              displayAddTask(),
-                            ],
-                          );
-                        }
-                        else {
-                          return displayTask(index);
-                        }
-                      }
-                    }
-                    );
-                }
-              },
-            ),
-        )
-      );
+    return Container(
+      margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0,2),
+          )
+        ]
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          for (int i = 0; i<widget.task.innerTasks.length; i++)
+            displayTask(i),
+          decideWhatToDisplay(),
+        ],
+      ),
+    );
   }
 
   displayTask(int index){
@@ -142,6 +87,20 @@ class _MyCardState extends State<MyCard> {
         ),
       ),
     );
+  }
+
+  decideWhatToDisplay(){
+    if (isCreating){
+      return Column(
+        children: <Widget>[
+          displayTextField(),
+          displayAddTask()
+        ],
+      );
+    }
+    else {
+      return displayAddTask();
+    }
   }
 
   displayTextField(){
