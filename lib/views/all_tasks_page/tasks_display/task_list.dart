@@ -58,6 +58,12 @@ class _TaskListState extends State<TaskList>{
       );
     }
   }
+
+  changeIsDoneOfTask(TaskModel task){
+    setState(() {
+      task.isDone = !task.isDone;
+    });
+  }
   
   createInnerTask(TaskModel task, String value){
     setState(() {
@@ -111,6 +117,7 @@ class _TaskListState extends State<TaskList>{
                     changeIsDone: changeInnerIsDone,
                     deleteInnerTask: deleteInnerTask,
                     createInnerTask: createInnerTask,
+                    changeIsDoneOfTask: changeIsDoneOfTask,
                   )));
                 },
                 child: Builder(
