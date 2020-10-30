@@ -3,13 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/services/popup_constans.dart';
 import 'package:flutter_internship_v2/services/tasks.dart';
-import 'package:flutter_internship_v2/services/themes.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/bottom_dialog/bottom_dialog.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/floating_create_button/my_floating_button.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/popup_menu/popup_appbar.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_list.dart';
 
+typedef ChangeThemeCallBack(int value);
+
 class TasksPage extends StatefulWidget {
+
+  final appBarColor;
+  final backGroundColor;
+  final ChangeThemeCallBack changeTheme;
+  final List<TaskModel> tasks;
+
+  TasksPage({this.tasks, this.appBarColor, this.backGroundColor, this.changeTheme});
 
   @override
   _TaskPageState createState() => _TaskPageState();
@@ -20,23 +28,19 @@ class _TaskPageState extends State<TasksPage>{
   final List<TaskModel> tasks = TaskService.tasks;
   List<TaskModel> taskHidden;
   bool isHidden = false;
-  Color appBarColor;
-  Color backGroundColor;
 
   @override
   void initState() {
     super.initState();
-    appBarColor = Color(0xff6200EE);
-    backGroundColor = Color.fromRGBO(181, 201, 253, 1);
     taskHidden = List<TaskModel>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGroundColor,
+      backgroundColor: widget.backGroundColor,
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: widget.appBarColor,
         leading: Icon(Icons.arrow_back_sharp),
         title: Text('Задачи'),
         actions: [
@@ -47,9 +51,9 @@ class _TaskPageState extends State<TasksPage>{
       body: TaskList(
           isHidden: isHidden,
           tasks: tasks,
-          iconsColor: appBarColor,
+          iconsColor: widget.appBarColor,
           tasksHidden: taskHidden,
-          backGroundColor: backGroundColor),
+          backGroundColor: widget.backGroundColor),
     );
   }
 
@@ -73,7 +77,7 @@ class _TaskPageState extends State<TasksPage>{
       showModalBottomSheet(
           context: context,
           builder: (_) {
-            return BottomDialog(changeTheme: changeTheme);
+            return BottomDialog(changeTheme: widget.changeTheme);
           }
       );
     }
@@ -89,15 +93,6 @@ class _TaskPageState extends State<TasksPage>{
           isHidden = true;
       });
     }
-  }
-
-  void changeTheme(int value){
-    setState(() {
-      for (var item in ListOfThemes.themes[value].entries){
-        appBarColor = item.key;
-        backGroundColor = item.value;
-      }
-    });
   }
 }
 

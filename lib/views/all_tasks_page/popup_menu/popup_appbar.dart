@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/services/popup_constans.dart';
 
-typedef CreateTaskCallback(String taskName);
+typedef ActionChoiceCallback(String taskName);
 
 class PopupMenu extends StatefulWidget {
 
-  final CreateTaskCallback actionChoice;
+  final ActionChoiceCallback actionChoice;
 
   PopupMenu({this.actionChoice});
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/task.dart';
-import 'package:flutter_internship_v2/views/current_task_page/floating_button.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/current_task_page/floating_button/floating_button.dart';
 import 'package:flutter_internship_v2/views/current_task_page/my_card.dart';
-import 'package:flutter_internship_v2/views/current_task_page/popup_appbar.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/current_task_page/popup_appbar/popup_appbar.dart';
 
 typedef ChangeTaskNameCallBack(int index, String value);
 typedef DeleteTaskCallBack(int index);
