@@ -4,13 +4,13 @@ class TaskService{
 
   static final tasks = [
     TaskModel(
-        Title: "Дорисовать дизайн"
+        title: "Дорисовать дизайн"
     ),
     TaskModel(
-        Title: "Дописать тз на стажировку"
+        title: "Дописать тз на стажировку"
     ),
     TaskModel(
-        Title: "Дописать план"
+        title: "Дописать план"
     ),
   ];
 

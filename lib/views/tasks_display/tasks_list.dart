@@ -68,18 +68,18 @@ class _TaskListState extends State<TaskList>{
         child: Row(
           children: [
             Checkbox(
-              value: widget.tasks[index].IsDone,
+              value: widget.tasks[index].isDone,
               activeColor: widget.iconsColor,
               onChanged: (bool value) {
                 setState(() {
-                  widget.tasks[index].IsDone = value;
+                  widget.tasks[index].isDone = value;
                 });
               },
             ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(widget.tasks[index].Title),
+                child: Text(widget.tasks[index].title),
               ),
             ),
             IconButton(

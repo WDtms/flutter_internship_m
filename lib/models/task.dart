@@ -1,7 +1,7 @@
 class TaskModel{
 
-  String Title;
-  bool IsDone;
+  String title;
+  bool isDone;
 
-  TaskModel({this.Title, this.IsDone = false});
+  TaskModel({this.title, this.isDone = false});
 }

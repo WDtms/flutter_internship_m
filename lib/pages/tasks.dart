@@ -4,11 +4,10 @@ import 'package:flutter_internship_v2/models/popup_constans.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/services/tasks.dart';
 import 'package:flutter_internship_v2/services/themes.dart';
-import 'package:flutter_internship_v2/styles/my_colors_themes.dart';
+import 'package:flutter_internship_v2/views/bottom_dialog/bottom_dialog.dart';
+import 'package:flutter_internship_v2/views/floating_create_button/my_floating_button.dart';
+import 'package:flutter_internship_v2/views/popup_menu/popup_appbar.dart';
 import 'package:flutter_internship_v2/views/tasks_display/tasks_list.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/bottom_dialog/bottom_dialog.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/floating_create_button/my_floating_button.dart';
-import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/popup_menu/popup_appbar.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -52,8 +51,8 @@ class _TaskPageState extends State<TasksPage>{
   void createTask(String taskName){
     setState(() {
       tasks.add(
-          new TaskModel(
-              Title: taskName
+          TaskModel(
+              title: taskName
           )
       );
     });
@@ -62,7 +61,7 @@ class _TaskPageState extends State<TasksPage>{
   void choiceAction(String choice) {
     if (choice == Constants.delete){
       setState(() {
-        tasks.removeWhere((task) => task.IsDone);
+        tasks.removeWhere((task) => task.isDone);
       });
     } else if (choice == Constants.changeTheme){
       showModalBottomSheet(
@@ -74,7 +73,7 @@ class _TaskPageState extends State<TasksPage>{
     }
     else if (choice == Constants.hide){
       for (int i = 0; i < tasks.length; i++) {
-        if (tasks[i].IsDone) {
+        if (tasks[i].isDone) {
           setState(() {
             taskHidden.add(tasks[i]);
           });
