@@ -42,7 +42,7 @@ class _TaskListState extends State<TaskList>{
       );
     } else {
       return ListView.builder(
-        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+        padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
         itemCount: widget.tasks.length,
         itemBuilder: (_, index) {
           if (widget.isHidden == true){
@@ -57,6 +57,12 @@ class _TaskListState extends State<TaskList>{
         }
       );
     }
+  }
+
+  changeTaskName(int index, String value){
+    setState(() {
+      widget.tasks[index].title = value;
+    });
   }
 
   changeIsDoneOfTask(TaskModel task){
@@ -88,80 +94,99 @@ class _TaskListState extends State<TaskList>{
   }
 
    displayTask(int index){
-    return Padding(
-      padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
-      child: Container(
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      onDismissed: (DismissDirection direction) {
+        setState(() {
+          deleteTask(index);
+        });
+      },
+      background: Container(
+        margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
         decoration: BoxDecoration(
-            borderRadius:BorderRadius.circular(5),
-            color: Colors.white
+          borderRadius:BorderRadius.circular(8),
+          color: Colors.redAccent,
         ),
-        child: Row(
-          children: [
-            Checkbox(
-              value: widget.tasks[index].isDone,
-              activeColor: widget.iconsColor,
-              onChanged: (bool value) {
-                setState(() {
-                  widget.tasks[index].isDone = value;
-                });
-              },
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask(
-                    taskName: widget.tasks[index].title,
-                    appBarColor: widget.iconsColor,
-                    backGroundColor: widget.backGroundColor,
-                    task: widget.tasks[index],
-                    changeIsDone: changeInnerIsDone,
-                    deleteInnerTask: deleteInnerTask,
-                    createInnerTask: createInnerTask,
-                    changeIsDoneOfTask: changeIsDoneOfTask,
-                  )));
+        alignment: AlignmentDirectional.centerEnd,
+        child: Icon(Icons.delete),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius:BorderRadius.circular(8),
+              color: Colors.white
+          ),
+          child: Row(
+            children: [
+              Checkbox(
+                value: widget.tasks[index].isDone,
+                activeColor: widget.iconsColor,
+                onChanged: (bool value) {
+                  setState(() {
+                    widget.tasks[index].isDone = value;
+                  });
                 },
-                child: Builder(
-                  builder: (BuildContext context) {
-
-                    if (widget.tasks[index].innerTasks.length == 0) {
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(widget.tasks[index].title),
-                      );
-                    }
-
-                    else {
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 4),
-                              child: Text(widget.tasks[index].title),
-                            ),
-                            Text('${countCompletedInnerTasks(index)} из ${widget.tasks[index].innerTasks.length}')
-                          ],
-                        ),
-                      );
-                    }
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask(
+                      taskName: widget.tasks[index].title,
+                      appBarColor: widget.iconsColor,
+                      backGroundColor: widget.backGroundColor,
+                      task: widget.tasks[index],
+                      changeIsDone: changeInnerIsDone,
+                      deleteInnerTask: deleteInnerTask,
+                      createInnerTask: createInnerTask,
+                      changeIsDoneOfTask: changeIsDoneOfTask,
+                      deleteTask: deleteTask,
+                      tasks: widget.tasks,
+                      index: index,
+                      changeTaskName: changeTaskName,
+                    )));
                   },
+                  child: Builder(
+                    builder: (BuildContext context) {
+
+                      if (widget.tasks[index].innerTasks.length == 0) {
+                        return Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(widget.tasks[index].title),
+                        );
+                      }
+
+                      else {
+                        return Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Text(widget.tasks[index].title),
+                              ),
+                              Text('${countCompletedInnerTasks(index)} из ${widget.tasks[index].innerTasks.length}')
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              color: widget.iconsColor,
-              onPressed: () {
-                setState(() {
-                  widget.tasks.removeAt(index);
-                });
-              },
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  deleteTask(int index){
+    setState(() {
+      widget.tasks.removeAt(index);
+    });
   }
 
   displayNothing(){
