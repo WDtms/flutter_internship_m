@@ -4,5 +4,4 @@ class InnerTask{
   bool isDone;
 
   InnerTask({this.title, this.isDone = false});
-
 }

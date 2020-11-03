@@ -1,104 +1,49 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
+import 'package:flutter_internship_v2/bloc/blocs/task_list.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
-import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/pages/current_task.dart';
-import 'package:flutter_internship_v2/services/image.dart';
 import 'package:flutter_internship_v2/styles/my_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-typedef DeleteTaskCallBack(int index);
-typedef ChangeTaskNameCallBack(int index, String value);
 
-class TaskList extends StatefulWidget{
+class TaskList1 extends StatelessWidget {
 
-  final Color iconsColor;
-  final Color backGroundColor;
-  final List<TaskModel> tasks;
-  final bool isHidden;
-  final List<TaskModel> tasksHidden;
-  final DeleteTaskCallBack deleteTask;
-  final ChangeTaskNameCallBack changeTaskName;
+  final backGroundColor;
+  final appBarColor;
 
-  TaskList({this.isHidden, this.tasks, this.iconsColor, this.tasksHidden, this.backGroundColor, this.deleteTask, this.changeTaskName});
-
-  @override
-  _TaskListState createState() => _TaskListState();
-}
-
-class _TaskListState extends State<TaskList>{
-
-  final List<SvgPicture> images = ImageService.images;
+  TaskList1({this.appBarColor, this.backGroundColor});
 
   @override
   Widget build(BuildContext context) {
-    if (widget.tasks.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(home_image),
-            Container(
-              height: 3,
-            ),
-            SvgPicture.asset(home_text),
-          ],
-        ),
-      );
-    } else {
-      return ListView.builder(
-        padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
-        itemCount: widget.tasks.length,
-        itemBuilder: (_, index) {
-          if (widget.isHidden == true){
-            if (widget.tasksHidden.contains(widget.tasks[index])){
-              return displayNothing();
-            } else {
-              return displayTask(index);
-            }
-          } else {
-            return displayTask(index);
-          }
+    final bloc = BlocProvider.of(context).taskListBloc;
+    return StreamBuilder(
+      stream: bloc.tasks,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+
+        if(snapshot.data.isEmpty){
+          return displayImages();
         }
-      );
-    }
+
+        return ListView.builder(
+          padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+          itemCount: snapshot.data.length,
+          itemBuilder: (context, index) {
+            return displayTask(context, bloc, snapshot, index);
+          },
+        );
+      },
+    );
   }
 
-  changeIsDoneOfTask(TaskModel task){
-    setState(() {
-      task.isDone = !task.isDone;
-    });
-  }
-  
-  createInnerTask(TaskModel task, String value){
-    setState(() {
-      task.innerTasks.add(
-        InnerTask(
-          title: value
-        )
-      );
-    });
-  }
-
-  changeInnerIsDone(bool value, TaskModel task, int index){
-    setState(() {
-      task.innerTasks[index].isDone = value;
-    });
-  }
-
-  deleteInnerTask(TaskModel task, int index){
-    setState(() {
-      task.innerTasks.removeAt(index);
-    });
-  }
-
-  displayNothing(){
-    return Container();
-  }
-
-  int countCompletedInnerTasks(index){
+  int countCompletedInnerTasks(AsyncSnapshot snapshot, int index){
     int count = 0;
-    for (InnerTask task in widget.tasks[index].innerTasks){
+    for (InnerTask task in snapshot.data[index].innerTasks){
       if (task.isDone){
         count++;
       }
@@ -106,14 +51,27 @@ class _TaskListState extends State<TaskList>{
     return count;
   }
 
-  displayTask(int index){
+  Widget displayImages(){
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset(home_image),
+          Container(
+            height: 3,
+          ),
+          SvgPicture.asset(home_text),
+        ],
+      ),
+    );
+  }
+
+  Widget displayTask(BuildContext context, TaskListBloc bloc, AsyncSnapshot snapshot, int index) {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
-        setState(() {
-          widget.deleteTask(index);
-        });
+        bloc.deleteTask(snapshot.data[index]);
       },
       background: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -124,8 +82,8 @@ class _TaskListState extends State<TaskList>{
         ),
         alignment: AlignmentDirectional.centerEnd,
         child: Icon(
-          Icons.delete,
-          color: Colors.white
+            Icons.delete,
+            color: Colors.white
         ),
       ),
       child: Padding(
@@ -138,39 +96,24 @@ class _TaskListState extends State<TaskList>{
           child: Row(
             children: [
               Checkbox(
-                value: widget.tasks[index].isDone,
-                activeColor: widget.iconsColor,
+                value: snapshot.data[index].isDone,
+                activeColor: appBarColor,
                 onChanged: (bool value) {
-                  setState(() {
-                    widget.tasks[index].isDone = value;
-                  });
+                  bloc.toggleTaskComplete(snapshot.data[index], index);
                 },
               ),
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask(
-                      taskName: widget.tasks[index].title,
-                      appBarColor: widget.iconsColor,
-                      backGroundColor: widget.backGroundColor,
-                      task: widget.tasks[index],
-                      changeIsDone: changeInnerIsDone,
-                      deleteInnerTask: deleteInnerTask,
-                      createInnerTask: createInnerTask,
-                      changeIsDoneOfTask: changeIsDoneOfTask,
-                      deleteTask: widget.deleteTask,
-                      tasks: widget.tasks,
-                      index: index,
-                      changeTaskName: widget.changeTaskName,
-                    )));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask1(index: index, appBarColor: appBarColor, backGroundColor: backGroundColor,)));
                   },
                   child: Builder(
                     builder: (BuildContext context) {
 
-                      if (widget.tasks[index].innerTasks.length == 0) {
+                      if (snapshot.data[index].innerTasks.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(widget.tasks[index].title),
+                          child: Text(snapshot.data[index].title),
                         );
                       }
 
@@ -182,9 +125,9 @@ class _TaskListState extends State<TaskList>{
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(bottom: 4),
-                                child: Text(widget.tasks[index].title),
+                                child: Text(snapshot.data[index].title),
                               ),
-                              Text('${countCompletedInnerTasks(index)} из ${widget.tasks[index].innerTasks.length}')
+                              Text('${countCompletedInnerTasks(snapshot, index)} из ${snapshot.data[index].innerTasks.length}')
                             ],
                           ),
                         );

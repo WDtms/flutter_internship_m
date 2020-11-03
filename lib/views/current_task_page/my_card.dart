@@ -1,86 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/models/task.dart';
+import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
+import 'package:flutter_internship_v2/bloc/blocs/task_list.dart';
 
-typedef ChangeIsDoneCallback(bool value, TaskModel task, int index);
-typedef DeleteInnerTaskCallback(TaskModel task, int index);
-typedef CreateInnerTaskCallback(TaskModel task, String value);
+class MyCard1 extends StatefulWidget {
 
-class MyCard extends StatefulWidget {
+  final index;
+  final backGroundColor;
 
-  final ChangeIsDoneCallback changeIsDone;
-  final DeleteInnerTaskCallback deleteInnerTask;
-  final CreateInnerTaskCallback createInnerTask;
-  final TaskModel task;
-  final Color appBarColor;
-
-  MyCard({this.task, this.appBarColor ,this.changeIsDone, this.createInnerTask, this.deleteInnerTask});
+  MyCard1({this.index, this.backGroundColor});
 
   @override
-  _MyCardState createState() => _MyCardState();
+  _MyCardState1 createState() => _MyCardState1();
 }
 
-class _MyCardState extends State<MyCard> {
+class _MyCardState1 extends State<MyCard1> {
 
   bool isCreating = false;
   final _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: Offset(0,2),
-          )
-        ]
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          for (int i = 0; i<widget.task.innerTasks.length; i++)
-            displayTask(i),
-          decideWhatToDisplay(),
-        ],
+    final bloc = BlocProvider.of(context).taskListBloc;
+    return Center(
+      child: Container(
+        margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black54,
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(0,2),
+              )
+            ]
+        ),
+        child: StreamBuilder(
+          stream: bloc.tasks,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData){
+              return CircularProgressIndicator();
+            }
+
+            if (snapshot.data.isEmpty){
+              return Container();
+            }
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                for (int i = 0; i<snapshot.data[widget.index].innerTasks.length; i++)
+                  displayTask(bloc, snapshot, widget.index, i),
+                decideWhatToDisplay(bloc, widget.index),
+              ],
+            );
+          }
+        ),
       ),
     );
   }
 
-  displayTask(int index){
+  displayTask(TaskListBloc bloc, AsyncSnapshot snapshot, int index, int innerIndex){
+    if (snapshot.data.isEmpty){
+      return Container(
+        color: widget.backGroundColor,
+      );
+    }
+
     return  Padding(
       padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
       child: Container(
         child: Row(
           children: [
             Checkbox(
-              value: widget.task.innerTasks[index].isDone,
-              activeColor: widget.appBarColor,
+              value: snapshot.data[index].innerTasks[innerIndex].isDone,
+              activeColor: Colors.black,
               onChanged: (bool value) {
-                setState(() {
-                  widget.changeIsDone(value, widget.task, index);
-                });
+                bloc.toggleInnerTaskComplete(snapshot.data[index], index, innerIndex);
               },
             ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 4),
                 child: Text(
-                  widget.task.innerTasks[index].title,
-                  style: TextStyle(
-                   fontSize: 14,
-                  )),
+                    snapshot.data[index].innerTasks[innerIndex].title,
+                    style: TextStyle(
+                      fontSize: 14,
+                    )),
               ),
             ),
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                setState(() {
-                  widget.deleteInnerTask(widget.task, index);
-                });
+                bloc.deleteInnerTask(snapshot.data[index], index, innerIndex);
               },
             )
           ],
@@ -89,11 +100,11 @@ class _MyCardState extends State<MyCard> {
     );
   }
 
-  decideWhatToDisplay(){
+  decideWhatToDisplay(TaskListBloc bloc, int index){
     if (isCreating){
       return Column(
         children: <Widget>[
-          displayTextField(),
+          displayTextField(bloc, index),
           displayAddTask()
         ],
       );
@@ -103,14 +114,14 @@ class _MyCardState extends State<MyCard> {
     }
   }
 
-  displayTextField(){
+  displayTextField(TaskListBloc bloc, int index){
     return Container(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: TextField(
         controller: _controller,
         onEditingComplete: () {
+          bloc.createInnerTask(index, _controller.text);
           setState(() {
-            widget.createInnerTask(widget.task, _controller.text);
             _controller.text = "";
             isCreating = false;
           });
@@ -121,32 +132,32 @@ class _MyCardState extends State<MyCard> {
 
   displayAddTask(){
     return InkWell(
-      onTap: () {
-        setState(() {
-          isCreating = true;
-        });
-      },
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
-            child: Icon(
-              Icons.add_sharp,
-              color: Color(0xff1A9FFF),
+        onTap: () {
+          setState(() {
+            isCreating = true;
+          });
+        },
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
+              child: Icon(
+                Icons.add_sharp,
+                color: Color(0xff1A9FFF),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Text(
-                'Добавить задачу',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xff1A9FFF),
-                )
+            Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                  'Добавить задачу',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xff1A9FFF),
+                  )
+              ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
     );
   }
 }
