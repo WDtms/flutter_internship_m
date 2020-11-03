@@ -1,5 +1,5 @@
 import 'package:flutter_internship_v2/models/task.dart';
-import 'package:flutter_internship_v2/repository/task.dart';
+import 'package:flutter_internship_v2/repository/task_repository.dart';
 
 class TaskListBloc{
   final TaskRepository _taskRepository;
