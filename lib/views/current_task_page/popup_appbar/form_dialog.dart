@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
-
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
 class FormDialogCurrentTask extends StatefulWidget {
 
@@ -20,19 +19,17 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of(context).taskListBloc;
     return Form(
       key: _formKey,
       child: SimpleDialog(
         contentPadding: EdgeInsets.all(12),
         children: <Widget>[
           Text('Редактирование'),
-          StreamBuilder(
-            stream: bloc.tasks,
-            builder: (context, snapshot) {
+          BlocBuilder<TaskCubit, TaskState> (
+            builder: (context, state) {
               return TextFormField(
                   onSaved: (String value) {
-                    bloc.editTaskName(snapshot.data[widget.index], widget.index, value);
+                    context.bloc<TaskCubit>().editTaskName(widget.index, value);
                   },
                   validator: (value){
                     if(value.length > 40){
@@ -41,7 +38,7 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
                     return null;
                   }
               );
-            }
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

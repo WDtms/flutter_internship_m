@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/models/task.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
-typedef ChangeIsDoneOfTaskCallback(TaskModel task);
+class CurrentTaskFloatingButton extends StatefulWidget {
 
-class CurrentPageFloatingButton extends StatefulWidget {
+  final index;
 
-  final TaskModel task;
-  final ChangeIsDoneOfTaskCallback changeIsDoneOfTask;
-
-  CurrentPageFloatingButton({this.task, this.changeIsDoneOfTask});
+  CurrentTaskFloatingButton({this.index});
 
   @override
-  _CurrentPageFloatingButtonState createState() => _CurrentPageFloatingButtonState();
+  _CurrentTaskFloatingButtonState createState() => _CurrentTaskFloatingButtonState();
 }
 
-class _CurrentPageFloatingButtonState extends State<CurrentPageFloatingButton> {
-
+class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
+  GlobalKey key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: displayIcon(widget.task),
-      backgroundColor: Colors.teal,
-      onPressed: () {
-        setState(() {
-          widget.changeIsDoneOfTask(widget.task);
-        });
-      },
-    );
-  }
-
-  displayIcon(TaskModel task) {
-    if (task.isDone)
-      return Icon(Icons.close);
-    else
-      return Icon(Icons.check);
+    return BlocBuilder<TaskCubit, TaskState>(
+        builder: (context, state) {
+        if (state is TaskInUsageState){
+          return Transform.translate(
+            key: key,
+            offset: Offset(20, 38),
+              child: FloatingActionButton(
+                backgroundColor: Colors.teal,
+                child: Builder(
+                  builder: (context) {
+                    if (state.taskList[widget.index].isDone)
+                      return Icon(Icons.close);
+                    else
+                      return Icon(Icons.check);
+                  },
+                ),
+                onPressed: () {
+                  context.bloc<TaskCubit>().toggleTaskComplete(widget.index);
+                },
+              ),
+          );
+        }
+        else {
+          return SizedBox.shrink();
+        }
+        }
+        );
   }
 }

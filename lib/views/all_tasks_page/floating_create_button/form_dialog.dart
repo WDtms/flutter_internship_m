@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
 
 class FormDialog extends StatefulWidget {
@@ -15,28 +15,22 @@ class _FormDialogState extends State<FormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of(context).taskListBloc;
     return Form(
       key: _formKey,
       child: SimpleDialog(
         contentPadding: EdgeInsets.all(12),
         children: <Widget>[
           Text('Создать задачу'),
-          StreamBuilder<Object>(
-            stream: bloc.tasks,
-            builder: (context, snapshot) {
-              return TextFormField(
-                  onSaved: (String value) {
-                    bloc.addNewTask(value);
-                  },
-                  validator: (value){
-                    if(value.length > 40){
-                      return 'Превышена допустимая длина задачи';
-                    }
-                    return null;
-                  }
-              );
-            }
+          TextFormField(
+              onSaved: (String value) {
+                context.bloc<TaskCubit>().createNewTask(value);
+              },
+              validator: (value){
+                if(value.length > 40){
+                  return 'Превышена допустимая длина задачи';
+                }
+                return null;
+              }
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -63,3 +57,4 @@ class _FormDialogState extends State<FormDialog> {
     );
   }
 }
+

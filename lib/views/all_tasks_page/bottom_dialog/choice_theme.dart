@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/services/themes.dart';
+import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/models/theme_list.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef ChangeThemeCallback(int value);
 
 class RadioButtonThemes extends StatefulWidget {
-
-  final ChangeThemeCallback changeTheme;
-
-  RadioButtonThemes({this.changeTheme});
 
   @override
   _RadioButtonThemesState createState() => _RadioButtonThemesState();
@@ -16,12 +13,18 @@ class RadioButtonThemes extends StatefulWidget {
 class _RadioButtonThemesState extends State<RadioButtonThemes> {
 
   int selectedRadio;
+  final themes = ThemeList().getAllThemes();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   setSelectedRadio(int value){
     setState(() {
       selectedRadio = value;
-      widget.changeTheme(selectedRadio);
     });
+    context.bloc<ThemeCubit>().changeTheme(value);
   }
 
   @override
@@ -31,7 +34,7 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.all(8),
-        itemCount: ListOfThemes.themes.length,
+        itemCount: themes.length,
         itemBuilder: (_, index) {
           return  Padding(
             padding: const EdgeInsets.all(5.0),
@@ -40,7 +43,7 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
               width: 15,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ListOfThemes.themes[index].keys.toList().elementAt(0),
+                color: themes[index].keys.toList().elementAt(0),
               ),
               child: Radio(
                 value: index,

@@ -1,98 +1,100 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
-import 'package:flutter_internship_v2/bloc/blocs/task_list.dart';
-import 'package:flutter_internship_v2/views/current_task_page/my_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/views/current_task_page/floating_button/floating_button.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/current_task_page/cards/my_card.dart';
+import 'file:///C:/Users/Shepelev.AA1/AndroidStudioProjects/flutter_internship_v2/lib/views/current_task_page/cards/my_date_card.dart';
 import 'package:flutter_internship_v2/views/current_task_page/popup_appbar/popup_appbar.dart';
 
-class CurrentTask1 extends StatefulWidget {
+class CurrentTask1 extends StatelessWidget {
 
-  final appBarColor;
-  final backGroundColor;
   final int index;
 
-  CurrentTask1({this.index, this.appBarColor, this.backGroundColor});
-
-  @override
-  _CurrentTask1State createState() => _CurrentTask1State();
-}
-
-class _CurrentTask1State extends State<CurrentTask1>{
-
-  ScrollController _scrollController;
-
-  @override
-  void initState(){
-    super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(() => setState(() {}));
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  CurrentTask1({this.index});
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of(context).taskListBloc;
-    return Scaffold(
-      backgroundColor: widget.backGroundColor,
-      body: Stack(
-        children: <Widget>[
-          CustomScrollView(
-            controller: _scrollController,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: checkTheme(context, state, 1),
+          body: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
-                actions: [
-                  PopupMenu1(index: widget.index),
-                ],
-                expandedHeight: 150,
-                floating: false,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: StreamBuilder(
-                    stream: bloc.tasks,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      }
-
-                      if (snapshot.data.isEmpty) {
-                        return Container();
-                      }
-
-                      return Text(
-                        snapshot.data[widget.index].title,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16
-                        ),
-                      );
-                    },
-                  ),
-                  background: Container(
-                    color: widget.appBarColor,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(0.0),
+                  child: Row(
+                    children: [
+                      CurrentTaskFloatingButton(index: index),
+                    ],
                   ),
                 ),
-                backgroundColor: widget.appBarColor,
+                actions: [
+                  PopupMenuCurrentTask(index: index),
+                ],
+                expandedHeight: 150,
+                snap: false,
+                floating: false,
+                pinned: true,
+                flexibleSpace: BlocBuilder<TaskCubit, TaskState>(
+                  builder: (context, state) {
+                    return FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: displayTaskTitle(state, index),
+                      background: Container(
+                        color: checkTheme(context, context.bloc<ThemeCubit>().state, 2),
+                      ),
+                    );
+                  },
+                ),
+                backgroundColor: checkTheme(context, state, 2),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
                     [
-                      MyCard1(index: widget.index, backGroundColor: widget.backGroundColor),
+                      MyCard1(index: index),
+                      MyDateCard(index: index),
                     ]
                 ),
               )
             ],
           ),
-          buildFab(),
-        ],
-      ),
-      );
+        );
+      },
+    );
   }
 
+  Color checkTheme(BuildContext context, ThemeState state, int index){
+    if (state is ThemeChangedState){
+      if (index == 1){
+        return state.theme.values.toList().first;
+      }
+      else {
+        return state.theme.keys.toList().first;
+      }
+    }
+    else {
+      if (index == 1){
+        return Color.fromRGBO(181, 201, 253, 1);
+      }
+      else
+        return Color(0xff6200EE);
+    }
+  }
+
+  displayTaskTitle(TaskState state, int index) {
+    if (state is TaskInUsageState){
+      return Text(state.taskList[index].title,
+      style: TextStyle(
+        fontSize: 16
+      ),);
+    }
+  }
+
+/*
   Widget buildFab(){
     final bloc = BlocProvider.of(context).taskListBloc;
 
@@ -127,7 +129,7 @@ class _CurrentTask1State extends State<CurrentTask1>{
             return FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
-                bloc.toggleTaskComplete(snapshot.data[widget.index], widget.index);
+
               },
               child: Builder(
                 builder: (_) {
@@ -148,22 +150,7 @@ class _CurrentTask1State extends State<CurrentTask1>{
     );
   }
 
-  displayTaskTitle(TaskListBloc bloc, int index) {
-    return StreamBuilder(
-      stream: bloc.tasks,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
-        }
+ */
 
-        if (snapshot.data.isEmpty) {
-          return Container();
-        }
 
-        return Text(
-            snapshot.data[index].title
-        );
-      },
-    );
-  }
 }

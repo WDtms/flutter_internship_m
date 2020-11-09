@@ -1,60 +1,77 @@
-import 'package:flutter_internship_v2/models/inner_task.dart';
+
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/models/task_list.dart';
-import 'package:rxdart/rxdart.dart';
 
-class TaskRepository{
+abstract class TaskRepository1{
+
+  Future<List<TaskModel>> getTaskList();
+
+  Future<List<TaskModel>> createNewTask(String value);
+
+  Future<List<TaskModel>> toggleTaskComplete(int index);
+
+  Future<List<TaskModel>> deleteTask(int index);
+
+  Future<List<TaskModel>> deleteAllCompletedTasks();
+
+  Future<List<TaskModel>> toggleInnerTaskComplete(int index, int innerIndex);
+
+  Future<List<TaskModel>> deleteInnerTask(int index, int innerIndex);
+
+  Future<List<TaskModel>> createNewInnerTask(int index, String value);
+
+  Future<List<TaskModel>> editTaskName(int index, String value);
+
+  Future<List<TaskModel>> addDateToComplete(int index, DateTime dateTime);
+}
+
+class FakeTaskRepository implements TaskRepository1{
+
   final TaskList taskList;
-  final BehaviorSubject<List<TaskModel>> _subject;
-  bool _loaded = false;
 
-  TaskRepository(this.taskList, {List<TaskModel> seed})
-      : _subject = BehaviorSubject<List<TaskModel>>.seeded(seed ?? []);
+  FakeTaskRepository({this.taskList});
 
-
-  List<TaskModel> get snapshot => _subject.value ?? [];
-
-  Stream<List<TaskModel>> get tasks {
-    if (!_loaded) _loadTasks();
-
-    return _subject.stream;
+  Future<List<TaskModel>> addDateToComplete(int index, DateTime dateTime) async {
+    return taskList.addDateToComplete(index, dateTime);
   }
 
-  Future<void> updateTask(TaskModel task, int index) async {
-    final tasks = _subject.value;
-    tasks[index] = task;
-    _subject.add(tasks);
+  Future<List<TaskModel>> editTaskName(int index, String value) async {
+    return taskList.editTaskName(index, value);
   }
 
-  void deleteInnerTask(TaskModel task, int index,  int innerIndex){
-    final taskList = _subject.value;
-    taskList[index].innerTasks.removeAt(innerIndex);
-    _subject.add(taskList);
+  Future<List<TaskModel>> createNewInnerTask(int index, String value) async {
+    return taskList.createNewInnerTask(index, value);
   }
 
-  void deleteTask(TaskModel task){
-    final taskList = _subject.value;
-    taskList.remove(task);
-    _subject.add(taskList);
+  Future<List<TaskModel>> deleteInnerTask(int index, int innerIndex) async {
+    return taskList.deleteInnerTask(index, innerIndex);
   }
 
-  void createNewInnerTask(int index, String value){
-    final _newInnerTask = InnerTask(title: value);
-    final taskList = _subject.value;
-    taskList[index].innerTasks.add(_newInnerTask);
-    _subject.add(taskList);
+  Future<List<TaskModel>> toggleInnerTaskComplete(int index, int innerIndex) async {
+    return taskList.toggleInnerTaskComplete(index, innerIndex);
   }
 
-  void createNewTask(String value){
-    final _newTask = TaskModel(title: value, innerTasks: []);
-    final taskList = _subject.value;
-    taskList.add(_newTask);
-    _subject.add(taskList);
+  @override
+  Future<List<TaskModel>> getTaskList() async {
+    return taskList.getFirstTaskList();
   }
 
-  void _loadTasks(){
-    _loaded = true;
-
-    taskList.getFirstTaskList().then((tasks) => _subject.add(tasks));
+  @override
+  Future<List<TaskModel>> createNewTask(String value) async {
+    return taskList.createNewTask(value);
   }
+
+  Future<List<TaskModel>> toggleTaskComplete(int index) async {
+    return taskList.toggleTaskComplete(index);
+  }
+
+  Future<List<TaskModel>> deleteTask(int index) async {
+    return taskList.deleteTask(index);
+  }
+
+  Future<List<TaskModel>> deleteAllCompletedTasks() async {
+    return taskList.deleteAllCompletedTasks();
+  }
+
+
 }

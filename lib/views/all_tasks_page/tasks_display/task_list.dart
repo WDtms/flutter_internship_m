@@ -1,49 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/bloc/bloc_provider.dart';
-import 'package:flutter_internship_v2/bloc/blocs/task_list.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
+import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/pages/current_task.dart';
 import 'package:flutter_internship_v2/styles/my_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TaskList1 extends StatelessWidget {
 
-  final backGroundColor;
-  final appBarColor;
+  final List<TaskModel> taskList;
 
-  TaskList1({this.appBarColor, this.backGroundColor});
+  TaskList1({this.taskList});
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of(context).taskListBloc;
-    return StreamBuilder(
-      stream: bloc.tasks,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-
-        if(snapshot.data.isEmpty){
-          return displayImages();
-        }
-
-        return ListView.builder(
-          padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
-          itemCount: snapshot.data.length,
-          itemBuilder: (context, index) {
-            return displayTask(context, bloc, snapshot, index);
-          },
-        );
+    return taskList.isEmpty ?
+        displayImages()
+        : ListView.builder(
+      padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
+      itemCount: taskList.length,
+      itemBuilder: (context, index) {
+        return displayTask(context, index);
       },
     );
   }
 
-  int countCompletedInnerTasks(AsyncSnapshot snapshot, int index){
+  int countCompletedInnerTasks(int index){
     int count = 0;
-    for (InnerTask task in snapshot.data[index].innerTasks){
+    for (InnerTask task in taskList[index].innerTasks){
       if (task.isDone){
         count++;
       }
@@ -66,12 +54,12 @@ class TaskList1 extends StatelessWidget {
     );
   }
 
-  Widget displayTask(BuildContext context, TaskListBloc bloc, AsyncSnapshot snapshot, int index) {
+  Widget displayTask(BuildContext context, int index) {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
-        bloc.deleteTask(snapshot.data[index]);
+        context.bloc<TaskCubit>().deleteTask(index);
       },
       background: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -96,24 +84,26 @@ class TaskList1 extends StatelessWidget {
           child: Row(
             children: [
               Checkbox(
-                value: snapshot.data[index].isDone,
-                activeColor: appBarColor,
+                value: taskList[index].isDone,
+                activeColor: checkTheme(context.bloc<ThemeCubit>().state),
                 onChanged: (bool value) {
-                  bloc.toggleTaskComplete(snapshot.data[index], index);
-                },
+                  context.bloc<TaskCubit>().toggleTaskComplete(index);
+                }
               ),
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask1(index: index, appBarColor: appBarColor, backGroundColor: backGroundColor,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask1(
+                      index: index,
+                    )));
                   },
                   child: Builder(
                     builder: (BuildContext context) {
 
-                      if (snapshot.data[index].innerTasks.isEmpty) {
+                      if (taskList[index].innerTasks.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(snapshot.data[index].title),
+                          child: Text(taskList[index].title),
                         );
                       }
 
@@ -125,9 +115,9 @@ class TaskList1 extends StatelessWidget {
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(bottom: 4),
-                                child: Text(snapshot.data[index].title),
+                                child: Text(taskList[index].title),
                               ),
-                              Text('${countCompletedInnerTasks(snapshot, index)} из ${snapshot.data[index].innerTasks.length}')
+                              Text('${countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}')
                             ],
                           ),
                         );
@@ -141,5 +131,12 @@ class TaskList1 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color checkTheme(ThemeState state) {
+    if (state is ThemeChangedState)
+      return state.theme.keys.toList().first;
+    else
+      return Color(0xff6200EE);
   }
 }
