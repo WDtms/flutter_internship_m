@@ -3,10 +3,6 @@ import 'package:flutter_internship_v2/models/task.dart';
 
 class TaskList{
 
-  final String title;
-
-  TaskList({this.title});
-
   bool isHidden = false;
 
   List<TaskModel> createNewInnerTask(int index, String value) {

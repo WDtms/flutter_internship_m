@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
-import 'package:flutter_internship_v2/views/current_task_page/select_time_dialog.dart';
+import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/select_time_dialog.dart';
 
 class MyDateCard extends StatelessWidget {
 

@@ -46,37 +46,5 @@ class PopupMenuCurrentTask extends StatelessWidget {
           }
         }
     );
-
-    /*
-    return StreamBuilder(
-      stream: bloc.tasks,
-      builder: (context, snapshot) {
-        return PopupMenuButton<String>(
-          onSelected: (String choice) {
-            if (choice == ConstantsOnPopUpCurrentTask.delete){
-              Navigator.of(context).pop();
-              bloc.deleteTask(snapshot.data[index]);
-            }
-            else {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return FormDialogCurrentTask(index: index);
-                  }
-              );
-            }
-          },
-          itemBuilder: (BuildContext context) {
-            return ConstantsOnPopUpCurrentTask.choices.map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-        );
-      }
-    );
-     */
   }
 }

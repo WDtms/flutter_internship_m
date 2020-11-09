@@ -5,7 +5,7 @@ import 'package:flutter_internship_v2/repository/task_repository.dart';
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState>{
-  final TaskRepository1 _taskRepository;
+  final TaskRepository _taskRepository;
 
   TaskCubit(this._taskRepository) : super(TaskInitialState());
 

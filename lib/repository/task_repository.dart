@@ -2,7 +2,7 @@
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/models/task_list.dart';
 
-abstract class TaskRepository1{
+abstract class TaskRepository{
 
   Future<List<TaskModel>> getTaskList();
 
@@ -23,9 +23,10 @@ abstract class TaskRepository1{
   Future<List<TaskModel>> editTaskName(int index, String value);
 
   Future<List<TaskModel>> addDateToComplete(int index, DateTime dateTime);
+
 }
 
-class FakeTaskRepository implements TaskRepository1{
+class FakeTaskRepository implements TaskRepository{
 
   final TaskList taskList;
 
