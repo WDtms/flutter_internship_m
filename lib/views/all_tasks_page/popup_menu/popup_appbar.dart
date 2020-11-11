@@ -7,12 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PopupMenu1 extends StatelessWidget {
 
+  final String id;
+
+  PopupMenu1({this.id});
+
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       onSelected: (String choice) {
         if (choice == Constants.delete){
-          context.bloc<TaskCubit>().deleteAllCompletedTasks();
+          context.bloc<TaskCubit>().deleteAllCompletedTasks(id);
         }
         if (choice == Constants.hide){
 

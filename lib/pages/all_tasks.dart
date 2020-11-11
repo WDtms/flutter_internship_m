@@ -3,65 +3,94 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/repository/interactor.dart';
+import 'package:flutter_internship_v2/repository/repository.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/floating_create_button/form_dialog.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/popup_menu/popup_appbar.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_list.dart';
 
-class TaskPage extends StatelessWidget {
+class TaskPage extends StatefulWidget {
 
+  final String id;
+
+  TaskPage({this.id});
+  
+  @override
+  _TaskPageState createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPage> {
+
+  TaskCubit cubit;
+  
+  @override
+  void initState() {
+    cubit = TaskCubit(TaskInteractor.getInstance(repository: Repository()));
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return Scaffold(
-              backgroundColor: checkTheme(context, state, 1),
-              appBar: AppBar(
-                backgroundColor: checkTheme(context, state, 2),
-                leading: Icon(Icons.arrow_back_sharp),
-                title: Text('Задачи'),
-                actions: [
-                  BlocBuilder<TaskCubit, TaskState>(
-                    builder: (context, state) {
-                      if (state is TaskInUsageState) {
-                        return PopupMenu1();
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  )
-                ],
-              ),
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add_sharp),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return FormDialog();
-                      }
-                  );
-                },
-                backgroundColor: Colors.teal,
-              ),
-              body: BlocBuilder<TaskCubit, TaskState>(
-                builder: (context, state) {
-                  if (state is TaskLoadingState) {
+    return BlocProvider(
+      create: (context) => cubit,
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return Scaffold(
+                backgroundColor: checkTheme(context, state, 1),
+                appBar: AppBar(
+                  backgroundColor: checkTheme(context, state, 2),
+                  leading: Icon(Icons.arrow_back_sharp),
+                  title: Text('Задачи'),
+                  actions: [
+                    BlocBuilder<TaskCubit, TaskState>(
+                      builder: (context, state) {
+                        if (state is TaskInUsageState) {
+                          return PopupMenu1();
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    )
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add_sharp),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return FormDialog(
+                            id: widget.id,
+                            createTask: (String value) {
+                              context.bloc<TaskCubit>().createNewTask(widget.id, value);
+                            },
+                          );
+                        }
+                    );
+                  },
+                  backgroundColor: Colors.teal,
+                ),
+                body: BlocBuilder<TaskCubit, TaskState>(
+                  builder: (context, state) {
+                    if (state is TaskLoadingState) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    else if (state is TaskInUsageState) {
+                      return TaskList1(
+                        id: widget.id,
+                        taskList: state.taskList,
+                      );
+                    }
+                    context.bloc<TaskCubit>().getTasks(widget.id);
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  }
-                  else if (state is TaskInUsageState) {
-                    return TaskList1(
-                      taskList: state.taskList,
-                    );
-                  }
-                  context.bloc<TaskCubit>().getTasks();
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              )
-          );
-        }
+                  },
+                )
+            );
+          }
+      ),
     );
   }
 
@@ -74,6 +103,12 @@ class TaskPage extends StatelessWidget {
     if (index == 1)
       return Color.fromRGBO(181, 201, 253, 1);
     return Color(0xff6200EE);
+  }
+
+  @override
+  void dispose() {
+    cubit.close();
+    super.dispose();
   }
 }
 

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
 class SelectTimeDialog extends StatefulWidget {
 
-  final int index;
   final DateTime dateTime;
+  final Function(DateTime dateTime) selectDateToComplete;
 
-  SelectTimeDialog({this.index, this.dateTime});
+  SelectTimeDialog({this.dateTime, this.selectDateToComplete});
 
   @override
   _SelectTimeDialogState createState() => _SelectTimeDialogState();
@@ -21,7 +19,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
         InkWell(
           child: Text('Сегодня'),
           onTap: () {
-            context.bloc<TaskCubit>().addDateToComplete(widget.index, widget.dateTime);
+            widget.selectDateToComplete(widget.dateTime);
             Navigator.pop(context);
           },
         ),
@@ -29,7 +27,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
           child: Text('Завтра'),
           onTap: () {
             var dateTimeToComplete = DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day + 1);
-            context.bloc<TaskCubit>().addDateToComplete(widget.index, dateTimeToComplete);
+            widget.selectDateToComplete(dateTimeToComplete);
             Navigator.pop(context);
           },
         ),
@@ -37,7 +35,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
           child: Text('На следующей неделе'),
           onTap: () {
             var dateTimeToComplete = DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day + 7);
-            context.bloc<TaskCubit>().addDateToComplete(widget.index, dateTimeToComplete);
+            widget.selectDateToComplete(dateTimeToComplete);
             Navigator.pop(context);
           },
         ),
@@ -49,8 +47,8 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
               initialDate: DateTime.now(),
               firstDate: DateTime.now(),
               lastDate: DateTime(2022),
-            ).then((date) {
-              context.bloc<TaskCubit>().addDateToComplete(widget.index, date);
+            ).then((dateTimeToComplete) {
+              widget.selectDateToComplete(dateTimeToComplete);
               Navigator.pop(context);
             });
           },

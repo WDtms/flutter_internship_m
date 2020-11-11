@@ -6,8 +6,9 @@ import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 class FormDialogCurrentTask extends StatefulWidget {
 
   final int index;
+  final Function(String value) editTaskName;
 
-  FormDialogCurrentTask({this.index});
+  FormDialogCurrentTask({this.index, this.editTaskName});
 
   @override
   _FormDialogState createState() => _FormDialogState();
@@ -29,7 +30,7 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
             builder: (context, state) {
               return TextFormField(
                   onSaved: (String value) {
-                    context.bloc<TaskCubit>().editTaskName(widget.index, value);
+                    widget.editTaskName(value);
                   },
                   validator: (value){
                     if(value.length > 40){

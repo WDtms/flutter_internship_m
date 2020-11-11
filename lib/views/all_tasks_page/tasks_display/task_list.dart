@@ -13,8 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TaskList1 extends StatelessWidget {
 
   final List<TaskModel> taskList;
+  final String id;
 
-  TaskList1({this.taskList});
+  TaskList1({this.taskList, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class TaskList1 extends StatelessWidget {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
-        context.bloc<TaskCubit>().deleteTask(index);
+        context.bloc<TaskCubit>().deleteTask(id, index);
       },
       background: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -87,7 +88,7 @@ class TaskList1 extends StatelessWidget {
                 value: taskList[index].isDone,
                 activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
                 onChanged: (bool value) {
-                  context.bloc<TaskCubit>().toggleTaskComplete(index);
+                  context.bloc<TaskCubit>().toggleTaskComplete(id, index);
                 }
               ),
               Expanded(

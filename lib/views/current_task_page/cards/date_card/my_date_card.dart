@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/current_task_cubit/current_task_cubit.dart';
 import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/select_time_dialog.dart';
 
 class MyDateCard extends StatelessWidget {
 
   final int index;
+  final String id;
 
-  MyDateCard({this.index});
+  MyDateCard({this.index, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,9 @@ class MyDateCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            BlocBuilder<TaskCubit, TaskState>(
+            BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
               builder: (context, state) {
-                if (state is TaskInUsageState){
+                if (state is CurrentTaskInUsageState){
                   return Row(
                     children: [
                       Padding(
@@ -40,7 +41,12 @@ class MyDateCard extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return SelectTimeDialog(index: index, dateTime: state.taskList[index].dateOfCreation);
+                                  return SelectTimeDialog(
+                                    dateTime: state.task.dateOfCreation,
+                                    selectDateToComplete: (DateTime dateTime) {
+                                      context.bloc<CurrentTaskCubit>().addDateToComplete(id, index, dateTime);
+                                    },
+                                  );
                                 }
                                 );
                             },
@@ -60,11 +66,11 @@ class MyDateCard extends StatelessWidget {
     );
   }
 
-  Widget _displayDateToComplete(TaskState state){
-    if (state is TaskInUsageState){
-      if (state.taskList[index].dateToComplete == null)
+  Widget _displayDateToComplete(CurrentTaskState state){
+    if (state is CurrentTaskInUsageState){
+      if (state.task.dateToComplete == null)
         return Text('Добавить дату выполнения');
-      DateTime date = state.taskList[index].dateToComplete;
+      DateTime date = state.task.dateToComplete;
       return Text("${date.day.toString()}.${date.month.toString()}.${date.year.toString()}");
     }
     return const SizedBox.shrink();

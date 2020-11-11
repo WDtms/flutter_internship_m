@@ -4,9 +4,10 @@ import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
 class CurrentTaskFloatingButton extends StatefulWidget {
 
+  final Function() toggleInnerTaskComplete;
   final index;
 
-  CurrentTaskFloatingButton({this.index});
+  CurrentTaskFloatingButton({this.index, this.toggleInnerTaskComplete});
 
   @override
   _CurrentTaskFloatingButtonState createState() => _CurrentTaskFloatingButtonState();
@@ -33,7 +34,7 @@ class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
                   },
                 ),
                 onPressed: () {
-                  context.bloc<TaskCubit>().toggleTaskComplete(widget.index);
+                  widget.toggleInnerTaskComplete();
                 },
               ),
           );

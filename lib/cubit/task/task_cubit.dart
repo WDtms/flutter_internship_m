@@ -1,62 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/repository/task_repository.dart';
+import 'package:flutter_internship_v2/repository/interactor.dart';
 
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState>{
-  final TaskRepository _taskRepository;
+  final Interactor _taskInteractor;
 
-  TaskCubit(this._taskRepository) : super(TaskInitialState());
+  TaskCubit(this._taskInteractor) : super(TaskInitialState());
 
-  Future<void> addDateToComplete(int index, DateTime dateTime) async {
-    final taskList = await _taskRepository.addDateToComplete(index, dateTime);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> editTaskName(int index, String value) async {
-    final taskList = await _taskRepository.editTaskName(index, value);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> createNewInnerTask(int index, String value) async {
-    final taskList = await _taskRepository.createNewInnerTask(index, value);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> deleteInnerTask(int index, int innerIndex) async {
-    final taskList = await _taskRepository.deleteInnerTask(index, innerIndex);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> toggleInnerTaskComplete(int index, int innerIndex) async {
-    final taskList = await _taskRepository.toggleInnerTaskComplete(index, innerIndex);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> getTasks() async {
+  Future<void> getTasks(String id) async {
     emit(TaskLoadingState());
-    final taskList = await _taskRepository.getTaskList();
+    final taskList = await _taskInteractor.getTaskList(id);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> createNewTask(String value) async {
-    final taskList = await _taskRepository.createNewTask(value);
+  Future<void> createNewTask(String id, String value) async {
+    final taskList = await _taskInteractor.createNewTask(id, value);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> toggleTaskComplete(int index) async {
-    final taskList = await _taskRepository.toggleTaskComplete(index);
+  Future<void> toggleTaskComplete(String id, int index) async {
+    final taskList = await _taskInteractor.toggleTaskComplete(id, index);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> deleteTask(int index) async {
-    final taskList = await _taskRepository.deleteTask(index);
+  Future<void> deleteTask(String id, int index) async {
+    final taskList = await _taskInteractor.deleteTask(id, index);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> deleteAllCompletedTasks() async {
-    final taskList = await _taskRepository.deleteAllCompletedTasks();
+  Future<void> deleteAllCompletedTasks(String id) async {
+    final taskList = await _taskInteractor.deleteAllCompletedTasks(id);
     emit(TaskInUsageState(taskList: taskList));
   }
 }
