@@ -11,13 +11,13 @@ class BranchCubit extends Cubit<BranchState>{
 
   Future<void> getBranches() async {
     emit(BranchLoadingState());
-    final _branches = _taskRepositoryAlpha.getBranches();
-    emit(BranchInUsageState(branches: _branches));
+    final branches = _taskRepositoryAlpha.getBranches();
+    emit(BranchInUsageState(branches: branches));
   }
 
   Future<void> createNewBranch() async {
-    final _branches = _taskRepositoryAlpha.createNewBranch();
-    emit(BranchInUsageState(branches: _branches));
+    final branches = _taskRepositoryAlpha.createNewBranch();
+    emit(BranchInUsageState(branches: branches));
   }
 
 }

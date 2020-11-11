@@ -12,19 +12,12 @@ class RadioButtonThemes extends StatefulWidget {
 
 class _RadioButtonThemesState extends State<RadioButtonThemes> {
 
-  int selectedRadio;
+  int _selectedRadio;
   final themes = ThemeList().getAllThemes();
 
   @override
   void initState() {
     super.initState();
-  }
-
-  setSelectedRadio(int value){
-    setState(() {
-      selectedRadio = value;
-    });
-    context.bloc<ThemeCubit>().changeTheme(value);
   }
 
   @override
@@ -48,7 +41,7 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
               child: Radio(
                 value: index,
                 activeColor: Colors.indigo,
-                groupValue: selectedRadio,
+                groupValue: _selectedRadio,
                 onChanged: (value) {
                   setSelectedRadio(value);
                 },
@@ -58,5 +51,12 @@ class _RadioButtonThemesState extends State<RadioButtonThemes> {
         },
       ),
     );
+  }
+
+  void setSelectedRadio(int value){
+    setState(() {
+      _selectedRadio = value;
+    });
+    context.bloc<ThemeCubit>().changeTheme(value);
   }
 }

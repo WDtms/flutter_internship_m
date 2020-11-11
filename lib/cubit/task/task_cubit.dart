@@ -10,53 +10,53 @@ class TaskCubit extends Cubit<TaskState>{
   TaskCubit(this._taskRepository) : super(TaskInitialState());
 
   Future<void> addDateToComplete(int index, DateTime dateTime) async {
-    final _taskList = await _taskRepository.addDateToComplete(index, dateTime);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.addDateToComplete(index, dateTime);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> editTaskName(int index, String value) async {
-    final _taskList = await _taskRepository.editTaskName(index, value);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.editTaskName(index, value);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> createNewInnerTask(int index, String value) async {
-    final _taskList = await _taskRepository.createNewInnerTask(index, value);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.createNewInnerTask(index, value);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> deleteInnerTask(int index, int innerIndex) async {
-    final _taskList = await _taskRepository.deleteInnerTask(index, innerIndex);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.deleteInnerTask(index, innerIndex);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> toggleInnerTaskComplete(int index, int innerIndex) async {
-    final _taskList = await _taskRepository.toggleInnerTaskComplete(index, innerIndex);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.toggleInnerTaskComplete(index, innerIndex);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> getTasks() async {
     emit(TaskLoadingState());
-    final _taskList = await _taskRepository.getTaskList();
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.getTaskList();
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> createNewTask(String value) async {
-    final _taskList = await _taskRepository.createNewTask(value);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.createNewTask(value);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> toggleTaskComplete(int index) async {
-    final _taskList = await _taskRepository.toggleTaskComplete(index);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.toggleTaskComplete(index);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> deleteTask(int index) async {
-    final _taskList = await _taskRepository.deleteTask(index);
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.deleteTask(index);
+    emit(TaskInUsageState(taskList: taskList));
   }
 
   Future<void> deleteAllCompletedTasks() async {
-    final _taskList = await _taskRepository.deleteAllCompletedTasks();
-    emit(TaskInUsageState(taskList: _taskList));
+    final taskList = await _taskRepository.deleteAllCompletedTasks();
+    emit(TaskInUsageState(taskList: taskList));
   }
 }

@@ -13,7 +13,7 @@ class MyDateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
         decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -35,7 +35,7 @@ class MyDateCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                          child: displayDateToComplete(state),
+                          child: _displayDateToComplete(state),
                           onTap: () {
                             showDialog(
                                 context: context,
@@ -60,15 +60,13 @@ class MyDateCard extends StatelessWidget {
     );
   }
 
-  displayDateToComplete(TaskState state){
+  Widget _displayDateToComplete(TaskState state){
     if (state is TaskInUsageState){
-      if (state.taskList[index].dateToComplete == null) {
+      if (state.taskList[index].dateToComplete == null)
         return Text('Добавить дату выполнения');
-      } else {
-        DateTime date = state.taskList[index].dateToComplete;
-        return Text("${date.day.toString()}.${date.month.toString()}.${date.year
-            .toString()}");
-      }
+      DateTime date = state.taskList[index].dateToComplete;
+      return Text("${date.day.toString()}.${date.month.toString()}.${date.year.toString()}");
     }
+    return const SizedBox.shrink();
   }
 }

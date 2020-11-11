@@ -13,7 +13,7 @@ class CurrentTaskFloatingButton extends StatefulWidget {
 }
 
 class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
-  GlobalKey key = GlobalKey();
+  GlobalKey _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
         builder: (context, state) {
         if (state is TaskInUsageState){
           return Transform.translate(
-            key: key,
+            key: _key,
             offset: Offset(20, 38),
               child: FloatingActionButton(
                 backgroundColor: Colors.teal,
@@ -29,8 +29,7 @@ class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
                   builder: (context) {
                     if (state.taskList[widget.index].isDone)
                       return Icon(Icons.close);
-                    else
-                      return Icon(Icons.check);
+                    return Icon(Icons.check);
                   },
                 ),
                 onPressed: () {
@@ -39,9 +38,7 @@ class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
               ),
           );
         }
-        else {
-          return SizedBox.shrink();
-        }
+        return SizedBox.shrink();
         }
         );
   }

@@ -5,6 +5,34 @@ class TaskList{
 
   bool isHidden = false;
 
+  List<TaskModel> _taskList = [
+    TaskModel(
+      title: "Дорисовать дизайн",
+      innerTasks: [],
+      dateOfCreation: DateTime.now(),
+      dateToComplete: null,
+    ),
+    TaskModel(
+      title: "Дописать тз на стажировку",
+      innerTasks: [
+        InnerTask(
+          title: 'Что-то там',
+        ),
+        InnerTask(
+            title: 'и еще вот это'
+        )
+      ],
+      dateOfCreation: DateTime.now(),
+      dateToComplete: null,
+    ),
+    TaskModel(
+      title: "Дописать план",
+      innerTasks: [],
+      dateOfCreation: DateTime.now(),
+      dateToComplete: null,
+    ),
+  ];
+
   List<TaskModel> createNewInnerTask(int index, String value) {
     _taskList[index].innerTasks.add(InnerTask(title: value));
     return _taskList;
@@ -54,32 +82,4 @@ class TaskList{
     _taskList[index].innerTasks.removeAt(innerIndex);
     return _taskList;
   }
-
-  List<TaskModel> _taskList = [
-    TaskModel(
-      title: "Дорисовать дизайн",
-      innerTasks: [],
-      dateOfCreation: DateTime.now(),
-      dateToComplete: null,
-    ),
-    TaskModel(
-      title: "Дописать тз на стажировку",
-      innerTasks: [
-        InnerTask(
-          title: 'Что-то там',
-        ),
-        InnerTask(
-            title: 'и еще вот это'
-        )
-      ],
-      dateOfCreation: DateTime.now(),
-      dateToComplete: null,
-    ),
-    TaskModel(
-      title: "Дописать план",
-      innerTasks: [],
-      dateOfCreation: DateTime.now(),
-      dateToComplete: null,
-    ),
-  ];
 }

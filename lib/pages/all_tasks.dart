@@ -25,9 +25,7 @@ class TaskPage extends StatelessWidget {
                       if (state is TaskInUsageState) {
                         return PopupMenu1();
                       }
-                      else {
-                        return SizedBox.shrink();
-                      }
+                      return const SizedBox.shrink();
                     },
                   )
                 ],
@@ -56,35 +54,26 @@ class TaskPage extends StatelessWidget {
                       taskList: state.taskList,
                     );
                   }
-                  else {
-                    context.bloc<TaskCubit>().getTasks();
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                  context.bloc<TaskCubit>().getTasks();
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
                 },
               )
           );
         }
-        );
+    );
   }
 
-  Color checkTheme(BuildContext context, ThemeState state, int index){
-    if (state is ThemeChangedState){
-      if (index == 1){
+  Color checkTheme(BuildContext context, ThemeState state, int index) {
+    if (state is ThemeChangedState) {
+      if (index == 1)
         return state.theme.values.toList().first;
-      }
-      else {
-        return state.theme.keys.toList().first;
-      }
+      return state.theme.keys.toList().first;
     }
-    else {
-      if (index == 1){
-        return Color.fromRGBO(181, 201, 253, 1);
-      }
-      else
-        return Color(0xff6200EE);
-    }
+    if (index == 1)
+      return Color.fromRGBO(181, 201, 253, 1);
+    return Color(0xff6200EE);
   }
 }
 

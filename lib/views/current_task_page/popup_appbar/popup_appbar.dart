@@ -21,8 +21,7 @@ class PopupMenuCurrentTask extends StatelessWidget {
                 if (choice == ConstantsOnPopUpCurrentTask.delete){
                   context.bloc<TaskCubit>().deleteTask(index);
                   Navigator.of(context).pop();
-                }
-                else {
+                } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {

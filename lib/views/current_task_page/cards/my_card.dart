@@ -23,7 +23,7 @@ class _MyCardState1 extends State<MyCard1> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+          margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
           decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -41,23 +41,21 @@ class _MyCardState1 extends State<MyCard1> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    displayDateOfCreation(state),
+                    _displayDateOfCreation(state),
                     for (int i = 0; i <state.taskList[widget.index].innerTasks.length; i++)
-                      displayTask(widget.index, i, state),
-                    decideWhatToDisplay(widget.index),
+                      _displayTask(widget.index, i, state),
+                    _decideWhatToDisplay(widget.index),
                   ],
                 );
               }
-              else {
-                return CircularProgressIndicator();
-              }
+              return CircularProgressIndicator();
             },
           )
       ),
     );
   }
 
-  displayDateOfCreation(TaskState state){
+  Widget _displayDateOfCreation(TaskState state){
     if (state is TaskInUsageState){
       DateTime date = state.taskList[widget.index].dateOfCreation;
       return Row(
@@ -70,16 +68,16 @@ class _MyCardState1 extends State<MyCard1> {
         ],
       );
     }
+    return const SizedBox.shrink();
   }
 
-  checkTheme(ThemeState state){
+  _checkTheme(ThemeState state){
     if (state is ThemeChangedState)
       return state.theme.keys.toList().first;
-    else
-      return Color(0xff6200EE);
+    return Color(0xff6200EE);
   }
 
-  displayTask(int index, int innerIndex, TaskState state) {
+  _displayTask(int index, int innerIndex, TaskState state) {
     if (state is TaskInUsageState) {
       return Padding(
         padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -88,7 +86,7 @@ class _MyCardState1 extends State<MyCard1> {
             children: [
               Checkbox(
                 value: state.taskList[index].innerTasks[innerIndex].isDone,
-                activeColor: checkTheme(context.bloc<ThemeCubit>().state),
+                activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
                 onChanged: (bool value) {
                   context.bloc<TaskCubit>().toggleInnerTaskComplete(index, innerIndex);
                 },
@@ -117,21 +115,21 @@ class _MyCardState1 extends State<MyCard1> {
   }
 
 
-  decideWhatToDisplay(int index){
+  _decideWhatToDisplay(int index){
     if (isCreating){
       return Column(
         children: <Widget>[
-          displayTextField(index),
-          displayAddTask()
+          _displayTextField(index),
+          _displayAddTask()
         ],
       );
     }
     else {
-      return displayAddTask();
+      return _displayAddTask();
     }
   }
 
-  displayTextField(int index){
+  _displayTextField(int index){
     return Container(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: TextField(
@@ -147,7 +145,7 @@ class _MyCardState1 extends State<MyCard1> {
     );
   }
 
-  displayAddTask(){
+  _displayAddTask(){
     return InkWell(
         onTap: () {
           setState(() {
@@ -176,5 +174,11 @@ class _MyCardState1 extends State<MyCard1> {
           ],
         )
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

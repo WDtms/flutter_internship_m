@@ -19,17 +19,17 @@ class TaskList1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return taskList.isEmpty ?
-        displayImages()
+        _displayImages()
         : ListView.builder(
       padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
       itemCount: taskList.length,
       itemBuilder: (context, index) {
-        return displayTask(context, index);
+        return _displayTask(context, index);
       },
     );
   }
 
-  int countCompletedInnerTasks(int index){
+  int _countCompletedInnerTasks(int index){
     int count = 0;
     for (InnerTask task in taskList[index].innerTasks){
       if (task.isDone){
@@ -39,7 +39,7 @@ class TaskList1 extends StatelessWidget {
     return count;
   }
 
-  Widget displayImages(){
+  Widget _displayImages(){
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +54,7 @@ class TaskList1 extends StatelessWidget {
     );
   }
 
-  Widget displayTask(BuildContext context, int index) {
+  Widget _displayTask(BuildContext context, int index) {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -85,7 +85,7 @@ class TaskList1 extends StatelessWidget {
             children: [
               Checkbox(
                 value: taskList[index].isDone,
-                activeColor: checkTheme(context.bloc<ThemeCubit>().state),
+                activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
                 onChanged: (bool value) {
                   context.bloc<TaskCubit>().toggleTaskComplete(index);
                 }
@@ -117,7 +117,7 @@ class TaskList1 extends StatelessWidget {
                                 padding: EdgeInsets.only(bottom: 4),
                                 child: Text(taskList[index].title),
                               ),
-                              Text('${countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}')
+                              Text('${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}')
                             ],
                           ),
                         );
@@ -133,7 +133,7 @@ class TaskList1 extends StatelessWidget {
     );
   }
 
-  Color checkTheme(ThemeState state) {
+  Color _checkTheme(ThemeState state) {
     if (state is ThemeChangedState)
       return state.theme.keys.toList().first;
     else
