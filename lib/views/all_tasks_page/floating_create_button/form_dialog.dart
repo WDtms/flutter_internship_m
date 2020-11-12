@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
-
 
 class FormDialog extends StatefulWidget {
 
@@ -28,7 +25,7 @@ class _FormDialogState extends State<FormDialog> {
           Text('Создать задачу'),
           TextFormField(
               onSaved: (String value) {
-                context.bloc<TaskCubit>().createNewTask(widget.id, value);
+                widget.createTask(value);
               },
               validator: (value){
                 if(value.length > 40){

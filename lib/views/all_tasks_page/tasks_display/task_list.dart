@@ -94,7 +94,11 @@ class TaskList1 extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentTask1(
+                    Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
+                      updateTaskList: () {
+                        context.bloc<TaskCubit>().updateTaskList(id);
+                      },
+                      id: id,
                       index: index,
                     )));
                   },

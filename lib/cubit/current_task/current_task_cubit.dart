@@ -41,6 +41,11 @@ class CurrentTaskCubit extends Cubit<CurrentTaskState>{
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  Future<void> toggleTaskCompleteFromCurrentTaskPage(String id, int index) async {
+    final task = await _taskInteractor.toggleTaskCompleteFromCurrentTaskPage(id, index);
+    emit(CurrentTaskInUsageState(task: task));
+  }
+
   Future<void> deleteTask(String id, int index) async {
     await _taskInteractor.deleteTask(id, index);
   }

@@ -1,15 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/current_task_cubit/current_task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 
 class MyCard1 extends StatefulWidget {
 
+  final Function() updateTaskList;
   final int index;
   final String id;
 
-  MyCard1({this.id, this.index});
+  MyCard1({this.id, this.index, this.updateTaskList});
 
   @override
   _MyCardState1 createState() => _MyCardState1();
@@ -88,8 +89,9 @@ class _MyCardState1 extends State<MyCard1> {
               Checkbox(
                 value: state.task.innerTasks[innerIndex].isDone,
                 activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
-                onChanged: (bool value) {
-                  context.bloc<CurrentTaskCubit>().toggleInnerTaskComplete(id, index, innerIndex);
+                onChanged: (bool value) async {
+                  await context.bloc<CurrentTaskCubit>().toggleInnerTaskComplete(id, index, innerIndex);
+                  widget.updateTaskList();
                 },
               ),
               Expanded(
@@ -104,8 +106,9 @@ class _MyCardState1 extends State<MyCard1> {
               ),
               IconButton(
                 icon: Icon(Icons.close),
-                onPressed: () {
-                  context.bloc<CurrentTaskCubit>().deleteInnerTask(id, index, innerIndex);
+                onPressed: () async {
+                  await context.bloc<CurrentTaskCubit>().deleteInnerTask(id, index, innerIndex);
+                  widget.updateTaskList();
                 },
               )
             ],

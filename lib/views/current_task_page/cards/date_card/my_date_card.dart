@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/current_task_cubit/current_task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/select_time_dialog.dart';
 
 class MyDateCard extends StatelessWidget {
@@ -40,7 +40,7 @@ class MyDateCard extends StatelessWidget {
                           onTap: () {
                             showDialog(
                                 context: context,
-                                builder: (BuildContext context) {
+                                builder: (BuildContext context1) {
                                   return SelectTimeDialog(
                                     dateTime: state.task.dateOfCreation,
                                     selectDateToComplete: (DateTime dateTime) {

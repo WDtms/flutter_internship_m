@@ -4,6 +4,8 @@ import 'package:flutter_internship_v2/repository/repository.dart';
 
 abstract class Interactor{
 
+  Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo();
+
   //Начало TaskCubit
 
   Future<List<TaskModel>> getTaskList(String id);
@@ -52,6 +54,10 @@ class TaskInteractor implements Interactor{
     return _instance;
   }
 
+  Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo() async {
+    return repository.getBranchesInfo();
+  }
+
   Future<TaskModel> getTask(String id, int index) async {
     return repository.getTask(id, index);
   }
@@ -74,6 +80,10 @@ class TaskInteractor implements Interactor{
 
   Future<TaskModel> toggleInnerTaskComplete(String id, int index, int innerIndex) async {
     return repository.toggleInnerTaskComplete(id, index, innerIndex);
+  }
+
+  Future<TaskModel> toggleTaskCompleteFromCurrentTaskPage(String id, int index) async {
+    return repository.toggleTaskCompleteFromCurrentTaskPage(id, index);
   }
 
   @override

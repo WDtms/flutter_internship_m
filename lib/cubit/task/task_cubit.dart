@@ -34,4 +34,9 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.deleteAllCompletedTasks(id);
     emit(TaskInUsageState(taskList: taskList));
   }
+
+  Future<void> updateTaskList(String id) async {
+    final taskList = await _taskInteractor.getTaskList(id);
+    emit(TaskInUsageState(taskList: taskList));
+  }
 }

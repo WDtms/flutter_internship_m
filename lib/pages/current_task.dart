@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/current_task_cubit/current_task_cubit.dart';
-import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/my_date_card.dart';
 import 'package:flutter_internship_v2/views/current_task_page/cards/my_card.dart';
@@ -11,10 +10,11 @@ import 'package:flutter_internship_v2/views/current_task_page/popup_appbar/popup
 
 class CurrentTask1 extends StatefulWidget {
 
+  final Function() updateTaskList;
   final String id;
   final int index;
 
-  CurrentTask1({this.id, this.index});
+  CurrentTask1({this.id, this.index, this.updateTaskList});
 
   @override
   _CurrentTask1State createState() => _CurrentTask1State();
@@ -34,14 +34,14 @@ class _CurrentTask1State extends State<CurrentTask1> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => cubit,
-      child: BlocBuilder<ThemeCubit, ThemeState>(
+      child: BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
         builder: (context, state) {
           if (state is CurrentTaskInitialState){
             context.bloc<CurrentTaskCubit>().getTask(widget.id, widget.index);
             return CircularProgressIndicator();
           } else if (state is CurrentTaskInUsageState){
             return Scaffold(
-              backgroundColor: checkTheme(context, state, 1),
+              backgroundColor: Colors.white60,
               body: CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
@@ -49,34 +49,40 @@ class _CurrentTask1State extends State<CurrentTask1> {
                       preferredSize: const Size.fromHeight(0.0),
                       child: Row(
                         children: [
-                          CurrentTaskFloatingButton(index: widget.index),
+                         CurrentTaskFloatingButton(
+                             toggleTaskComplete: () async {
+                               await context.bloc<CurrentTaskCubit>().toggleTaskCompleteFromCurrentTaskPage(widget.id, widget.index);
+                               widget.updateTaskList();
+                             },
+                             index: widget.index
+                         ),
                         ],
                       ),
                     ),
                     actions: [
-                      PopupMenuCurrentTask(index: widget.index),
+                      PopupMenuCurrentTask(
+                          updateTaskList: widget.updateTaskList,
+                          id: widget.id,
+                          index: widget.index
+                      ),
                     ],
                     expandedHeight: 150,
                     snap: false,
                     floating: false,
                     pinned: true,
-                    flexibleSpace: BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
-                      builder: (context, state) {
-                        return FlexibleSpaceBar(
+                    flexibleSpace: FlexibleSpaceBar(
                           centerTitle: true,
                           title: _displayTaskTitle(state, widget.index),
                           background: Container(
-                            color: checkTheme(context, context.bloc<ThemeCubit>().state, 2),
+                            color: Colors.indigo,
                           ),
-                        );
-                      },
                     ),
-                    backgroundColor: checkTheme(context, state, 2),
+                    backgroundColor: Colors.indigo,
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          MyCard1(index: widget.index, id: widget.id),
+                          MyCard1(updateTaskList: widget.updateTaskList, index: widget.index, id: widget.id),
                           MyDateCard(index: widget.index, id: widget.id),
                         ]
                     ),
@@ -89,24 +95,6 @@ class _CurrentTask1State extends State<CurrentTask1> {
         },
       ),
     );
-  }
-
-  Color checkTheme(BuildContext context, ThemeState state, int index){
-    if (state is ThemeChangedState){
-      if (index == 1){
-        return state.theme.values.toList().first;
-      }
-      else {
-        return state.theme.keys.toList().first;
-      }
-    }
-    else {
-      if (index == 1){
-        return Color.fromRGBO(181, 201, 253, 1);
-      }
-      else
-        return Color(0xff6200EE);
-    }
   }
 
   _displayTaskTitle(CurrentTaskState state, int index) {

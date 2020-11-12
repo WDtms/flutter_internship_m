@@ -5,9 +5,19 @@ import 'package:flutter_internship_v2/repository/interactor.dart';
 part 'branch_state.dart';
 
 class BranchCubit extends Cubit<BranchState>{
-  final TaskInteractor _taskRepositoryAlpha;
+  final TaskInteractor _taskInteractor;
 
-  BranchCubit(this._taskRepositoryAlpha) : super(BranchInitialState());
+  BranchCubit(this._taskInteractor) : super(BranchInitialState());
 
+  Future<void> getBranchesInfo() async {
+    emit(BranchLoadingState());
+    final branchesInfo = await _taskInteractor.getBranchesInfo();
+    emit(BranchInUsageState(branchesInfo: branchesInfo));
+  }
+
+  Future<void> updateBranchesInfo() async {
+    final branchesInfo = await _taskInteractor.getBranchesInfo();
+    emit(BranchInUsageState(branchesInfo: branchesInfo));
+  }
 
 }

@@ -39,13 +39,12 @@ class _TaskPageState extends State<TaskPage> {
                 backgroundColor: checkTheme(context, state, 1),
                 appBar: AppBar(
                   backgroundColor: checkTheme(context, state, 2),
-                  leading: Icon(Icons.arrow_back_sharp),
                   title: Text('Задачи'),
                   actions: [
                     BlocBuilder<TaskCubit, TaskState>(
                       builder: (context, state) {
                         if (state is TaskInUsageState) {
-                          return PopupMenu1();
+                          return PopupMenu1(id: widget.id);
                         }
                         return const SizedBox.shrink();
                       },
@@ -57,7 +56,7 @@ class _TaskPageState extends State<TaskPage> {
                   onPressed: () {
                     showDialog(
                         context: context,
-                        builder: (BuildContext context) {
+                        builder: (BuildContext context0) {
                           return FormDialog(
                             id: widget.id,
                             createTask: (String value) {

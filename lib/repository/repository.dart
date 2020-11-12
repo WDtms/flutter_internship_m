@@ -11,7 +11,7 @@ class Repository{
     initiateBranch();
   }
 
-  Map<String, TaskList> branches;
+  Map<String, TaskList> branches = Map<String, TaskList>();
 
   initiateBranch(){
     TaskList branch = TaskList(
@@ -60,8 +60,8 @@ class Repository{
   }
 
   Map<dynamic, dynamic> getInfoFromOneBranch(String id){
-    int countCompletedTasks;
-    int countAllTasks;
+    int countCompletedTasks = 0;
+    int countAllTasks = 0;
     for (TaskModel task in branches[id].taskList){
       if (task.isDone)
         countCompletedTasks++;
@@ -78,7 +78,7 @@ class Repository{
       title: 'new',
       taskList: [],
       theme: firstTheme,
-    );;
+    );
   }
 
   //Конец методов ГЛАВНОЙ СТРАНИЦЫ
@@ -135,6 +135,11 @@ class Repository{
   TaskModel toggleInnerTaskComplete(String id, int indexTask, int innerTaskIndex){
     branches[id].taskList[indexTask].innerTasks[innerTaskIndex].isDone =
         !branches[id].taskList[indexTask].innerTasks[innerTaskIndex].isDone;
+    return branches[id].taskList[indexTask];
+  }
+
+  TaskModel toggleTaskCompleteFromCurrentTaskPage(String id, int indexTask){
+    branches[id].taskList[indexTask].isDone = !branches[id].taskList[indexTask].isDone;
     return branches[id].taskList[indexTask];
   }
 
