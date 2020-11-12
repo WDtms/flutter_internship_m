@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
-import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/pages/current_task.dart';
@@ -12,11 +11,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskList1 extends StatelessWidget {
 
+  final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
   final List<TaskModel> taskList;
   final String id;
 
-  TaskList1({this.updateBranchesInfo, this.taskList, this.id});
+  TaskList1({this.updateBranchesInfo, this.taskList, this.id, this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class TaskList1 extends StatelessWidget {
             children: [
               Checkbox(
                 value: taskList[index].isDone,
-                activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
+                activeColor: theme.keys.toList().first,
                 onChanged: (bool value) async {
                   context.bloc<TaskCubit>().toggleTaskComplete(id, index);
                   updateBranchesInfo();
@@ -98,6 +98,7 @@ class TaskList1 extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
+                      theme: theme,
                       updateBranchesInfo: updateBranchesInfo,
                       updateTaskList: () {
                         context.bloc<TaskCubit>().updateTaskList(id);
@@ -140,12 +141,5 @@ class TaskList1 extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _checkTheme(ThemeState state) {
-    if (state is ThemeChangedState)
-      return state.theme.keys.toList().first;
-    else
-      return Color(0xff6200EE);
   }
 }

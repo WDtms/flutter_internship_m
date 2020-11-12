@@ -71,8 +71,19 @@ class MyDateCard extends StatelessWidget {
       if (state.task.dateToComplete == null)
         return Text('Добавить дату выполнения');
       DateTime date = state.task.dateToComplete;
-      return Text("${date.day.toString()}.${date.month.toString()}.${date.year.toString()}");
+      return Text(
+        "${date.day.toString()}.${date.month.toString()}.${date.year.toString()}",
+        style: TextStyle(
+          color: isExpired(date),
+        ),
+      );
     }
     return const SizedBox.shrink();
+  }
+
+  Color isExpired(DateTime date){
+    if (DateTime.now().isAfter(date))
+      return Color(0xffF64444);
+    return Color(0xff1A9FFF);
   }
 }

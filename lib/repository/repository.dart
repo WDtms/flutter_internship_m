@@ -19,6 +19,7 @@ class Repository{
       title: 'Работа',
       taskList: [
         TaskModel(
+          isDone: true,
           title: "Дорисовать дизайн",
           innerTasks: [],
           dateOfCreation: DateTime.now(),
@@ -53,8 +54,8 @@ class Repository{
   Map<Map<String, String>, Map<dynamic, dynamic>> getBranchesInfo(){
     Map<Map<String, String>, Map<dynamic, dynamic>> branchesInfo = Map<Map<String, String>, Map<dynamic, dynamic>>();
     for (int i = 0; i<branches.length; i++){
-      branchesInfo[{branches.keys.toList().first : branches[branches.keys.toList().first].title}]
-        = getInfoFromOneBranch(branches.keys.toList().first);
+      branchesInfo[{branches.keys.toList().elementAt(i) : branches[branches.keys.toList().elementAt(i)].title}]
+        = getInfoFromOneBranch(branches.keys.toList().elementAt(i));
     }
     return branchesInfo;
   }
@@ -89,12 +90,12 @@ class Repository{
     return branches[id].taskList;
   }
 
-  List<TaskModel> createNewTask(String id, String value){
+  List<TaskModel> createNewTask(String id, String value, DateTime dateToComplete){
     branches[id].taskList.add(TaskModel(
         title: value,
         innerTasks: [],
         dateOfCreation: DateTime.now(),
-        dateToComplete: null
+        dateToComplete: dateToComplete,
     ));
     return branches[id].taskList;
   }
@@ -121,6 +122,15 @@ class Repository{
 
   List<TaskModel> updateTask(String id){
     return branches[id].taskList;
+  }
+
+  Map<Color, Color> getBranchTheme(String id){
+    return branches[id].theme;
+  }
+
+  Map<Color, Color> setBranchTheme(String id, Map<Color, Color> theme){
+    branches[id].theme = theme;
+    return branches[id].theme;
   }
 
   //Конец методов страницы с ОДНОЙ ВЕТКОЙ

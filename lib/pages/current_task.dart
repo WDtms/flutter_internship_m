@@ -14,8 +14,9 @@ class CurrentTask1 extends StatefulWidget {
   final Function() updateTaskList;
   final String id;
   final int index;
+  final Map<Color, Color> theme;
 
-  CurrentTask1({this.id, this.index, this.updateTaskList, this.updateBranchesInfo});
+  CurrentTask1({this.id, this.index, this.updateTaskList, this.updateBranchesInfo, this.theme});
 
   @override
   _CurrentTask1State createState() => _CurrentTask1State();
@@ -42,7 +43,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
             return CircularProgressIndicator();
           } else if (state is CurrentTaskInUsageState){
             return Scaffold(
-              backgroundColor: Colors.white60,
+              backgroundColor: widget.theme.values.toList().first,
               body: CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
@@ -77,15 +78,15 @@ class _CurrentTask1State extends State<CurrentTask1> {
                           centerTitle: true,
                           title: _displayTaskTitle(state, widget.index),
                           background: Container(
-                            color: Colors.indigo,
+                            color: widget.theme.keys.toList().first,
                           ),
                     ),
-                    backgroundColor: Colors.indigo,
+                    backgroundColor: widget.theme.keys.toList().first,
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          MyCard1(updateTaskList: widget.updateTaskList, index: widget.index, id: widget.id),
+                          MyCard1(theme: widget.theme, updateTaskList: widget.updateTaskList, index: widget.index, id: widget.id),
                           MyDateCard(index: widget.index, id: widget.id),
                         ]
                     ),

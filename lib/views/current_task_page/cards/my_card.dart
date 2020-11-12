@@ -2,15 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
-import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 
 class MyCard1 extends StatefulWidget {
 
   final Function() updateTaskList;
+  final Map<Color, Color> theme;
   final int index;
   final String id;
 
-  MyCard1({this.id, this.index, this.updateTaskList});
+  MyCard1({this.id, this.index, this.updateTaskList, this.theme});
 
   @override
   _MyCardState1 createState() => _MyCardState1();
@@ -73,12 +73,6 @@ class _MyCardState1 extends State<MyCard1> {
     return const SizedBox.shrink();
   }
 
-  _checkTheme(ThemeState state){
-    if (state is ThemeChangedState)
-      return state.theme.keys.toList().first;
-    return Color(0xff6200EE);
-  }
-
   _displayTask(String id, int index, int innerIndex, CurrentTaskState state) {
     if (state is CurrentTaskInUsageState) {
       return Padding(
@@ -88,7 +82,7 @@ class _MyCardState1 extends State<MyCard1> {
             children: [
               Checkbox(
                 value: state.task.innerTasks[innerIndex].isDone,
-                activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
+                activeColor: widget.theme.keys.toList().first,
                 onChanged: (bool value) async {
                   await context.bloc<CurrentTaskCubit>().toggleInnerTaskComplete(id, index, innerIndex);
                   widget.updateTaskList();
@@ -138,8 +132,9 @@ class _MyCardState1 extends State<MyCard1> {
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: TextField(
         controller: _controller,
-        onEditingComplete: () {
-          context.bloc<CurrentTaskCubit>().createNewInnerTask(id, index, _controller.text);
+        onEditingComplete: () async {
+          await context.bloc<CurrentTaskCubit>().createNewInnerTask(id, index, _controller.text);
+          widget.updateTaskList();
           setState(() {
             _controller.text = "";
             isCreating = false;

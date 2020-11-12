@@ -15,8 +15,8 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> createNewTask(String id, String value) async {
-    final taskList = await _taskInteractor.createNewTask(id, value);
+  Future<void> createNewTask(String id, String value, DateTime dateTimeToComplete) async {
+    final taskList = await _taskInteractor.createNewTask(id, value, dateTimeToComplete);
     emit(TaskInUsageState(taskList: taskList));
   }
 
@@ -37,6 +37,11 @@ class TaskCubit extends Cubit<TaskState>{
 
   Future<void> updateTaskList(String id) async {
     final taskList = await _taskInteractor.getTaskList(id);
+    emit(TaskInUsageState(taskList: taskList));
+  }
+
+  Future<void> addDateToComplete(String id, int index, DateTime dateTime) async {
+    final taskList = await _taskInteractor.addDateToComplete(id, index, dateTime);
     emit(TaskInUsageState(taskList: taskList));
   }
 }

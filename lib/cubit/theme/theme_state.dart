@@ -2,16 +2,19 @@
 part of 'theme_cubit.dart';
 
 abstract class ThemeState {
-  const ThemeState();
 }
 
 class ThemeInitialState extends ThemeState {
-  const ThemeInitialState();
+
 }
 
-class ThemeChangedState extends ThemeState {
-  final Map theme;
+class ThemeLoadingState extends ThemeState {
 
-  const ThemeChangedState({this.theme});
+}
+
+class ThemeUsageState extends ThemeState {
+  final Map<Color, Color> theme;
+
+  ThemeUsageState({this.theme});
 }
 

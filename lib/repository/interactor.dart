@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
 
@@ -12,7 +13,7 @@ abstract class Interactor{
 
   Future<List<TaskModel>> getTaskList(String id);
 
-  Future<List<TaskModel>> createNewTask(String id, String value);
+  Future<List<TaskModel>> createNewTask(String id, String value, DateTime dateTimeToComplete);
 
   Future<List<TaskModel>> toggleTaskComplete(String id, int index);
 
@@ -37,6 +38,14 @@ abstract class Interactor{
   Future<TaskModel> addDateToComplete(String id, int index, DateTime dateTime);
 
   //Конец CurrentTaskCubit
+
+  //Начало ThemeCubit
+
+  Future<Map<Color, Color>> getBranchTheme(String id);
+
+  Future<Map<Color, Color>> setBranchTheme(String id, Map<Color, Color> theme);
+
+  //Конец ThemeCubit
 
 }
 
@@ -98,8 +107,8 @@ class TaskInteractor implements Interactor{
   }
 
   @override
-  Future<List<TaskModel>> createNewTask(String id, String value) async {
-    return repository.createNewTask(id, value);
+  Future<List<TaskModel>> createNewTask(String id, String value, DateTime dateToComplete) async {
+    return repository.createNewTask(id, value, dateToComplete);
   }
 
   Future<List<TaskModel>> toggleTaskComplete(String id, int index) async {
@@ -112,6 +121,14 @@ class TaskInteractor implements Interactor{
 
   Future<List<TaskModel>> deleteAllCompletedTasks(String id) async {
     return repository.deleteAllCompletedTasks(id);
+  }
+
+  Future<Map<Color, Color>> getBranchTheme(String id) async {
+    return repository.getBranchTheme(id);
+  }
+
+  Future<Map<Color, Color>> setBranchTheme(String id, Map<Color, Color> theme) async {
+    return repository.setBranchTheme(id, theme);
   }
 
 

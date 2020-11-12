@@ -5,6 +5,7 @@ import 'package:flutter_internship_v2/cubit/branch/branch_cubit.dart';
 import 'package:flutter_internship_v2/pages/all_tasks.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
+import 'package:flutter_internship_v2/views/branches_page/one_branch_progress_bar.dart';
 
 class BranchesInfoDisplay extends StatefulWidget {
 
@@ -24,6 +25,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocProvider(
       create: (context) => cubit,
       child: BlocBuilder<BranchCubit, BranchState>(
@@ -35,9 +37,20 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
             return  Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     displayAllTaskInfo(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                      child: Text(
+                        'Ветки задач',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: GridView.count(
                         mainAxisSpacing: 8,
@@ -47,8 +60,8 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                           for (int i = 0; i<state.branchesInfo.length; i++)
                             displaySpecificBranchInfo(
                                 context,
-                                state.branchesInfo.keys.toList().elementAt(i).keys.first,
-                                state.branchesInfo.keys.toList().elementAt(i).values.first,
+                                state.branchesInfo.keys.toList().elementAt(i).keys.toList().first,
+                                state.branchesInfo.keys.toList().elementAt(i).values.toList().first,
                                 state.branchesInfo.values.toList().elementAt(i)
                             ),
                           displayAddButton(context),
@@ -92,12 +105,26 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
   }
 
   Widget displayAllTaskInfo(){
-    return Container();
+    return Row(
+      children: <Widget>[
+        Column(),
+
+      ],
+    );
   }
 
 
-  Widget displayProgressInCircularBar(){
-    return Container();
+  Widget displayProgressInCircularBar(double completedProgress, Color completedColor){
+    return CircleProgressBar(
+        completedColor: completedColor,
+        progress: completedProgress
+    );
+  }
+
+  double calculateProgress(Map<dynamic, dynamic> branchInfo){
+    if (branchInfo.values.toList().first == 0)
+      return 1;
+    return branchInfo.keys.toList().first/branchInfo.values.toList().first;
   }
 
   Widget displaySpecificBranchInfo(BuildContext context, String id, String branchName, Map<dynamic, dynamic> branchInfo){
@@ -111,7 +138,6 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
         ));
       },
       child: Container(
-        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(25),
@@ -127,19 +153,31 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            displayProgressInCircularBar(),
-            Text(
-              '${branchName}',
-              style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold
+            Padding(
+              padding: const EdgeInsets.fromLTRB(3, 15, 0, 0),
+              child: displayProgressInCircularBar(
+                calculateProgress(branchInfo),
+                branchInfo.keys.toList().last,
               ),
             ),
-            Text(
-              '${branchInfo.values.toList().first} задач(и)',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xff979797),
+            Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                '${branchName}',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                '${branchInfo.values.toList().first} задач(и)',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff979797),
+                ),
               ),
             ),
             Container(
@@ -148,10 +186,10 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                 children: <Widget>[
                   Container(
                       decoration: BoxDecoration(
-                          color: Colors.lightBlueAccent,
+                          color: branchInfo.values.toList().last,
                           borderRadius: BorderRadius.circular(8)
                       ),
-                      margin: EdgeInsets.only(right: 3),
+                      margin: EdgeInsets.fromLTRB(12, 2, 4, 0),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
                         child: Text(
@@ -159,6 +197,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
+                            color: branchInfo.keys.toList().last,
                           ),
                         ),
                       )

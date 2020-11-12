@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/services/popup_constans.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/bottom_dialog/bottom_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,8 +27,13 @@ class PopupMenu1 extends StatelessWidget {
         if (choice == Constants.changeTheme){
           showModalBottomSheet(
             context: context,
-            builder: (context) {
-              return BottomDialog();
+            builder: (context1) {
+              return BottomDialog(
+                setBranchTheme: (Map<Color, Color> theme) async {
+                  await context.bloc<ThemeCubit>().setThemeBranch(id, theme);
+                  updateBranchesInfo();
+                },
+              );
             }
           );
         }
