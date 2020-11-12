@@ -73,7 +73,7 @@ class Repository{
     };
   }
 
-  createNewBranch(){
+  void createNewBranch(){
     branches[Uuid().v4()] = TaskList(
       title: 'new',
       taskList: [],

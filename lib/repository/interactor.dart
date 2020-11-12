@@ -4,6 +4,8 @@ import 'package:flutter_internship_v2/repository/repository.dart';
 
 abstract class Interactor{
 
+  Future<void> createNewBranch();
+
   Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo();
 
   //Начало TaskCubit
@@ -52,6 +54,10 @@ class TaskInteractor implements Interactor{
       return _instance;
     }
     return _instance;
+  }
+
+  Future<void> createNewBranch() async{
+    repository.createNewBranch();
   }
 
   Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo() async {

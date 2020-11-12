@@ -20,4 +20,10 @@ class BranchCubit extends Cubit<BranchState>{
     emit(BranchInUsageState(branchesInfo: branchesInfo));
   }
 
+  Future<void> createNewBranch() async {
+    await _taskInteractor.createNewBranch();
+    final branchesInfo = await _taskInteractor.getBranchesInfo();
+    emit(BranchInUsageState(branchesInfo: branchesInfo));
+  }
+
 }

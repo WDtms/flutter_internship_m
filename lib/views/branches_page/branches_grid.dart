@@ -32,25 +32,31 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
             context.bloc<BranchCubit>().getBranchesInfo();
             return CircularProgressIndicator();
           } else if (state is BranchInUsageState){
-            return  Column(
-                children: <Widget>[
-                  displayAllTaskInfo(),
-                  Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        for (int i = 0; i<state.branchesInfo.length; i++)
-                          displaySpecificBranchInfo(
-                              context,
-                              state.branchesInfo.keys.toList().elementAt(i).keys.first,
-                              state.branchesInfo.keys.toList().elementAt(i).values.first,
-                              state.branchesInfo.values.toList().elementAt(i)
-                          ),
-                        displayAddButton(),
-                      ],
-                    ),
-                  )
-                ]
+            return  Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    displayAllTaskInfo(),
+                    Expanded(
+                      child: GridView.count(
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        crossAxisCount: 2,
+                        children: <Widget>[
+                          for (int i = 0; i<state.branchesInfo.length; i++)
+                            displaySpecificBranchInfo(
+                                context,
+                                state.branchesInfo.keys.toList().elementAt(i).keys.first,
+                                state.branchesInfo.keys.toList().elementAt(i).values.first,
+                                state.branchesInfo.values.toList().elementAt(i)
+                            ),
+                          displayAddButton(context),
+                        ],
+                      ),
+                    )
+                  ]
+              ),
             );
           }
           return CircularProgressIndicator();
@@ -59,11 +65,38 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
     );
   }
 
-  Widget displayAddButton(){
-    return Container();
+  Widget displayAddButton(BuildContext context){
+    return InkWell(
+      onTap: () {
+        context.bloc<BranchCubit>().createNewBranch();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.teal,
+          borderRadius: BorderRadius.circular(25),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black38,
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: Offset(0, 5),
+              )
+            ]
+        ),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   Widget displayAllTaskInfo(){
+    return Container();
+  }
+
+
+  Widget displayProgressInCircularBar(){
     return Container();
   }
 
@@ -155,10 +188,6 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
         ),
       ),
     );
-  }
-
-  Widget displayProgressInCircularBar(){
-    return Container();
   }
 
   @override
