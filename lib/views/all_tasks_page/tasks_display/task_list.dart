@@ -12,10 +12,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskList1 extends StatelessWidget {
 
+  final Function() updateBranchesInfo;
   final List<TaskModel> taskList;
   final String id;
 
-  TaskList1({this.taskList, this.id});
+  TaskList1({this.updateBranchesInfo, this.taskList, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +60,9 @@ class TaskList1 extends StatelessWidget {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
-      onDismissed: (DismissDirection direction) {
+      onDismissed: (DismissDirection direction) async {
         context.bloc<TaskCubit>().deleteTask(id, index);
+        updateBranchesInfo();
       },
       background: Container(
         margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -87,14 +89,16 @@ class TaskList1 extends StatelessWidget {
               Checkbox(
                 value: taskList[index].isDone,
                 activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
-                onChanged: (bool value) {
+                onChanged: (bool value) async {
                   context.bloc<TaskCubit>().toggleTaskComplete(id, index);
+                  updateBranchesInfo();
                 }
               ),
               Expanded(
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
+                      updateBranchesInfo: updateBranchesInfo,
                       updateTaskList: () {
                         context.bloc<TaskCubit>().updateTaskList(id);
                       },

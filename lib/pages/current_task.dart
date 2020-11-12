@@ -10,11 +10,12 @@ import 'package:flutter_internship_v2/views/current_task_page/popup_appbar/popup
 
 class CurrentTask1 extends StatefulWidget {
 
+  final Function() updateBranchesInfo;
   final Function() updateTaskList;
   final String id;
   final int index;
 
-  CurrentTask1({this.id, this.index, this.updateTaskList});
+  CurrentTask1({this.id, this.index, this.updateTaskList, this.updateBranchesInfo});
 
   @override
   _CurrentTask1State createState() => _CurrentTask1State();
@@ -53,6 +54,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                              toggleTaskComplete: () async {
                                await context.bloc<CurrentTaskCubit>().toggleTaskCompleteFromCurrentTaskPage(widget.id, widget.index);
                                widget.updateTaskList();
+                               widget.updateBranchesInfo();
                              },
                              index: widget.index
                          ),
@@ -61,6 +63,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                     ),
                     actions: [
                       PopupMenuCurrentTask(
+                          updateBranchesInfo: widget.updateBranchesInfo,
                           updateTaskList: widget.updateTaskList,
                           id: widget.id,
                           index: widget.index

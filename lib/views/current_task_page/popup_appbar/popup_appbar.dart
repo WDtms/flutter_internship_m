@@ -7,22 +7,22 @@ import 'package:flutter_internship_v2/views/current_task_page/popup_appbar/form_
 
 class PopupMenuCurrentTask extends StatelessWidget {
 
+  final Function() updateBranchesInfo;
   final Function() updateTaskList;
   final String id;
   final int index;
 
-  PopupMenuCurrentTask({this.id, this.index, this.updateTaskList});
+  PopupMenuCurrentTask({this.id, this.index, this.updateTaskList, this.updateBranchesInfo});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      onSelected: (String choice) {
+      onSelected: (String choice) async {
         if (choice == ConstantsOnPopUpCurrentTask.delete) {
-          () async {
-            await context.bloc<CurrentTaskCubit>().deleteTask(id, index);
-            await updateTaskList();
-            Navigator.of(context).pop();
-          };
+          await context.bloc<CurrentTaskCubit>().deleteTask(id, index);
+          await updateTaskList();
+          updateBranchesInfo();
+          Navigator.of(context).pop();
         } else {
           showDialog(
               context: context,

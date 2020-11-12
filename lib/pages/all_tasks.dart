@@ -11,9 +11,10 @@ import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_li
 
 class TaskPage extends StatefulWidget {
 
+  final Function() updateBranchesInfo;
   final String id;
 
-  TaskPage({this.id});
+  TaskPage({this.id, this.updateBranchesInfo});
   
   @override
   _TaskPageState createState() => _TaskPageState();
@@ -44,7 +45,10 @@ class _TaskPageState extends State<TaskPage> {
                     BlocBuilder<TaskCubit, TaskState>(
                       builder: (context, state) {
                         if (state is TaskInUsageState) {
-                          return PopupMenu1(id: widget.id);
+                          return PopupMenu1(
+                              updateBranchesInfo: widget.updateBranchesInfo,
+                              id: widget.id
+                          );
                         }
                         return const SizedBox.shrink();
                       },
@@ -59,8 +63,9 @@ class _TaskPageState extends State<TaskPage> {
                         builder: (BuildContext context0) {
                           return FormDialog(
                             id: widget.id,
-                            createTask: (String value) {
-                              context.bloc<TaskCubit>().createNewTask(widget.id, value);
+                            createTask: (String value) async {
+                              await context.bloc<TaskCubit>().createNewTask(widget.id, value);
+                              widget.updateBranchesInfo();
                             },
                           );
                         }
@@ -77,6 +82,7 @@ class _TaskPageState extends State<TaskPage> {
                     }
                     else if (state is TaskInUsageState) {
                       return TaskList1(
+                        updateBranchesInfo: widget.updateBranchesInfo,
                         id: widget.id,
                         taskList: state.taskList,
                       );
