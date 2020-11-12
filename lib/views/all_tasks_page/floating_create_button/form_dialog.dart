@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
-typedef CreateTaskCallback(String taskName);
 
 class FormDialog extends StatefulWidget {
-
-  final CreateTaskCallback onTaskCreate;
-
-  FormDialog({this.onTaskCreate});
 
   @override
   _FormDialogState createState() => _FormDialogState();
@@ -26,9 +23,7 @@ class _FormDialogState extends State<FormDialog> {
           Text('Создать задачу'),
           TextFormField(
               onSaved: (String value) {
-                setState(() {
-                  widget.onTaskCreate(value);
-                });
+                context.bloc<TaskCubit>().createNewTask(value);
               },
               validator: (value){
                 if(value.length > 40){
@@ -38,6 +33,7 @@ class _FormDialogState extends State<FormDialog> {
               }
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SimpleDialogOption(
                 child: Text('Отмена'),
@@ -61,3 +57,4 @@ class _FormDialogState extends State<FormDialog> {
     );
   }
 }
+
