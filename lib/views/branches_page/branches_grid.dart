@@ -1,11 +1,14 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/branch/branch_cubit.dart';
 import 'package:flutter_internship_v2/pages/all_tasks.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
+import 'package:flutter_internship_v2/styles/my_images.dart';
+import 'package:flutter_internship_v2/views/branches_page/horizontal_progress_bar.dart';
 import 'package:flutter_internship_v2/views/branches_page/one_branch_progress_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BranchesInfoDisplay extends StatefulWidget {
 
@@ -40,7 +43,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    displayAllTaskInfo(),
+                    displayAllTaskInfo(calculateAllTasksProgress(state.branchesInfo)),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                       child: Text(
@@ -84,6 +87,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
         context.bloc<BranchCubit>().createNewBranch();
       },
       child: Container(
+        margin: EdgeInsets.only(right: 100),
         decoration: BoxDecoration(
           color: Colors.teal,
           borderRadius: BorderRadius.circular(25),
@@ -104,13 +108,73 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
     );
   }
 
-  Widget displayAllTaskInfo(){
-    return Row(
-      children: <Widget>[
-        Column(),
-
-      ],
+  Widget displayAllTaskInfo(Map<int, int> allBranchesProgressInfo){
+    return Container(
+      margin: EdgeInsets.only(top: 16),
+      decoration: BoxDecoration(
+          color: Color(0xff86A5F5),
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38,
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 5),
+            )
+          ]
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Text(
+                  'Все задания',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Text(
+                    'Завершено ${allBranchesProgressInfo.keys.toList().first} задач из ${allBranchesProgressInfo.values.toList().first}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
+                child: displayHorizontalProgressBar(allBranchesProgressInfo),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 80,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(branches_info_image),
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget displayHorizontalProgressBar(Map<int, int> allBranchesProgress){
+    double progress;
+    if (allBranchesProgress.values.toList().first == 0)
+      progress = 0;
+    else
+      progress = allBranchesProgress.keys.toList().first/allBranchesProgress.values.toList().first;
+    return HorizontalProgressBar(progress: progress);
   }
 
 
@@ -125,6 +189,16 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
     if (branchInfo.values.toList().first == 0)
       return 1;
     return branchInfo.keys.toList().first/branchInfo.values.toList().first;
+  }
+
+  Map<int, int> calculateAllTasksProgress(Map<Map<String, String>, Map<dynamic, dynamic>> branchesTaskInfo){
+    int allTasksCount = 0;
+    int completedTasksCount = 0;
+    for (int i = 0; i<branchesTaskInfo.length; i++){
+      completedTasksCount += branchesTaskInfo.values.toList().elementAt(i).keys.toList().first;
+      allTasksCount += branchesTaskInfo.values.toList().elementAt(i).values.toList().first;
+    }
+    return {completedTasksCount : allTasksCount};
   }
 
   Widget displaySpecificBranchInfo(BuildContext context, String id, String branchName, Map<dynamic, dynamic> branchInfo){

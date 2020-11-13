@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/models/task_list.dart';
+import 'package:flutter_internship_v2/models/theme_list.dart';
 import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Repository{
 
@@ -12,8 +14,9 @@ class Repository{
   }
 
   Map<String, TaskList> branches = Map<String, TaskList>();
+  List<Map<Color, Color>> themes = ThemeList().themes;
 
-  initiateBranch(){
+  initiateBranch() async {
     TaskList branch = TaskList(
       theme: firstTheme,
       title: 'Работа',
@@ -48,6 +51,20 @@ class Repository{
     );
     branches[Uuid().v4()] = branch;
   }
+
+  //Работа с SharedPreference
+
+  addThemeToSf() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('initialBranchTheme', 0);
+  }
+
+  getThemeFromSf() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int index = prefs.getInt('initialBranchTheme');
+}
+
+  //Конец работы с SharedPreference
 
   //Работа на ГЛАВНОЙ СТРАНИЦЕ
 
