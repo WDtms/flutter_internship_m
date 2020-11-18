@@ -13,10 +13,10 @@ class TaskList1 extends StatelessWidget {
 
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
-  final List<TaskModel> taskList;
-  final String id;
+  final List<Task> taskList;
+  final String branchID;
 
-  TaskList1({this.updateBranchesInfo, this.taskList, this.id, this.theme});
+  TaskList1({this.updateBranchesInfo, this.taskList, this.branchID, this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class TaskList1 extends StatelessWidget {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
-        context.bloc<TaskCubit>().deleteTask(id, index);
+        context.bloc<TaskCubit>().deleteTask(branchID, index);
         updateBranchesInfo();
       },
       background: Container(
@@ -90,7 +90,8 @@ class TaskList1 extends StatelessWidget {
                 value: taskList[index].isDone,
                 activeColor: theme.keys.toList().first,
                 onChanged: (bool value) async {
-                  context.bloc<TaskCubit>().toggleTaskComplete(id, index);
+                  bool isCompleted = taskList[index].isDone;
+                  context.bloc<TaskCubit>().editTask(branchID, index, taskList[index].copyWith(isDone: !isCompleted));
                   updateBranchesInfo();
                 }
               ),
@@ -101,10 +102,10 @@ class TaskList1 extends StatelessWidget {
                       theme: theme,
                       updateBranchesInfo: updateBranchesInfo,
                       updateTaskList: () {
-                        context.bloc<TaskCubit>().updateTaskList(id);
+                        context.bloc<TaskCubit>().updateTaskList(branchID);
                       },
-                      id: id,
-                      index: index,
+                      branchID: branchID,
+                      indexTask: index,
                     )));
                   },
                   child: Builder(

@@ -9,16 +9,16 @@ class ThemeCubit extends Cubit<ThemeState>{
 
   ThemeCubit(this._taskInteractor) : super (ThemeInitialState());
 
-  Future<void> getThemeBranch(String id) async {
+  Future<void> getThemeBranch(String branchID) async {
     emit(ThemeLoadingState());
-    final theme = await _taskInteractor.getBranchTheme(id);
+    final theme = await _taskInteractor.getBranchTheme(branchID);
     emit(ThemeUsageState(theme: theme));
   }
 
-  Future<void> setThemeBranch(String id, Map<Color, Color> theme) async {
-    final newTheme = await _taskInteractor.setBranchTheme(id, theme);
-    emit(ThemeUsageState(theme: newTheme));
+  Future<void> changeTheme(String branchID, Map<Color, Color> newTheme) async {
+    await _taskInteractor.changeTheme(branchID, newTheme);
+    final theme = await _taskInteractor.getBranchTheme(branchID);
+    emit(ThemeUsageState(theme: theme));
   }
-
 
 }

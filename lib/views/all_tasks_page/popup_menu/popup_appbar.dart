@@ -9,16 +9,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PopupMenu1 extends StatelessWidget {
 
   final Function() updateBranchesInfo;
-  final String id;
+  final String branchID;
 
-  PopupMenu1({this.id, this.updateBranchesInfo});
+  PopupMenu1({this.branchID, this.updateBranchesInfo});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       onSelected: (String choice) async {
         if (choice == Constants.delete) {
-          await context.bloc<TaskCubit>().deleteAllCompletedTasks(id);
+          await context.bloc<TaskCubit>().deleteAllCompletedTasks(branchID);
           updateBranchesInfo();
         }
         if (choice == Constants.hide){
@@ -30,7 +30,7 @@ class PopupMenu1 extends StatelessWidget {
             builder: (context1) {
               return BottomDialog(
                 setBranchTheme: (Map<Color, Color> theme) async {
-                  await context.bloc<ThemeCubit>().setThemeBranch(id, theme);
+                  await context.bloc<ThemeCubit>().changeTheme(branchID, theme);
                   updateBranchesInfo();
                 },
               );

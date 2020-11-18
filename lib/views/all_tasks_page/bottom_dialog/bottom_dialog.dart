@@ -4,7 +4,7 @@ import 'package:flutter_internship_v2/models/theme_list.dart';
 
 class BottomDialog extends StatefulWidget{
 
-  final Function(Map<Color, Color> theme) setBranchTheme;
+  final Function(Map<Color, Color>) setBranchTheme;
 
   BottomDialog({this.setBranchTheme});
 
@@ -15,7 +15,6 @@ class BottomDialog extends StatefulWidget{
 class _BottomDialogState extends State<BottomDialog> {
 
   int _selectedRadio;
-  final themes = ThemeList().getAllThemes();
 
   @override
   void initState() {
@@ -26,7 +25,7 @@ class _BottomDialogState extends State<BottomDialog> {
     setState(() {
       _selectedRadio = value;
     });
-    widget.setBranchTheme(themes[value]);
+    widget.setBranchTheme(ThemeList().themes[value]);
   }
 
   @override
@@ -44,7 +43,7 @@ class _BottomDialogState extends State<BottomDialog> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.all(8),
-            itemCount: themes.length,
+            itemCount: ThemeList().themes.length,
             itemBuilder: (_, index) {
               return  Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -53,7 +52,7 @@ class _BottomDialogState extends State<BottomDialog> {
                   width: 15,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: themes[index].keys.toList().elementAt(0),
+                    color: ThemeList().themes[index].keys.toList().elementAt(0),
                   ),
                   child: Radio(
                     value: index,

@@ -201,14 +201,14 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
     return {completedTasksCount : allTasksCount};
   }
 
-  Widget displaySpecificBranchInfo(BuildContext context, String id, String branchName, Map<dynamic, dynamic> branchInfo){
+  Widget displaySpecificBranchInfo(BuildContext context, String branchID, String branchName, Map<dynamic, dynamic> branchInfo){
     return InkWell(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context1) => TaskPage(
             updateBranchesInfo: () {
               context.bloc<BranchCubit>().updateBranchesInfo();
               },
-            id: id)
+            branchID: branchID)
         ));
       },
       child: Container(

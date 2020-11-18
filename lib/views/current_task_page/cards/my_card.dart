@@ -2,15 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/models/inner_task.dart';
+import 'package:uuid/uuid.dart';
 
 class MyCard1 extends StatefulWidget {
 
   final Function() updateTaskList;
   final Map<Color, Color> theme;
-  final int index;
-  final String id;
+  final int indexTask;
+  final String branchID;
 
-  MyCard1({this.id, this.index, this.updateTaskList, this.theme});
+  MyCard1({this.branchID, this.indexTask, this.updateTaskList, this.theme});
 
   @override
   _MyCardState1 createState() => _MyCardState1();
@@ -45,8 +47,8 @@ class _MyCardState1 extends State<MyCard1> {
                   children: <Widget>[
                     _displayDateOfCreation(state),
                     for (int i = 0; i <state.task.innerTasks.length; i++)
-                      _displayTask(widget.id, widget.index, i, state),
-                    _decideWhatToDisplay(widget.id, widget.index),
+                      _displayTask(widget.branchID, widget.indexTask, i, state),
+                    _decideWhatToDisplay(widget.branchID, widget.indexTask),
                   ],
                 );
               }
@@ -73,7 +75,7 @@ class _MyCardState1 extends State<MyCard1> {
     return const SizedBox.shrink();
   }
 
-  _displayTask(String id, int index, int innerIndex, CurrentTaskState state) {
+  _displayTask(String branchID, int indexTask, int indexInnerTask, CurrentTaskState state) {
     if (state is CurrentTaskInUsageState) {
       return Padding(
         padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
@@ -81,10 +83,15 @@ class _MyCardState1 extends State<MyCard1> {
           child: Row(
             children: [
               Checkbox(
-                value: state.task.innerTasks[innerIndex].isDone,
+                value: state.task.innerTasks[indexInnerTask].isDone,
                 activeColor: widget.theme.keys.toList().first,
                 onChanged: (bool value) async {
-                  await context.bloc<CurrentTaskCubit>().toggleInnerTaskComplete(id, index, innerIndex);
+                  bool isCompleted = state.task.innerTasks[indexInnerTask].isDone;
+                  await context.bloc<CurrentTaskCubit>().editInnerTask(
+                      widget.branchID,
+                      widget.indexTask,
+                      indexInnerTask,
+                      state.task.innerTasks[indexInnerTask].copyWith(isDone: !isCompleted));
                   widget.updateTaskList();
                 },
               ),
@@ -92,7 +99,7 @@ class _MyCardState1 extends State<MyCard1> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 4),
                   child: Text(
-                      state.task.innerTasks[innerIndex].title,
+                      state.task.innerTasks[indexInnerTask].title,
                       style: TextStyle(
                         fontSize: 14,
                       )),
@@ -101,7 +108,7 @@ class _MyCardState1 extends State<MyCard1> {
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () async {
-                  await context.bloc<CurrentTaskCubit>().deleteInnerTask(id, index, innerIndex);
+                  await context.bloc<CurrentTaskCubit>().deleteInnerTask(branchID, indexTask, indexInnerTask);
                   widget.updateTaskList();
                 },
               )
@@ -133,7 +140,14 @@ class _MyCardState1 extends State<MyCard1> {
       child: TextField(
         controller: _controller,
         onEditingComplete: () async {
-          await context.bloc<CurrentTaskCubit>().createNewInnerTask(id, index, _controller.text);
+          await context.bloc<CurrentTaskCubit>().createNewInnerTask(
+              id,
+              index,
+              InnerTask(
+                id: Uuid().v4(),
+                title: _controller.text,
+              )
+          );
           widget.updateTaskList();
           setState(() {
             _controller.text = "";

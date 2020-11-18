@@ -11,6 +11,7 @@ class BranchCubit extends Cubit<BranchState>{
 
   Future<void> getBranchesInfo() async {
     emit(BranchLoadingState());
+    await _taskInteractor.initiateBranches();
     final branchesInfo = await _taskInteractor.getBranchesInfo();
     emit(BranchInUsageState(branchesInfo: branchesInfo));
   }

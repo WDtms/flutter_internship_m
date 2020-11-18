@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 
 part 'task_state.dart';
@@ -9,39 +10,38 @@ class TaskCubit extends Cubit<TaskState>{
 
   TaskCubit(this._taskInteractor) : super(TaskInitialState());
 
-  Future<void> getTasks(String id) async {
+  Future<void> getTasks(String branchID) async {
     emit(TaskLoadingState());
-    final taskList = await _taskInteractor.getTaskList(id);
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> createNewTask(String id, String value, DateTime dateTimeToComplete) async {
-    final taskList = await _taskInteractor.createNewTask(id, value, dateTimeToComplete);
+  Future<void> editTask(String branchID, int indexTask, Task task) async {
+    await _taskInteractor.editTask(branchID, indexTask, task);
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> toggleTaskComplete(String id, int index) async {
-    final taskList = await _taskInteractor.toggleTaskComplete(id, index);
+  Future<void> createNewTask(String branchID, Task task) async {
+    await _taskInteractor.createNewTask(branchID, task);
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> deleteTask(String id, int index) async {
-    final taskList = await _taskInteractor.deleteTask(id, index);
+  Future<void> deleteTask(String branchID, int indexTask) async {
+    await _taskInteractor.deleteTask(branchID, indexTask);
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> deleteAllCompletedTasks(String id) async {
-    final taskList = await _taskInteractor.deleteAllCompletedTasks(id);
+  Future<void> deleteAllCompletedTasks(String branchID) async {
+    await _taskInteractor.deleteAllCompletedTasks(branchID);
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 
-  Future<void> updateTaskList(String id) async {
-    final taskList = await _taskInteractor.getTaskList(id);
-    emit(TaskInUsageState(taskList: taskList));
-  }
-
-  Future<void> addDateToComplete(String id, int index, DateTime dateTime) async {
-    final taskList = await _taskInteractor.addDateToComplete(id, index, dateTime);
+  Future<void> updateTaskList(String branchID) async {
+    final taskList = await _taskInteractor.getTaskList(branchID);
     emit(TaskInUsageState(taskList: taskList));
   }
 }

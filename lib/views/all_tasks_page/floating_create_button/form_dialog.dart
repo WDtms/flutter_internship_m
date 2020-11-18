@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/models/task.dart';
+import 'package:uuid/uuid.dart';
 
 class FormDialog extends StatefulWidget {
 
-  final String id;
-  final Function(String value, DateTime dateTimeToComplete) createTask;
+  final Function(Task task) createTask;
 
-  FormDialog({this.id, this.createTask});
+  FormDialog({this.createTask});
 
   @override
   _FormDialogState createState() => _FormDialogState();
@@ -50,7 +51,15 @@ class _FormDialogState extends State<FormDialog> {
           ),
           TextFormField(
               onSaved: (String value) {
-                widget.createTask(value, dateTimeToComplete);
+                widget.createTask(
+                    Task(
+                        id: Uuid().v4(),
+                        title: value,
+                        dateToComplete: dateTimeToComplete,
+                        dateOfCreation: DateTime.now(),
+                        innerTasks: []
+                    )
+                );
               },
               validator: (value){
                 if(value.length > 40){

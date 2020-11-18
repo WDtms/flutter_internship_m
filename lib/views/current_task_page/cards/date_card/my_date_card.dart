@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/select_time_dialog.dart';
 
 class MyDateCard extends StatelessWidget {
 
-  final int index;
-  final String id;
+  final Task task;
+  final int indexTask;
+  final String branchID;
 
-  MyDateCard({this.index, this.id});
+  MyDateCard({this.task, this.indexTask, this.branchID});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class MyDateCard extends StatelessWidget {
                                   return SelectTimeDialog(
                                     dateTime: state.task.dateOfCreation,
                                     selectDateToComplete: (DateTime dateTime) {
-                                      context.bloc<CurrentTaskCubit>().addDateToComplete(id, index, dateTime);
+                                      context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(dateToComplete: dateTime));
                                     },
                                   );
                                 }

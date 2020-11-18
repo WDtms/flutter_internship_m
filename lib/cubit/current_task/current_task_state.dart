@@ -13,7 +13,7 @@ class CurrentTaskLoadingState extends CurrentTaskState {
 }
 
 class CurrentTaskInUsageState extends CurrentTaskState {
-  final TaskModel task;
+  final Task task;
 
   CurrentTaskInUsageState({this.task});
 }

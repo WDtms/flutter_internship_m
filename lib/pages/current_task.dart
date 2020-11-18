@@ -12,11 +12,11 @@ class CurrentTask1 extends StatefulWidget {
 
   final Function() updateBranchesInfo;
   final Function() updateTaskList;
-  final String id;
-  final int index;
+  final String branchID;
+  final int indexTask;
   final Map<Color, Color> theme;
 
-  CurrentTask1({this.id, this.index, this.updateTaskList, this.updateBranchesInfo, this.theme});
+  CurrentTask1({this.branchID, this.indexTask, this.updateTaskList, this.updateBranchesInfo, this.theme});
 
   @override
   _CurrentTask1State createState() => _CurrentTask1State();
@@ -39,7 +39,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
       child: BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
         builder: (context, state) {
           if (state is CurrentTaskInitialState){
-            context.bloc<CurrentTaskCubit>().getTask(widget.id, widget.index);
+            context.bloc<CurrentTaskCubit>().getTask(widget.branchID, widget.indexTask);
             return CircularProgressIndicator();
           } else if (state is CurrentTaskInUsageState){
             return Scaffold(
@@ -53,21 +53,27 @@ class _CurrentTask1State extends State<CurrentTask1> {
                         children: [
                          CurrentTaskFloatingButton(
                              toggleTaskComplete: () async {
-                               await context.bloc<CurrentTaskCubit>().toggleTaskCompleteFromCurrentTaskPage(widget.id, widget.index);
+                               bool isCompleted = state.task.isDone;
+                               await context.bloc<CurrentTaskCubit>().editTask(
+                                   widget.branchID,
+                                   widget.indexTask,
+                                   state.task.copyWith(isDone: !isCompleted),
+                               );
                                widget.updateTaskList();
                                widget.updateBranchesInfo();
                              },
-                             index: widget.index
+                             index: widget.indexTask
                          ),
                         ],
                       ),
                     ),
                     actions: [
                       PopupMenuCurrentTask(
-                          updateBranchesInfo: widget.updateBranchesInfo,
-                          updateTaskList: widget.updateTaskList,
-                          id: widget.id,
-                          index: widget.index
+                        updateBranchesInfo: widget.updateBranchesInfo,
+                        updateTaskList: widget.updateTaskList,
+                        branchID: widget.branchID,
+                        indexTask: widget.indexTask,
+                        task: state.task,
                       ),
                     ],
                     expandedHeight: 150,
@@ -76,7 +82,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
                           centerTitle: true,
-                          title: _displayTaskTitle(state, widget.index),
+                          title: _displayTaskTitle(state, widget.indexTask),
                           background: Container(
                             color: widget.theme.keys.toList().first,
                           ),
@@ -86,8 +92,8 @@ class _CurrentTask1State extends State<CurrentTask1> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          MyCard1(theme: widget.theme, updateTaskList: widget.updateTaskList, index: widget.index, id: widget.id),
-                          MyDateCard(index: widget.index, id: widget.id),
+                          MyCard1(theme: widget.theme, updateTaskList: widget.updateTaskList, indexTask: widget.indexTask, branchID: widget.branchID),
+                          MyDateCard(indexTask: widget.indexTask, branchID: widget.branchID, task: state.task),
                         ]
                     ),
                   )

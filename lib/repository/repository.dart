@@ -1,72 +1,23 @@
 import 'package:flutter/material.dart';
+import 'file:///C:/Android/AndroidStudioProjects/flutter_internship_m/lib/database/db_actions.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/models/task_list.dart';
-import 'package:flutter_internship_v2/models/theme_list.dart';
+
 import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 import 'package:uuid/uuid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Repository{
 
-  Repository() {
-    initiateBranch();
-  }
 
+  DBStorageAction dbActions = DBStorageAction();
   Map<String, TaskList> branches = Map<String, TaskList>();
-  List<Map<Color, Color>> themes = ThemeList().themes;
-
-  initiateBranch() async {
-    TaskList branch = TaskList(
-      theme: firstTheme,
-      title: 'Работа',
-      taskList: [
-        TaskModel(
-          isDone: true,
-          title: "Дорисовать дизайн",
-          innerTasks: [],
-          dateOfCreation: DateTime.now(),
-          dateToComplete: null,
-        ),
-        TaskModel(
-          title: "Дописать тз на стажировку",
-          innerTasks: [
-            InnerTask(
-              title: 'Что-то там',
-            ),
-            InnerTask(
-                title: 'и еще вот это'
-            )
-          ],
-          dateOfCreation: DateTime.now(),
-          dateToComplete: null,
-        ),
-        TaskModel(
-          title: "Дописать план",
-          innerTasks: [],
-          dateOfCreation: DateTime.now(),
-          dateToComplete: null,
-        ),
-      ]
-    );
-    branches[Uuid().v4()] = branch;
-  }
-
-  //Работа с SharedPreference
-
-  addThemeToSf() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('initialBranchTheme', 0);
-  }
-
-  getThemeFromSf() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int index = prefs.getInt('initialBranchTheme');
-}
-
-  //Конец работы с SharedPreference
 
   //Работа на ГЛАВНОЙ СТРАНИЦЕ
+
+  Future<void> initializeBranches() async {
+    branches = await dbActions.initializeBranches();
+  }
 
   Map<Map<String, String>, Map<dynamic, dynamic>> getBranchesInfo(){
     Map<Map<String, String>, Map<dynamic, dynamic>> branchesInfo = Map<Map<String, String>, Map<dynamic, dynamic>>();
@@ -80,7 +31,7 @@ class Repository{
   Map<dynamic, dynamic> getInfoFromOneBranch(String id){
     int countCompletedTasks = 0;
     int countAllTasks = 0;
-    for (TaskModel task in branches[id].taskList){
+    for (Task task in branches[id].taskList){
       if (task.isDone)
         countCompletedTasks++;
       countAllTasks++;
@@ -91,63 +42,57 @@ class Repository{
     };
   }
 
-  void createNewBranch(){
-    branches[Uuid().v4()] = TaskList(
+  Future<void> createNewBranch() async {
+    String id = Uuid().v4();
+    TaskList branch = TaskList(
+      id: id,
       title: 'new',
       taskList: [],
       theme: firstTheme,
     );
+    await dbActions.insertBranch(branch.toMap());
+    branches[id] = branch;
+  }
+
+  void changeTheme(String branchID, Map<Color, Color> theme){
+    branches[branchID].theme = theme;
   }
 
   //Конец методов ГЛАВНОЙ СТРАНИЦЫ
 
   //Работа на странице ОДНОЙ ВЕТКИ
 
-  List<TaskModel> getTaskList(String id){
+  List<Task> getTaskList(String id){
     return branches[id].taskList;
   }
 
-  List<TaskModel> createNewTask(String id, String value, DateTime dateToComplete){
-    branches[id].taskList.add(TaskModel(
-        title: value,
-        innerTasks: [],
-        dateOfCreation: DateTime.now(),
-        dateToComplete: dateToComplete,
-    ));
-    return branches[id].taskList;
+  Future<void> createNewTask(String branchID, Task task) async {
+    branches[branchID].taskList.add(task);
+    await dbActions.insertTask(task.toMap(branchID));
   }
 
-  List<TaskModel> toggleTaskComplete(String id, int index){
-    branches[id].taskList[index].isDone = !branches[id].taskList[index].isDone;
-    return branches[id].taskList;
+  Future<void> editTask(String branchID, int indexTask, Task task) async {
+    branches[branchID].taskList[indexTask] = task;
+    await dbActions.updateTask(task.toMap(branchID));
   }
 
-  List<TaskModel> deleteTask(String id, int index){
-    branches[id].taskList.removeAt(index);
-    return branches[id].taskList;
+  Future<void> deleteTask(String branchID, int taskIndex) async {
+    branches[branchID].taskList.removeAt(taskIndex);
+    await dbActions.deleteTask(branches[branchID].taskList[taskIndex].id);
   }
 
-  List<TaskModel> deleteAllCompletedTasks(String id){
-    branches[id].taskList.removeWhere((task) => task.isDone);
-    return branches[id].taskList;
+  Future<void> deleteAllCompletedTasks(String branchID) async {
+    branches[branchID].taskList.removeWhere((task) => task.isDone);
+    List<String> tasksToDeleteId = List<String>();
+    for (Task task in branches[branchID].taskList){
+      if (task.isDone)
+        tasksToDeleteId.add(task.id);
+    }
+    await dbActions.deleteallCompletedTasks(tasksToDeleteId);
   }
 
-  Map<Color, Color> changeTheme(String id, Map<Color, Color> theme){
-    branches[id].theme = theme;
-    return branches[id].theme;
-  }
-
-  List<TaskModel> updateTask(String id){
-    return branches[id].taskList;
-  }
-
-  Map<Color, Color> getBranchTheme(String id){
-    return branches[id].theme;
-  }
-
-  Map<Color, Color> setBranchTheme(String id, Map<Color, Color> theme){
-    branches[id].theme = theme;
-    return branches[id].theme;
+  Map<Color, Color> getBranchTheme(String branchID){
+    return branches[branchID].theme;
   }
 
   //Конец методов страницы с ОДНОЙ ВЕТКОЙ
@@ -155,41 +100,23 @@ class Repository{
 
   //Работа с ОДНОЙ ЗАДАЧЕЙ
 
-  TaskModel getTask(String id, int index){
-    return branches[id].taskList[index];
+  Task getTask(String branchID, int indexTask){
+    return branches[branchID].taskList[indexTask];
   }
 
-  TaskModel toggleInnerTaskComplete(String id, int indexTask, int innerTaskIndex){
-    branches[id].taskList[indexTask].innerTasks[innerTaskIndex].isDone =
-        !branches[id].taskList[indexTask].innerTasks[innerTaskIndex].isDone;
-    return branches[id].taskList[indexTask];
+  Future<void> createNewInnerTask(String branchID, int indexTask, InnerTask innerTask) async {
+    branches[branchID].taskList[indexTask].innerTasks.add(innerTask);
+    await dbActions.insertInnerTask(innerTask.toMap(branchID, branches[branchID].taskList[indexTask].id));
   }
 
-  TaskModel toggleTaskCompleteFromCurrentTaskPage(String id, int indexTask){
-    branches[id].taskList[indexTask].isDone = !branches[id].taskList[indexTask].isDone;
-    return branches[id].taskList[indexTask];
+  Future<void> editInnerTask(String branchID, int indexTask, int innerTaskIndex, InnerTask innerTask) async {
+    branches[branchID].taskList[indexTask].innerTasks[innerTaskIndex] = innerTask;
+    await dbActions.updateInnerTask(innerTask.toMap(branchID, branches[branchID].taskList[indexTask].id));
   }
 
-  TaskModel deleteInnerTask(String id, int indexTask, int innerTaskIndex){
-    branches[id].taskList[indexTask].innerTasks.removeAt(innerTaskIndex);
-    return branches[id].taskList[indexTask];
-  }
-
-  TaskModel createNewInnerTask(String id, int indexTask, String value){
-    branches[id].taskList[indexTask].innerTasks.add(InnerTask(
-      title: value
-    ));
-    return branches[id].taskList[indexTask];
-  }
-
-  TaskModel editTaskName(String id, int indexTask, String value){
-    branches[id].taskList[indexTask].title = value;
-    return branches[id].taskList[indexTask];
-  }
-
-  TaskModel addDateToComplete(String id, int indexTask, DateTime dateTime){
-    branches[id].taskList[indexTask].dateToComplete = dateTime;
-    return branches[id].taskList[indexTask];
+  Future<void> deleteInnerTask(String branchID, int indexTask, int innerTaskIndex) async {
+    branches[branchID].taskList[indexTask].innerTasks.removeAt(innerTaskIndex);
+    await dbActions.deleteInnerTask(branches[branchID].taskList[indexTask].innerTasks[innerTaskIndex].id);
   }
 
   //Конец методов страницы с ОДНОЙ ЗАДАЧЕЙ

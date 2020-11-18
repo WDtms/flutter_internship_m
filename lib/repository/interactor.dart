@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
 
@@ -7,43 +8,41 @@ abstract class Interactor{
 
   Future<void> createNewBranch();
 
+  Future<void> initiateBranches();
+
   Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo();
 
   //Начало TaskCubit
 
-  Future<List<TaskModel>> getTaskList(String id);
+  Future<List<Task>> getTaskList(String branchID);
 
-  Future<List<TaskModel>> createNewTask(String id, String value, DateTime dateTimeToComplete);
+  Future<void> editTask(String branchID, int indexTask, Task task);
 
-  Future<List<TaskModel>> toggleTaskComplete(String id, int index);
+  Future<void> createNewTask(String branchID, Task task);
 
-  Future<List<TaskModel>> deleteTask(String id, int index);
+  Future<void> deleteTask(String branchID, int indexTask);
 
-  Future<List<TaskModel>> deleteAllCompletedTasks(String id);
+  Future<void> deleteAllCompletedTasks(String id);
 
   //Конец TaskCubit
 
   //Начало CurrentTaskCubit
 
-  Future<TaskModel> getTask(String id, int index);
+  Future<Task> getTask(String branchID, int indexTask);
 
-  Future<TaskModel> toggleInnerTaskComplete(String id, int index, int innerIndex);
+  Future<void> editInnerTask(String branchID, int indexTask, int indexInnerTask, InnerTask innerTask);
 
-  Future<TaskModel> deleteInnerTask(String id, int index, int innerIndex);
+  Future<void> deleteInnerTask(String branchID, int indexTask, int innerTaskIndex);
 
-  Future<TaskModel> createNewInnerTask(String id, int index, String value);
-
-  Future<TaskModel> editTaskName(String id, int index, String value);
-
-  Future<TaskModel> addDateToComplete(String id, int index, DateTime dateTime);
+  Future<void> createNewInnerTask(String branchID, int index, InnerTask innerTask);
 
   //Конец CurrentTaskCubit
 
   //Начало ThemeCubit
 
-  Future<Map<Color, Color>> getBranchTheme(String id);
+  Future<Map<Color, Color>> getBranchTheme(String branchID);
 
-  Future<Map<Color, Color>> setBranchTheme(String id, Map<Color, Color> theme);
+  Future<void> changeTheme(String branchID, Map<Color, Color> theme);
 
   //Конец ThemeCubit
 
@@ -65,71 +64,80 @@ class TaskInteractor implements Interactor{
     return _instance;
   }
 
+  //Работа в BranchCubit
+
+  @override
+  Future<void> initiateBranches() async {
+    await repository.initializeBranches();
+  }
+
+  @override
   Future<void> createNewBranch() async{
-    repository.createNewBranch();
+    await repository.createNewBranch();
   }
 
+  @override
   Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo() async {
-    return repository.getBranchesInfo();
+    return await repository.getBranchesInfo();
   }
 
-  Future<TaskModel> getTask(String id, int index) async {
-    return repository.getTask(id, index);
-  }
+  //Работа в TaskCubit
 
-  Future<TaskModel> addDateToComplete(String id, int index, DateTime dateTime) async {
-    return repository.addDateToComplete(id, index, dateTime);
-  }
-
-  Future<TaskModel> editTaskName(String id, int index, String value) async {
-    return repository.editTaskName(id, index, value);
-  }
-
-  Future<TaskModel> createNewInnerTask(String id, int index, String value) async {
-    return repository.createNewInnerTask(id, index, value);
-  }
-
-  Future<TaskModel> deleteInnerTask(String id, int index, int innerIndex) async {
-    return repository.deleteInnerTask(id, index, innerIndex);
-  }
-
-  Future<TaskModel> toggleInnerTaskComplete(String id, int index, int innerIndex) async {
-    return repository.toggleInnerTaskComplete(id, index, innerIndex);
-  }
-
-  Future<TaskModel> toggleTaskCompleteFromCurrentTaskPage(String id, int index) async {
-    return repository.toggleTaskCompleteFromCurrentTaskPage(id, index);
+  @override
+  Future<List<Task>> getTaskList(String branchID) async {
+    return await repository.getTaskList(branchID);
   }
 
   @override
-  Future<List<TaskModel>> getTaskList(String id) async {
-    return repository.getTaskList(id);
+  Future<Map<Color, Color>> getBranchTheme(String branchID) async {
+    return await repository.getBranchTheme(branchID);
   }
 
   @override
-  Future<List<TaskModel>> createNewTask(String id, String value, DateTime dateToComplete) async {
-    return repository.createNewTask(id, value, dateToComplete);
+  Future<void> editTask(String branchID, int indexTask, Task task) async {
+    await repository.editTask(branchID, indexTask, task);
   }
 
-  Future<List<TaskModel>> toggleTaskComplete(String id, int index) async {
-    return repository.toggleTaskComplete(id, index);
+  @override
+  Future<void> createNewTask(String branchID, Task task) async {
+    await repository.createNewTask(branchID, task);
   }
 
-  Future<List<TaskModel>> deleteTask(String id, int index) async {
-    return repository.deleteTask(id, index);
+  @override
+  Future<void> deleteTask(String branchID, int indexTask) async {
+    await repository.deleteTask(branchID, indexTask);
   }
 
-  Future<List<TaskModel>> deleteAllCompletedTasks(String id) async {
-    return repository.deleteAllCompletedTasks(id);
+  @override
+  Future<void> deleteAllCompletedTasks(String branchID) async {
+    await repository.deleteAllCompletedTasks(branchID);
   }
 
-  Future<Map<Color, Color>> getBranchTheme(String id) async {
-    return repository.getBranchTheme(id);
+  @override
+  Future<void> changeTheme(String branchID, Map<Color, Color> theme) async {
+   await repository.changeTheme(branchID, theme);
   }
 
-  Future<Map<Color, Color>> setBranchTheme(String id, Map<Color, Color> theme) async {
-    return repository.setBranchTheme(id, theme);
+  //Работа с CurrentTaskCubit
+
+  @override
+  Future<Task> getTask(String branchID, int indexTask) async {
+    return repository.getTask(branchID, indexTask);
   }
 
+  @override
+  Future<void> createNewInnerTask(String branchID, int indexTask, InnerTask innerTask) async {
+    await repository.createNewInnerTask(branchID, indexTask, innerTask);
+  }
+
+  @override
+  Future<void> deleteInnerTask(String branchID, int indexTask, int indexInnerTask) async {
+    await repository.deleteInnerTask(branchID, indexTask, indexInnerTask);
+  }
+
+  @override
+  Future<void> editInnerTask(String branchID, int indexTask, int innerTaskIndex, InnerTask innerTask) async {
+    await repository.editInnerTask(branchID, indexTask, innerTaskIndex, innerTask);
+  }
 
 }

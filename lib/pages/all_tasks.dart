@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/floating_create_button/form_dialog.dart';
@@ -12,9 +13,9 @@ import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_li
 class TaskPage extends StatefulWidget {
 
   final Function() updateBranchesInfo;
-  final String id;
+  final String branchID;
 
-  TaskPage({this.id, this.updateBranchesInfo});
+  TaskPage({this.branchID, this.updateBranchesInfo});
   
   @override
   _TaskPageState createState() => _TaskPageState();
@@ -42,7 +43,7 @@ class _TaskPageState extends State<TaskPage> {
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {
             if (state is ThemeInitialState){
-              context.bloc<ThemeCubit>().getThemeBranch(widget.id);
+              themeCubit.getThemeBranch(widget.branchID);
               return CircularProgressIndicator();
             } else if (state is ThemeUsageState){
               Map<Color, Color> theme = state.theme;
@@ -56,8 +57,8 @@ class _TaskPageState extends State<TaskPage> {
                         builder: (context, state) {
                           if (state is TaskInUsageState) {
                             return PopupMenu1(
-                                updateBranchesInfo: widget.updateBranchesInfo,
-                                id: widget.id
+                              updateBranchesInfo: widget.updateBranchesInfo,
+                              branchID: widget.branchID,
                             );
                           }
                           return const SizedBox.shrink();
@@ -72,9 +73,8 @@ class _TaskPageState extends State<TaskPage> {
                           context: context,
                           builder: (BuildContext context0) {
                             return FormDialog(
-                              id: widget.id,
-                              createTask: (String value, DateTime dateTimeToComplete) async {
-                                await context.bloc<TaskCubit>().createNewTask(widget.id, value, dateTimeToComplete);
+                              createTask: (Task task) async {
+                                await taskCubit.createNewTask(widget.branchID, task);
                                 widget.updateBranchesInfo();
                               },
                             );
@@ -94,11 +94,11 @@ class _TaskPageState extends State<TaskPage> {
                         return TaskList1(
                           theme: theme,
                           updateBranchesInfo: widget.updateBranchesInfo,
-                          id: widget.id,
+                          branchID: widget.branchID,
                           taskList: state.taskList,
                         );
                       }
-                      context.bloc<TaskCubit>().getTasks(widget.id);
+                      taskCubit.getTasks(widget.branchID);
                       return Center(
                         child: CircularProgressIndicator(),
                       );
