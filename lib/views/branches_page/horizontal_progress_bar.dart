@@ -48,7 +48,7 @@ class _HorizontalProgressBarState extends State<HorizontalProgressBar> with Sing
       foregroundPainter: MyHorizontalProgressBar(progress: animation.value),
       child: Container(
         height: 30,
-        width: 150,
+        width: 200,
       ),
     );
   }

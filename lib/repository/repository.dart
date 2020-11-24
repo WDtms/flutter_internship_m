@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Android/AndroidStudioProjects/flutter_internship_m/lib/database/db_actions.dart';
+import 'package:flutter_internship_v2/database/db_actions.dart';
+import 'package:flutter_internship_v2/models/all_branch_info.dart';
+import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
-import 'package:flutter_internship_v2/models/task_list.dart';
-
+import 'package:flutter_internship_v2/models/branch.dart';
 import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,7 +12,7 @@ class Repository{
 
 
   DBStorageAction dbActions = DBStorageAction();
-  Map<String, TaskList> branches = Map<String, TaskList>();
+  Map<String, Branch> branches = Map<String, Branch>();
 
   //Работа на ГЛАВНОЙ СТРАНИЦЕ
 
@@ -19,32 +20,10 @@ class Repository{
     branches = await dbActions.initializeBranches();
   }
 
-  Map<Map<String, String>, Map<dynamic, dynamic>> getBranchesInfo(){
-    Map<Map<String, String>, Map<dynamic, dynamic>> branchesInfo = Map<Map<String, String>, Map<dynamic, dynamic>>();
-    for (int i = 0; i<branches.length; i++){
-      branchesInfo[{branches.keys.toList().elementAt(i) : branches[branches.keys.toList().elementAt(i)].title}]
-        = getInfoFromOneBranch(branches.keys.toList().elementAt(i));
-    }
-    return branchesInfo;
-  }
-
-  Map<dynamic, dynamic> getInfoFromOneBranch(String id){
-    int countCompletedTasks = 0;
-    int countAllTasks = 0;
-    for (Task task in branches[id].taskList){
-      if (task.isDone)
-        countCompletedTasks++;
-      countAllTasks++;
-    }
-    return {
-      countCompletedTasks : countAllTasks,
-      branches[id].theme.keys.toList().first : branches[id].theme.values.toList().first,
-    };
-  }
 
   Future<void> createNewBranch() async {
     String id = Uuid().v4();
-    TaskList branch = TaskList(
+    Branch branch = Branch(
       id: id,
       title: 'new',
       taskList: [],
@@ -54,8 +33,63 @@ class Repository{
     branches[id] = branch;
   }
 
-  void changeTheme(String branchID, Map<Color, Color> theme){
+  Future<void> changeTheme(String branchID, Map<Color, Color> theme) async {
     branches[branchID].theme = theme;
+  }
+
+  AllBranchesInfo getAllBranchesTasksInfo(){
+    int countAllCompleted = 0;
+    int countAllUnCompleted = 0;
+    for (int i = 0; i<branches.length; i++){
+      Map<int, int> tasksInfo = _calculateTaskInfo(branches.values.toList().elementAt(i).taskList);
+      countAllCompleted += tasksInfo.keys.toList().first;
+      countAllUnCompleted += tasksInfo.values.toList().first;
+    }
+    return AllBranchesInfo(
+      countAllCompleted: countAllCompleted,
+      countAllUncompleted: countAllUnCompleted,
+      progress: _calculateProgressDouble({countAllCompleted : countAllUnCompleted}),
+    );
+  }
+
+  List<OneBranchInfo> getAllBranchesInfo(){
+    List<OneBranchInfo> branchesInfo = List<OneBranchInfo>();
+    for (int i = 0; i<branches.length; i++){
+      Branch branch = branches.values.toList().elementAt(i);
+      Map<int, int> tasksInfo = _calculateTaskInfo(branch.taskList);
+      branchesInfo.add(
+        OneBranchInfo(
+          id: branch.id,
+          title: branch.title,
+          countCompletedTasks: tasksInfo.keys.toList().first,
+          countUnCompletedTasks: tasksInfo.values.toList().first,
+          completedColor: branch.theme.keys.toList().first,
+          backGroundColor: branch.theme.values.toList().first,
+          progress: _calculateProgressDouble(tasksInfo),
+        )
+      );
+    }
+    return branchesInfo;
+  }
+
+  double _calculateProgressDouble(Map<int, int> info){
+    if (info.values.toList().first+info.keys.toList().first == 0)
+      return 0;
+    else
+      return info.keys.toList().first/
+          (info.values.toList().first+info.keys.toList().first);
+  }
+
+  Map<int, int> _calculateTaskInfo(List<Task> taskList){
+    int countCompleted = 0;
+    int countUncompleted = 0;
+    for (Task task in taskList){
+      if (task.isDone)
+        countCompleted++;
+      else
+        countUncompleted++;
+    }
+    return {countCompleted : countUncompleted};
   }
 
   //Конец методов ГЛАВНОЙ СТРАНИЦЫ

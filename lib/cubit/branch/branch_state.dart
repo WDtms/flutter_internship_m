@@ -13,7 +13,8 @@ class BranchLoadingState extends BranchState{
 }
 
 class BranchInUsageState extends BranchState{
-  final Map<Map<String, String>, Map<dynamic, dynamic>> branchesInfo;
+  final AllBranchesInfo allBranchesTasksInfo;
+  final List<OneBranchInfo> allBranchesInfo;
 
-  BranchInUsageState({this.branchesInfo});
+  BranchInUsageState({this.allBranchesTasksInfo, this.allBranchesInfo});
 }

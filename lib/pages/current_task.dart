@@ -82,7 +82,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
                           centerTitle: true,
-                          title: _displayTaskTitle(state, widget.indexTask),
+                          title: Text(state.task.title),
                           background: Container(
                             color: widget.theme.keys.toList().first,
                           ),
@@ -92,7 +92,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          MyCard1(theme: widget.theme, updateTaskList: widget.updateTaskList, indexTask: widget.indexTask, branchID: widget.branchID),
+                          MyCard(theme: widget.theme, updateTaskList: widget.updateTaskList, indexTask: widget.indexTask, branchID: widget.branchID),
                           MyDateCard(indexTask: widget.indexTask, branchID: widget.branchID, task: state.task),
                         ]
                     ),
@@ -105,15 +105,6 @@ class _CurrentTask1State extends State<CurrentTask1> {
         },
       ),
     );
-  }
-
-  _displayTaskTitle(CurrentTaskState state, int index) {
-    if (state is CurrentTaskInUsageState){
-      return Text(state.task.title,
-      style: TextStyle(
-        fontSize: 16
-      ),);
-    }
   }
 
   @override

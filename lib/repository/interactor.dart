@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/models/all_branch_info.dart';
+import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
@@ -10,7 +12,9 @@ abstract class Interactor{
 
   Future<void> initiateBranches();
 
-  Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo();
+  Future<List<OneBranchInfo>> getAllBranchesInfo();
+
+  Future<AllBranchesInfo> getAllBranchesTasksInfo();
 
   //Начало TaskCubit
 
@@ -77,20 +81,25 @@ class TaskInteractor implements Interactor{
   }
 
   @override
-  Future<Map<Map<String, String>, Map<dynamic, dynamic>>> getBranchesInfo() async {
-    return await repository.getBranchesInfo();
+  Future<List<OneBranchInfo>> getAllBranchesInfo() async {
+    return repository.getAllBranchesInfo();
+  }
+
+  @override
+  Future<AllBranchesInfo> getAllBranchesTasksInfo() async {
+    return repository.getAllBranchesTasksInfo();
   }
 
   //Работа в TaskCubit
 
   @override
   Future<List<Task>> getTaskList(String branchID) async {
-    return await repository.getTaskList(branchID);
+    return repository.getTaskList(branchID);
   }
 
   @override
   Future<Map<Color, Color>> getBranchTheme(String branchID) async {
-    return await repository.getBranchTheme(branchID);
+    return repository.getBranchTheme(branchID);
   }
 
   @override

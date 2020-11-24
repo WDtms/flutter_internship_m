@@ -21,6 +21,15 @@ final fifthTheme = {
   Color(0xff37474f) : Color(0xffcfd8dc)
 };
 
-final sixTheme = {
+final sixthTheme = {
   Color(0xff9e9d24) : Color(0xfff0f4c3)
 };
+
+final themes = [
+  firstTheme,
+  secondTheme,
+  thirdTheme,
+  fourthTheme,
+  fifthTheme,
+  sixthTheme
+];

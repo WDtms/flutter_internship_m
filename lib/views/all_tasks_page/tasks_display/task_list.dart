@@ -31,16 +31,6 @@ class TaskList1 extends StatelessWidget {
     );
   }
 
-  int _countCompletedInnerTasks(int index){
-    int count = 0;
-    for (InnerTask task in taskList[index].innerTasks){
-      if (task.isDone){
-        count++;
-      }
-    }
-    return count;
-  }
-
   Widget _displayImages(){
     return Center(
       child: Column(
@@ -142,5 +132,15 @@ class TaskList1 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  int _countCompletedInnerTasks(int index){
+    int count = 0;
+    for (InnerTask task in taskList[index].innerTasks){
+      if (task.isDone){
+        count++;
+      }
+    }
+    return count;
   }
 }

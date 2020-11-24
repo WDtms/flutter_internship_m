@@ -5,9 +5,9 @@ import 'package:flutter_internship_v2/database/db_storage/innertask_db_storage.d
 import 'package:flutter_internship_v2/database/db_storage/task_db_storage.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
-import 'package:flutter_internship_v2/models/task_list.dart';
-import 'package:flutter_internship_v2/models/theme_list.dart';
+import 'package:flutter_internship_v2/models/branch.dart';
 import 'package:flutter_internship_v2/services/db_constants.dart';
+import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 
 class DBStorageAction{
 
@@ -25,15 +25,15 @@ class DBStorageAction{
 
   //Загрузка ДБ из таблицы
 
-  Future<Map<String, TaskList>> initializeBranches() async {
-    Map<String, TaskList> branches = Map<String, TaskList>();
+  Future<Map<String, Branch>> initializeBranches() async {
+    Map<String, Branch> branches = Map<String, Branch>();
 
     List<Map> branchesDB = await branchDBStorage.getQuery();
     branchesDB.forEach((row) {
-      branches[row[DBConstants.branchId]] = TaskList(
+      branches[row[DBConstants.branchId]] = Branch(
           id: row[DBConstants.branchId],
           title: row[DBConstants.branchTitle],
-          theme: ThemeList().themes[row[DBConstants.branchTheme]],
+          theme: themes[row[DBConstants.branchTheme]],
           taskList: []
       );
     });

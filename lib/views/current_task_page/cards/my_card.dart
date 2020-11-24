@@ -5,20 +5,20 @@ import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:uuid/uuid.dart';
 
-class MyCard1 extends StatefulWidget {
+class MyCard extends StatefulWidget {
 
   final Function() updateTaskList;
   final Map<Color, Color> theme;
   final int indexTask;
   final String branchID;
 
-  MyCard1({this.branchID, this.indexTask, this.updateTaskList, this.theme});
+  MyCard({this.branchID, this.indexTask, this.updateTaskList, this.theme});
 
   @override
-  _MyCardState1 createState() => _MyCardState1();
+  _MyCardState createState() => _MyCardState();
 }
 
-class _MyCardState1 extends State<MyCard1> {
+class _MyCardState extends State<MyCard> {
 
   bool isCreating = false;
   final _controller = TextEditingController();
