@@ -27,7 +27,7 @@ class _MyCardState extends State<MyCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+          margin: const EdgeInsets.fromLTRB(16, 30, 16, 8),
           decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -66,8 +66,13 @@ class _MyCardState extends State<MyCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Text("Создано: ${date.day.toString()}.${date.month.toString()}.${date.year.toString()}")
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Text(
+                "Создано: ${date.day.toString()}.${date.month.toString()}.${date.year.toString()}",
+                style: TextStyle(
+                  fontSize: 12
+                ),
+              )
           ),
         ],
       );
@@ -101,7 +106,7 @@ class _MyCardState extends State<MyCard> {
                   child: Text(
                       state.task.innerTasks[indexInnerTask].title,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                       )),
                 ),
               ),

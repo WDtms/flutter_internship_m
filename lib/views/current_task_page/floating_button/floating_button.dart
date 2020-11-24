@@ -25,7 +25,7 @@ class _CurrentTaskFloatingButtonState extends State<CurrentTaskFloatingButton> {
             key: _key,
             offset: Offset(20, 38),
               child: FloatingActionButton(
-                backgroundColor: Colors.teal,
+                backgroundColor: Color(0xff01A39D),
                 child: Builder(
                   builder: (context) {
                     if (state.task.isDone)

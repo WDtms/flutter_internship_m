@@ -14,14 +14,14 @@ class AllBranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 124,
+      height: 140,
       margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
           color: Color(0xff86A5F5),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.black38,
+              color: Colors.black26,
               spreadRadius: 1,
               blurRadius: 5,
               offset: Offset(0, 5),
@@ -46,7 +46,7 @@ class AllBranchCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 30,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 12),

@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/branch/branch_cubit.dart';
+import 'package:flutter_internship_v2/models/branch.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
 import 'package:flutter_internship_v2/views/branches_page/all_branch_card.dart';
+import 'package:flutter_internship_v2/views/branches_page/branch_create.dart';
 import 'package:flutter_internship_v2/views/branches_page/one_branch_card.dart';
 
 class BranchesInfoDisplay extends StatefulWidget {
@@ -56,15 +58,12 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                     ),
                     Expanded(
                       child: GridView.count(
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
                         crossAxisCount: 2,
                         children: <Widget>[
                           for (int i = 0; i<state.allBranchesInfo.length; i++)
                             OneBranchCard(
-                              updateBranchesInfo: () {
-                                cubit.updateBranchesInfo();
-                              },
                               branchInfo: state.allBranchesInfo[i],
                             ),
                           displayAddButton(context),
@@ -88,16 +87,25 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
   Widget displayAddButton(BuildContext context){
     return InkWell(
       onTap: () {
-        context.bloc<BranchCubit>().createNewBranch();
+        showDialog(
+          context: context,
+          builder: (context0) {
+            return CreateBranchForm(
+              createBranch: (Branch branch) {
+                cubit.createNewBranch(branch);
+              },
+            );
+          }
+        );
       },
       child: Container(
-        margin: EdgeInsets.only(right: 100),
+        margin: EdgeInsets.only(right: 90),
         decoration: BoxDecoration(
-          color: Colors.teal,
+          color: Color(0xff01A39D),
           borderRadius: BorderRadius.circular(25),
             boxShadow: [
               BoxShadow(
-                color: Colors.black38,
+                color: Colors.black26,
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: Offset(0, 5),

@@ -55,4 +55,14 @@ class InnerTaskDBStorage implements DBStorage{
     );
   }
 
+  Future<void> deleteWhenBranchDeleted(String branchID) async {
+    Database db = await DB.instance.database;
+
+    await db.delete(
+      DBConstants.innerTaskTable,
+      where: "${DBConstants.branchId} = ?",
+      whereArgs: [branchID],
+    );
+  }
+
 }

@@ -16,7 +16,7 @@ class MyDateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.fromLTRB(16, 30, 16, 8),
         decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -33,27 +33,15 @@ class MyDateCard extends StatelessWidget {
             BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
               builder: (context, state) {
                 if (state is CurrentTaskInUsageState){
-                  return Row(
+                  return Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          child: _displayDateToComplete(state),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context1) {
-                                  return SelectTimeDialog(
-                                    dateTime: state.task.dateOfCreation,
-                                    selectDateToComplete: (DateTime dateTime) {
-                                      context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(dateToComplete: dateTime));
-                                    },
-                                  );
-                                }
-                                );
-                            },
-                        ),
+                      _displayNotificationTime(state, context),
+                      Divider(
+                        thickness: 1,
+                        indent: 56,
+                        color: Colors.black38,
                       ),
+                      _displayDateToComplete(state, context),
                     ],
                   );
                 }
@@ -68,19 +56,148 @@ class MyDateCard extends StatelessWidget {
     );
   }
 
-  Widget _displayDateToComplete(CurrentTaskState state){
-    if (state is CurrentTaskInUsageState){
-      if (state.task.dateToComplete == null)
-        return Text('Добавить дату выполнения');
-      DateTime date = state.task.dateToComplete;
-      return Text(
-        "${date.day.toString()}.${date.month.toString()}.${date.year.toString()}",
-        style: TextStyle(
-          color: isExpired(date),
+  Widget _displayNotificationTime(CurrentTaskState state, BuildContext context) {
+    if (state is CurrentTaskInUsageState) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(16, 8, 0, 0),
+        child: InkWell(
+          onTap: () async {
+            final DateTime date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2100),
+            );
+            final TimeOfDay time = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+            );
+            context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(
+                notificationTime: DateTime(date.year, date.month, date.day, time.hour, time.minute)
+            ));
+          },
+          child: Row(
+            children: <Widget>[
+              Builder(
+                builder: (context) {
+                  if (state.task.notificationTime != null)
+                    return Icon(
+                      Icons.notifications_active_outlined,
+                      color: isExpired(state.task.notificationTime),
+                    );
+                  return Icon(
+                    Icons.notifications_active_outlined,
+                    color: Color(0xff616161),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Builder(
+                    builder: (context) {
+                      if (state.task.notificationTime == null)
+                        return Text(
+                          'Напомнить',
+                          style: TextStyle(
+                            color: Color(0xff616161),
+                            fontSize: 15
+                          ),
+                        );
+                      return Text(
+                        '${state.task.notificationTime.year}.'
+                            '${state.task.notificationTime.month}.'
+                            '${state.task.notificationTime.day} в '
+                            '${state.task.notificationTime.hour}:'
+                            '${_displayMinutes(state.task.notificationTime.minute)}',
+                        style: TextStyle(
+                          color: isExpired(state.task.notificationTime),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
+                  ),
+              ),
+            ],
+          ),
         ),
       );
     }
     return const SizedBox.shrink();
+  }
+
+  Widget _displayDateToComplete(CurrentTaskState state, BuildContext context){
+    if (state is CurrentTaskInUsageState){
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 0, 8),
+        child: InkWell(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context1) {
+                  return SelectTimeDialog(
+                    dateTime: state.task.dateOfCreation,
+                    selectDateToComplete: (DateTime dateTime) {
+                      context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(
+                          dateToComplete: DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59)
+                      ));
+                    },
+                  );
+                }
+            );
+          },
+          child: Row(
+            children: <Widget>[
+              Builder(
+                builder: (context) {
+                  if (state.task.dateToComplete != null)
+                    return Icon(
+                      Icons.calendar_today_outlined,
+                      color: isExpired(state.task.dateToComplete),
+                    );
+                  return Icon(
+                    Icons.calendar_today_outlined,
+                    color: Color(0xff616161),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Builder(
+                  builder: (context) {
+                    if (state.task.dateToComplete == null)
+                      return Text(
+                        'Добавить дату выполнения',
+                        style: TextStyle(
+                          color: Color(0xff616161),
+                          fontSize: 15,
+                        ),
+                      );
+                    return Text(
+                      '${state.task.dateToComplete.year}.'
+                          '${state.task.dateToComplete.month}.'
+                          '${state.task.dateToComplete.day}',
+                      style: TextStyle(
+                          color: isExpired(task.dateToComplete),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500
+                      ),
+                    );
+                    },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  String _displayMinutes(int minutes){
+    if (minutes<10)
+      return "0$minutes";
+    return "$minutes";
   }
 
   Color isExpired(DateTime date){

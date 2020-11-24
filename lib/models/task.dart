@@ -9,9 +9,10 @@ class Task{
   bool isDone;
   DateTime dateOfCreation;
   DateTime dateToComplete;
-  var innerTasks = <InnerTask>[];
+  DateTime notificationTime;
+  List<InnerTask> innerTasks;
 
-  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete});
+  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete, this.notificationTime});
 
   Map<String, dynamic> toMap(String branchID) {
     return {
@@ -20,7 +21,8 @@ class Task{
       DBConstants.taskIsDone: isDone ? 1 : 0,
       DBConstants.branchId: branchID,
       DBConstants.taskDateOfCreation: dateOfCreation.millisecondsSinceEpoch,
-      DBConstants.taskDateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch
+      DBConstants.taskDateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
+      DBConstants.taskNotificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
     };
   }
 
@@ -30,7 +32,8 @@ class Task{
     bool isDone,
     DateTime dateOfCreation,
     DateTime dateToComplete,
-    var innerTasks,
+    DateTime notificationTime,
+    List<InnerTask> innerTasks,
   }) {
     return Task(
       id: id ?? this.id,
@@ -38,6 +41,7 @@ class Task{
       isDone: isDone ?? this.isDone,
       dateOfCreation: dateOfCreation ?? this.dateOfCreation,
       dateToComplete: dateToComplete ?? this.dateToComplete,
+      notificationTime: notificationTime ?? this.notificationTime,
       innerTasks: innerTasks ?? this.innerTasks,
     );
   }

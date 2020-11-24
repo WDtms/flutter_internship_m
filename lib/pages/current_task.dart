@@ -47,6 +47,12 @@ class _CurrentTask1State extends State<CurrentTask1> {
               body: CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_sharp),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(0.0),
                       child: Row(
@@ -69,6 +75,12 @@ class _CurrentTask1State extends State<CurrentTask1> {
                     ),
                     actions: [
                       PopupMenuCurrentTask(
+                        onDelete: () async {
+                          await cubit.deleteTask(widget.branchID, widget.indexTask);
+                          await widget.updateTaskList();
+                          await widget.updateBranchesInfo();
+                          Navigator.of(context).pop();
+                        },
                         updateBranchesInfo: widget.updateBranchesInfo,
                         updateTaskList: widget.updateTaskList,
                         branchID: widget.branchID,

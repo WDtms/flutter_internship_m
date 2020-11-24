@@ -48,6 +48,8 @@ class DBStorageAction{
             dateToComplete: row[DBConstants.taskDateToComplete] == 0 ? null
                 : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateToComplete]),
             dateOfCreation: DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateOfCreation]),
+            notificationTime: row[DBConstants.taskNotificationTime] == 0 ? null
+                : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskNotificationTime]),
             innerTasks: [],
           )
       );
@@ -110,14 +112,16 @@ class DBStorageAction{
 
   Future<void> deleteBranch(String branchID) async {
     await branchDBStorage.deleteObject(branchID);
+    await taskDBStorage.deleteWhenBranchDeleted(branchID);
+    await innerTaskDBStorage.deleteWhenBranchDeleted(branchID);
   }
 
   Future<void> deleteInnerTask(String innerTaskID) async {
     await innerTaskDBStorage.deleteObject(innerTaskID);
   }
 
-  Future<void> deleteallCompletedTasks(List<String> listTaskID) async {
-    await taskDBStorage.deleteAllTasksCompleted(listTaskID);
+  Future<void> deleteAllCompletedTasks(String branchID) async {
+    await taskDBStorage.deleteAllCompletedTasks(branchID);
   }
 
 }

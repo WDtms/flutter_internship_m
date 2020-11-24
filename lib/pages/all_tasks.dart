@@ -81,7 +81,7 @@ class _TaskPageState extends State<TaskPage> {
                           }
                       );
                     },
-                    backgroundColor: Colors.teal,
+                    backgroundColor: Color(0xff01A39D),
                   ),
                   body: BlocBuilder<TaskCubit, TaskState>(
                     builder: (context, state) {

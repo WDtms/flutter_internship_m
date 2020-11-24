@@ -45,8 +45,8 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             showDatePicker(
               context: context,
               initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime(2022),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
             ).then((dateTimeToComplete) {
               widget.selectDateToComplete(dateTimeToComplete);
               Navigator.pop(context);

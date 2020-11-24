@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/models/all_branch_info.dart';
+import 'package:flutter_internship_v2/models/branch.dart';
 import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
@@ -8,9 +9,11 @@ import 'package:flutter_internship_v2/repository/repository.dart';
 
 abstract class Interactor{
 
-  Future<void> createNewBranch();
+  Future<void> createNewBranch(Branch branch);
 
   Future<void> initiateBranches();
+
+  Future<void> removeBranch(String branchID);
 
   Future<List<OneBranchInfo>> getAllBranchesInfo();
 
@@ -76,8 +79,13 @@ class TaskInteractor implements Interactor{
   }
 
   @override
-  Future<void> createNewBranch() async{
-    await repository.createNewBranch();
+  Future<void> createNewBranch(Branch branch) async{
+    await repository.createNewBranch(branch);
+  }
+
+  @override
+  Future<void> removeBranch(String branchID) async {
+    await repository.deleteBranch(branchID);
   }
 
   @override

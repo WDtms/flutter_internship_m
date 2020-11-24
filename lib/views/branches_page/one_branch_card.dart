@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/cubit/branch/branch_cubit.dart';
 import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/pages/all_tasks.dart';
 import 'one_branch_progress_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OneBranchCard extends StatelessWidget {
 
-  final Function() updateBranchesInfo;
   final OneBranchInfo branchInfo;
 
-  OneBranchCard({this.branchInfo, this.updateBranchesInfo});
+  OneBranchCard({this.branchInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,13 @@ class OneBranchCard extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context1) => TaskPage(
             updateBranchesInfo: () {
-              updateBranchesInfo();
+              context.bloc<BranchCubit>().updateBranchesInfo();
             },
             branchID: branchInfo.id)
         ));
+      },
+      onLongPress: () {
+        context.bloc<BranchCubit>().removeBranch(branchInfo.id);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -27,7 +31,7 @@ class OneBranchCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
             boxShadow: [
               BoxShadow(
-                color: Colors.black38,
+                color: Colors.black26,
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: Offset(0, 5),
@@ -38,7 +42,7 @@ class OneBranchCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(3, 15, 0, 0),
+              padding: const EdgeInsets.fromLTRB(3, 10, 0, 0),
               child: CircleProgressBar(
                 completedColor: branchInfo.completedColor,
                 progress: branchInfo.progress,
@@ -65,7 +69,7 @@ class OneBranchCard extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+              padding: EdgeInsets.fromLTRB(0, 8, 0, 4),
               child: Row(
                 children: <Widget>[
                   Container(
@@ -73,14 +77,14 @@ class OneBranchCard extends StatelessWidget {
                           color: branchInfo.backGroundColor,
                           borderRadius: BorderRadius.circular(8)
                       ),
-                      margin: EdgeInsets.fromLTRB(12, 2, 4, 0),
+                      margin: EdgeInsets.fromLTRB(12, 0, 4, 0),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
                         child: Text(
-                          '${branchInfo.countCompletedTasks} Сделано',
+                          '${branchInfo.countCompletedTasks} сделано',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 11,
                             color: branchInfo.completedColor,
                           ),
                         ),
@@ -98,7 +102,7 @@ class OneBranchCard extends StatelessWidget {
                         style: TextStyle(
                             color: Color(0xffFD3535),
                             fontWeight: FontWeight.bold,
-                            fontSize: 12
+                            fontSize: 11
                         ),
                       ),
                     ),

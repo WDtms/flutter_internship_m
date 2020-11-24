@@ -5,8 +5,7 @@ import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/models/inner_task.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/models/branch.dart';
-import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_internship_v2/notification/notification_helper.dart';
 
 class Repository{
 
@@ -21,16 +20,14 @@ class Repository{
   }
 
 
-  Future<void> createNewBranch() async {
-    String id = Uuid().v4();
-    Branch branch = Branch(
-      id: id,
-      title: 'new',
-      taskList: [],
-      theme: firstTheme,
-    );
+  Future<void> createNewBranch(Branch branch) async {
+    branches[branch.id] = branch;
     await dbActions.insertBranch(branch.toMap());
-    branches[id] = branch;
+  }
+
+  Future<void> deleteBranch(String branchID) async {
+    await dbActions.deleteBranch(branchID);
+    branches.remove(branchID);
   }
 
   Future<void> changeTheme(String branchID, Map<Color, Color> theme) async {
@@ -103,26 +100,26 @@ class Repository{
   Future<void> createNewTask(String branchID, Task task) async {
     branches[branchID].taskList.add(task);
     await dbActions.insertTask(task.toMap(branchID));
+    if (task.notificationTime != null){
+      await NotificationHelper.scheduleNotification(task);
+    }
   }
 
   Future<void> editTask(String branchID, int indexTask, Task task) async {
+    if (task.notificationTime != branches[branchID].taskList[indexTask].notificationTime)
+      await NotificationHelper.scheduleNotification(task);
     branches[branchID].taskList[indexTask] = task;
     await dbActions.updateTask(task.toMap(branchID));
   }
 
   Future<void> deleteTask(String branchID, int taskIndex) async {
-    branches[branchID].taskList.removeAt(taskIndex);
     await dbActions.deleteTask(branches[branchID].taskList[taskIndex].id);
+    branches[branchID].taskList.removeAt(taskIndex);
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {
+    await dbActions.taskDBStorage.deleteAllCompletedTasks(branchID);
     branches[branchID].taskList.removeWhere((task) => task.isDone);
-    List<String> tasksToDeleteId = List<String>();
-    for (Task task in branches[branchID].taskList){
-      if (task.isDone)
-        tasksToDeleteId.add(task.id);
-    }
-    await dbActions.deleteallCompletedTasks(tasksToDeleteId);
   }
 
   Map<Color, Color> getBranchTheme(String branchID){
@@ -149,8 +146,8 @@ class Repository{
   }
 
   Future<void> deleteInnerTask(String branchID, int indexTask, int innerTaskIndex) async {
-    branches[branchID].taskList[indexTask].innerTasks.removeAt(innerTaskIndex);
     await dbActions.deleteInnerTask(branches[branchID].taskList[indexTask].innerTasks[innerTaskIndex].id);
+    branches[branchID].taskList[indexTask].innerTasks.removeAt(innerTaskIndex);
   }
 
   //Конец методов страницы с ОДНОЙ ЗАДАЧЕЙ

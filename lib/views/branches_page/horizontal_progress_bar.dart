@@ -47,7 +47,7 @@ class _HorizontalProgressBarState extends State<HorizontalProgressBar> with Sing
     return CustomPaint(
       foregroundPainter: MyHorizontalProgressBar(progress: animation.value),
       child: Container(
-        height: 30,
+        height: 20,
         width: 200,
       ),
     );
@@ -71,7 +71,7 @@ class MyHorizontalProgressBar extends CustomPainter{
 
     Paint completedLine = Paint()
       ..strokeWidth = 15
-      ..color = Colors.teal
+      ..color = Color(0xff01A39D)
       ..style = PaintingStyle.stroke
       ..strokeCap  = StrokeCap.round;
 

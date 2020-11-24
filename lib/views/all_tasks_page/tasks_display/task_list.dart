@@ -51,7 +51,7 @@ class TaskList1 extends StatelessWidget {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
-        context.bloc<TaskCubit>().deleteTask(branchID, index);
+        await context.bloc<TaskCubit>().deleteTask(branchID, index);
         updateBranchesInfo();
       },
       background: Container(
@@ -100,14 +100,17 @@ class TaskList1 extends StatelessWidget {
                   },
                   child: Builder(
                     builder: (BuildContext context) {
-
                       if (taskList[index].innerTasks.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(taskList[index].title),
+                          child: Text(
+                            taskList[index].title,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
                         );
                       }
-
                       else {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
@@ -116,9 +119,20 @@ class TaskList1 extends StatelessWidget {
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(bottom: 4),
-                                child: Text(taskList[index].title),
+                                child: Text(
+                                  taskList[index].title,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
-                              Text('${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}')
+                              Text(
+                                '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black54,
+                                ),
+                              )
                             ],
                           ),
                         );

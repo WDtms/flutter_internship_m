@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/models/all_branch_info.dart';
+import 'package:flutter_internship_v2/models/branch.dart';
 import 'package:flutter_internship_v2/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 
@@ -31,8 +32,18 @@ class BranchCubit extends Cubit<BranchState>{
     ));
   }
 
-  Future<void> createNewBranch() async {
-    await _taskInteractor.createNewBranch();
+  Future<void> createNewBranch(Branch branch) async {
+    await _taskInteractor.createNewBranch(branch);
+    final allBranchesTasksInfo = await _taskInteractor.getAllBranchesTasksInfo();
+    final branchesInfo = await _taskInteractor.getAllBranchesInfo();
+    emit(BranchInUsageState(
+      allBranchesInfo: branchesInfo,
+      allBranchesTasksInfo: allBranchesTasksInfo,
+    ));
+  }
+
+  Future<void> removeBranch(String branchID) async {
+    await _taskInteractor.removeBranch(branchID);
     final allBranchesTasksInfo = await _taskInteractor.getAllBranchesTasksInfo();
     final branchesInfo = await _taskInteractor.getAllBranchesInfo();
     emit(BranchInUsageState(
