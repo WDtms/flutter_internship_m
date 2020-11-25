@@ -36,6 +36,7 @@ class _FormDialogState extends State<FormDialog> {
             ),
           ),
           TextFormField(
+            maxLength: 40,
             onSaved: (String value) {
               widget.createTask(
                   Task(
@@ -226,7 +227,7 @@ class _FormDialogState extends State<FormDialog> {
 
   String _displayMinutes(int minutes){
     if (minutes < 10)
-      return "0${minutes}";
+      return "0$minutes";
     return "$minutes";
   }
 }

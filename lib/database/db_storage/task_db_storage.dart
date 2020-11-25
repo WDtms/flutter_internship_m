@@ -10,6 +10,7 @@ class TaskDBStorage implements DBStorage{
       "${DBConstants.taskId} TEXT PRIMARY KEY,"
       "${DBConstants.taskTitle} TEXT,"
       "${DBConstants.taskIsDone} INTEGER,"
+      "${DBConstants.taskDescription} TEXT,"
       "${DBConstants.taskDateOfCreation} INTEGER,"
       "${DBConstants.taskDateToComplete} INTEGER,"
       "${DBConstants.taskNotificationTime} INTEGER,"

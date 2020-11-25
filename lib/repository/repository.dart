@@ -32,6 +32,7 @@ class Repository{
 
   Future<void> changeTheme(String branchID, Map<Color, Color> theme) async {
     branches[branchID].theme = theme;
+    await dbActions.updateBranch(branches[branchID].toMap());
   }
 
   AllBranchesInfo getAllBranchesTasksInfo(){

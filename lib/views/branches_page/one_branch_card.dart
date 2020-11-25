@@ -23,7 +23,52 @@ class OneBranchCard extends StatelessWidget {
         ));
       },
       onLongPress: () {
-        context.bloc<BranchCubit>().removeBranch(branchInfo.id);
+        showDialog(
+          context: context,
+          builder: (context0) {
+            return SimpleDialog(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Вы точно хотите удалить эту ветвь задач?",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    SimpleDialogOption(
+                      child: Text(
+                        "Удалить",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await context.bloc<BranchCubit>().removeBranch(branchInfo.id);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: Text(
+                        "Отмена",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              ],
+            );
+          }
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -42,49 +87,55 @@ class OneBranchCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(3, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.height/200, MediaQuery.of(context).size.height/100, 0, 0),
               child: CircleProgressBar(
                 completedColor: branchInfo.completedColor,
                 progress: branchInfo.progress,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 12),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
               child: Text(
                 '${branchInfo.title}',
                 style: TextStyle(
-                    fontSize: 25.0,
+                    fontSize: MediaQuery.of(context).size.height/31,
                     fontWeight: FontWeight.bold
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 12),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
               child: Text(
                 '${branchInfo.countCompletedTasks + branchInfo.countUnCompletedTasks} задач(и)',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: MediaQuery.of(context).size.height/39,
                   color: Color(0xff979797),
                 ),
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 8, 0, 4),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.height/70,
+                vertical: MediaQuery.of(context).size.height/100
+              ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
                       decoration: BoxDecoration(
                           color: branchInfo.backGroundColor,
                           borderRadius: BorderRadius.circular(8)
                       ),
-                      margin: EdgeInsets.fromLTRB(12, 0, 4, 0),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width/40,
+                          vertical: MediaQuery.of(context).size.height/600,
+                        ),
                         child: Text(
                           '${branchInfo.countCompletedTasks} сделано',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 11,
+                            fontSize: MediaQuery.of(context).size.width/36,
                             color: branchInfo.completedColor,
                           ),
                         ),
@@ -96,13 +147,16 @@ class OneBranchCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width/40,
+                        vertical: MediaQuery.of(context).size.height/600,
+                      ),
                       child: Text(
                         '${branchInfo.countUnCompletedTasks} осталось',
                         style: TextStyle(
-                            color: Color(0xffFD3535),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11
+                          color: Color(0xffFD3535),
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width/36,
                         ),
                       ),
                     ),

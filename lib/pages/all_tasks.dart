@@ -6,9 +6,10 @@ import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/models/task.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
 import 'package:flutter_internship_v2/repository/repository.dart';
-import 'package:flutter_internship_v2/views/all_tasks_page/floating_create_button/form_dialog.dart';
-import 'package:flutter_internship_v2/views/all_tasks_page/popup_menu/popup_appbar.dart';
-import 'package:flutter_internship_v2/views/all_tasks_page/tasks_display/task_list.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/form_dialog.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/popup_appbar.dart';
+import 'package:flutter_internship_v2/views/all_tasks_page/task_list.dart';
+
 
 class TaskPage extends StatefulWidget {
 

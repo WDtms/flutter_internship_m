@@ -40,7 +40,7 @@ class AllBranchCard extends StatelessWidget {
                 child: Text(
                   'Все задания',
                   style: TextStyle(
-                    fontSize: 25.0,
+                    fontSize: MediaQuery.of(context).size.width/16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -51,8 +51,10 @@ class AllBranchCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: Text(
-                  'Завершено ${allBranchesProgressInfo.countAllCompleted} задач из ${allBranchesProgressInfo.countAllUncompleted}',
+                  'Завершено ${allBranchesProgressInfo.countAllCompleted} задач из ${allBranchesProgressInfo.countAllUncompleted
+                      +allBranchesProgressInfo.countAllCompleted}',
                   style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width/24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

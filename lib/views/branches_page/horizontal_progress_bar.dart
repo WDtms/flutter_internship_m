@@ -48,7 +48,7 @@ class _HorizontalProgressBarState extends State<HorizontalProgressBar> with Sing
       foregroundPainter: MyHorizontalProgressBar(progress: animation.value),
       child: Container(
         height: 20,
-        width: 200,
+        width: MediaQuery.of(context).size.width/2,
       ),
     );
   }
@@ -63,6 +63,12 @@ class MyHorizontalProgressBar extends CustomPainter{
   @override
   void paint(Canvas canvas, Size size) {
 
+    Paint backgroundLine = Paint()
+      ..strokeWidth = 17
+      ..color = Color(0xff01A39D)
+      ..style = PaintingStyle.stroke
+      ..strokeCap  = StrokeCap.round;
+
     Paint line = Paint()
       ..strokeWidth = 15
       ..color = Colors.white
@@ -75,19 +81,26 @@ class MyHorizontalProgressBar extends CustomPainter{
       ..style = PaintingStyle.stroke
       ..strokeCap  = StrokeCap.round;
 
-    final p1 = Offset(0, 0);
+    final p1 = Offset(0.5, 0);
     final p2 = Offset(size.width, 0);
+    final p3 = Offset(size.width+0.5, 0);
+    final p4 = Offset(0, 0);
     Offset as;
 
+
+    canvas.drawLine(p4, p3, backgroundLine);
+    canvas.drawLine(p1, p2, line);
     if (progress == 0) {
       as = Offset(0,0);
     }
     else {
       as = Offset(size.width * progress / 100, 0);
+      canvas.drawLine(p1, as, completedLine);
     }
 
-    canvas.drawLine(p1, p2, line);
-    canvas.drawLine(p1, as, completedLine);
+
+
+
 
   }
 

@@ -50,11 +50,11 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
      return CustomPaint(
        foregroundPainter: CircleProgress(animation.value, widget.completedColor), // this will add custom painter after child
        child: Container(
-         width: 75,
-         height: 75,
+         width: MediaQuery.of(context).size.width/5,
+         height: MediaQuery.of(context).size.width/5,
          child: Center(child: Text("${animation.value.toInt()} %",
                style: TextStyle(
-                   fontSize: 17,
+                   fontSize: MediaQuery.of(context).size.height/44,
                    fontWeight: FontWeight.bold,
                    color: widget.completedColor
                ),

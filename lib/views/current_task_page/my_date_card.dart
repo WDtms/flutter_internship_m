@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/models/task.dart';
-import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/select_time_dialog.dart';
+import 'package:flutter_internship_v2/views/current_task_page/select_time_dialog.dart';
+
 
 class MyDateCard extends StatelessWidget {
 
@@ -21,10 +22,10 @@ class MyDateCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black54,
-                spreadRadius: 1,
+                color: Colors.black26,
+                spreadRadius: 2,
                 blurRadius: 2,
-                offset: Offset(0, 2),
+                offset: Offset(0, 3),
               )
             ]
         ),

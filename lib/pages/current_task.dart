@@ -2,11 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/pages/flickr_page.dart';
 import 'package:flutter_internship_v2/repository/interactor.dart';
-import 'package:flutter_internship_v2/views/current_task_page/cards/date_card/my_date_card.dart';
-import 'package:flutter_internship_v2/views/current_task_page/cards/my_card.dart';
-import 'package:flutter_internship_v2/views/current_task_page/floating_button/floating_button.dart';
-import 'package:flutter_internship_v2/views/current_task_page/popup_appbar/popup_appbar.dart';
+import 'package:flutter_internship_v2/views/current_task_page/flickr_card.dart';
+import 'package:flutter_internship_v2/views/current_task_page/floating_button.dart';
+import 'package:flutter_internship_v2/views/current_task_page/my_card.dart';
+import 'package:flutter_internship_v2/views/current_task_page/my_date_card.dart';
+import 'package:flutter_internship_v2/views/current_task_page/popup_appbar.dart';
 
 class CurrentTask1 extends StatefulWidget {
 
@@ -106,6 +108,7 @@ class _CurrentTask1State extends State<CurrentTask1> {
                         [
                           MyCard(theme: widget.theme, updateTaskList: widget.updateTaskList, indexTask: widget.indexTask, branchID: widget.branchID),
                           MyDateCard(indexTask: widget.indexTask, branchID: widget.branchID, task: state.task),
+                          MyFlickrCard(),
                         ]
                     ),
                   )
