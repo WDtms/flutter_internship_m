@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/models/all_branch_info.dart';
-import 'package:flutter_internship_v2/data/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/domain/interactors/branch_interactor.dart';
+import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
+import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
 
 
 part 'branch_state.dart';
