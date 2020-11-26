@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/models/task.dart';
 
 class SelectTimeDialog extends StatefulWidget {
 
-  final DateTime dateTime;
+  final Task task;
   final Function(DateTime dateTime) selectDateToComplete;
 
-  SelectTimeDialog({this.dateTime, this.selectDateToComplete});
+  SelectTimeDialog({this.task, this.selectDateToComplete});
 
   @override
   _SelectTimeDialogState createState() => _SelectTimeDialogState();
@@ -29,7 +30,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
                 )
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day, 17, 59, 59));
+              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day, 17, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -45,7 +46,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
               ),
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day + 1, 9, 59, 59));
+              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day + 1, 9, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -61,7 +62,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
               ),
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day + 7, 9, 59, 59));
+              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day + 7, 9, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -79,8 +80,9 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             onTap: () {
               showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
+                initialDate: widget.task.dateToComplete == null ? DateTime.now()
+                    : widget.task.dateToComplete,
+                firstDate: DateTime.now(),
                 lastDate: DateTime(2100),
               ).then((dateTimeToComplete) {
                 widget.selectDateToComplete(dateTimeToComplete);

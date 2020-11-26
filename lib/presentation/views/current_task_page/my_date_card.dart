@@ -144,7 +144,7 @@ class MyDateCard extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context1) {
                   return SelectTimeDialog(
-                    dateTime: state.task.dateOfCreation,
+                    task: state.task,
                     selectDateToComplete: (DateTime dateTime) {
                       if (dateTime != null) {
                         context.bloc<CurrentTaskCubit>().editTask(
