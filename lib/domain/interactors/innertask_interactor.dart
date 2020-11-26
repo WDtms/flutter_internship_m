@@ -38,7 +38,6 @@ class InnerTaskInteractor {
 
   Future<void> editTask(String branchID, int indexTask, Task task) async {
     await innerTaskRepository.editTask(branchID, indexTask, task);
-
   }
 
   Future<void> deleteTask(String branchID, int taskIndex) async {

@@ -1,6 +1,6 @@
 import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
 import 'package:sqflite/sqflite.dart';
-import 'db_storage.dart';
+import 'db_wrapper.dart';
 import '../db.dart';
 
 class InnerTaskDBStorage implements DBStorage{

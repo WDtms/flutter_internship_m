@@ -1,7 +1,8 @@
+import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
-import 'package:flutter_internship_v2/presentation/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 
 class InnerTaskCard extends StatelessWidget {
 
@@ -22,7 +23,7 @@ class InnerTaskCard extends StatelessWidget {
       child: Container(
         child: Row(
           children: [
-            Checkbox(
+            CircularCheckBox(
               value: task.innerTasks[indexInnerTask].isDone,
               activeColor: activeColor,
               onChanged: (bool value) async {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
-import 'package:flutter_internship_v2/presentation/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
+
 import 'package:flutter_internship_v2/presentation/views/current_task_page/select_time_dialog.dart';
 
 
@@ -65,17 +66,23 @@ class MyDateCard extends StatelessWidget {
           onTap: () async {
             final DateTime date = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
+              initialDate: state.task.notificationTime == null ? DateTime.now()
+                  : state.task.notificationTime,
               firstDate: DateTime.now(),
               lastDate: DateTime(2100),
             );
             final TimeOfDay time = await showTimePicker(
               context: context,
-              initialTime: TimeOfDay.now(),
+              initialTime: state.task.notificationTime == null? TimeOfDay.now()
+                  : TimeOfDay.fromDateTime(state.task.notificationTime),
             );
-            context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(
-                notificationTime: DateTime(date.year, date.month, date.day, time.hour, time.minute)
-            ));
+            if (date != null && time != null) {
+              context.bloc<CurrentTaskCubit>().editTask(
+                  branchID, indexTask, task.copyWith(
+                  notificationTime: DateTime(
+                      date.year, date.month, date.day, time.hour, time.minute)
+              ));
+            }
           },
           child: Row(
             children: <Widget>[
@@ -139,9 +146,14 @@ class MyDateCard extends StatelessWidget {
                   return SelectTimeDialog(
                     dateTime: state.task.dateOfCreation,
                     selectDateToComplete: (DateTime dateTime) {
-                      context.bloc<CurrentTaskCubit>().editTask(branchID, indexTask, task.copyWith(
-                          dateToComplete: DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59)
-                      ));
+                      if (dateTime != null) {
+                        context.bloc<CurrentTaskCubit>().editTask(
+                            branchID, indexTask, task.copyWith(
+                            dateToComplete: DateTime(
+                                dateTime.year, dateTime.month, dateTime.day, 23,
+                                59, 59)
+                        ));
+                      }
                     },
                   );
                 }

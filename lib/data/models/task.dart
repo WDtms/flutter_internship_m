@@ -38,6 +38,7 @@ class Task{
     DateTime dateToComplete,
     DateTime notificationTime,
     List<InnerTask> innerTasks,
+    String description,
   }) {
     return Task(
       id: id ?? this.id,
@@ -47,6 +48,7 @@ class Task{
       dateToComplete: dateToComplete ?? this.dateToComplete,
       notificationTime: notificationTime ?? this.notificationTime,
       innerTasks: innerTasks ?? this.innerTasks,
+      description: description ?? this.description
     );
   }
 

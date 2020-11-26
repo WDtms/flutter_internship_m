@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/presentation/constants/popup_constans.dart';
-import 'package:flutter_internship_v2/presentation/cubit/task/task_cubit.dart';
-import 'package:flutter_internship_v2/presentation/cubit/theme/theme_cubit.dart';
 
 import 'bottom_dialog.dart';
 

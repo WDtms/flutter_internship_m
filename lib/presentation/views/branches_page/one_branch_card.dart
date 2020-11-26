@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
-import 'package:flutter_internship_v2/presentation/cubit/branch/branch_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/branch/branch_cubit.dart';
 import 'package:flutter_internship_v2/presentation/pages/all_tasks.dart';
 import 'one_branch_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,9 +1,11 @@
 
+import 'package:circular_check_box/circular_check_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
+import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/constants/my_images.dart';
-import 'package:flutter_internship_v2/presentation/cubit/task/task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/pages/current_task.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,15 +70,16 @@ class TaskList1 extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Container(
+          height: 65,
           decoration: BoxDecoration(
-              borderRadius:BorderRadius.circular(8),
+              borderRadius:BorderRadius.circular(16),
               color: Colors.white
           ),
           child: Row(
             children: [
-              Checkbox(
+              CircularCheckBox(
                 value: taskList[index].isDone,
                 activeColor: theme.keys.toList().first,
                 onChanged: (bool value) async {
@@ -103,10 +106,13 @@ class TaskList1 extends StatelessWidget {
                       if (taskList[index].innerTasks.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            taskList[index].title,
-                            style: TextStyle(
-                              fontSize: 16,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              taskList[index].title,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         );
@@ -114,26 +120,29 @@ class TaskList1 extends StatelessWidget {
                       else {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 4),
-                                child: Text(
-                                  taskList[index].title,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 2),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 4),
+                                  child: Text(
+                                    taskList[index].title,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
-                              )
-                            ],
+                                Text(
+                                  '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       }

@@ -2,9 +2,10 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'db_storage/branch_db_storage.dart';
-import 'db_storage/innertask_db_storage.dart';
-import 'db_storage/task_db_storage.dart';
+import 'db_wrappers/branch_db_wrapper.dart';
+import 'db_wrappers/innertask_db_wrapper.dart';
+import 'db_wrappers/task_db_wrapper.dart';
+
 
 
 class DB{

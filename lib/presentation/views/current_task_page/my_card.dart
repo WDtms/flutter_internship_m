@@ -1,19 +1,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/presentation/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/views/current_task_page/description.dart';
 
 import 'create_inner_task.dart';
 import 'inner_task_card.dart';
 
 class MyCard extends StatefulWidget {
 
+  final String description;
   final Function() updateTaskList;
+  final Function(String value) onSubmitDescription;
   final Map<Color, Color> theme;
   final int indexTask;
   final String branchID;
 
-  MyCard({this.branchID, this.indexTask, this.updateTaskList, this.theme});
+  MyCard({this.branchID, this.indexTask, this.updateTaskList, this.theme, this.description, this.onSubmitDescription});
 
   @override
   _MyCardState createState() => _MyCardState();
@@ -21,7 +24,6 @@ class MyCard extends StatefulWidget {
 
 class _MyCardState extends State<MyCard> {
 
-  bool isCreating = false;
   final _controller = TextEditingController();
 
   @override
@@ -62,7 +64,12 @@ class _MyCardState extends State<MyCard> {
                         widget.updateTaskList();
                       },
                     ),
-
+                    Description(
+                      description: widget.description,
+                      onSubmitDescription: (String value) {
+                        widget.onSubmitDescription(value);
+                      },
+                    ),
                   ],
                 );
               }

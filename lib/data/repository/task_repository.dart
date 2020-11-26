@@ -1,5 +1,5 @@
 
-import 'package:flutter_internship_v2/data/database/db_storage/task_db_storage.dart';
+import 'package:flutter_internship_v2/data/database/db_wrappers/task_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/data/storage/task_wrapper.dart';
 

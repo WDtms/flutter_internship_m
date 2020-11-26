@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/presentation/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
+
 
 class CurrentTaskFloatingButton extends StatefulWidget {
 

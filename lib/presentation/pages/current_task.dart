@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/repository/innertask_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.dart';
-import 'package:flutter_internship_v2/presentation/cubit/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/flickr_card.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/floating_button.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/my_card.dart';
@@ -107,9 +107,19 @@ class _CurrentTask1State extends State<CurrentTask1> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          MyCard(theme: widget.theme, updateTaskList: widget.updateTaskList, indexTask: widget.indexTask, branchID: widget.branchID),
+                          MyCard(
+                            theme: widget.theme,
+                            updateTaskList: widget.updateTaskList,
+                            indexTask: widget.indexTask,
+                            branchID: widget.branchID,
+                            description: state.task.description,
+                            onSubmitDescription: (String value) async {
+                              await context.bloc<CurrentTaskCubit>().editTask(widget.branchID, widget.indexTask, state.task.copyWith(description: value));
+                              widget.updateTaskList();
+                            },
+                          ),
                           MyDateCard(indexTask: widget.indexTask, branchID: widget.branchID, task: state.task),
-                          MyFlickrCard(),
+                          MyFlickrCard(theme: widget.theme),
                         ]
                     ),
                   )

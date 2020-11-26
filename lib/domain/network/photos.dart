@@ -1,3 +1,19 @@
+class DataModel {
+  int totalImages;
+  List<Photo> data;
+  
+  DataModel({this.totalImages, this.data});
+  
+  factory DataModel.fromJson(Map<String, dynamic> json) {
+    return DataModel(
+      totalImages: (json['photos']['total']).toInt(),
+      data: (json['photos']['photo'] as List).map((photoInfo) => Photo.fromMap(photoInfo)).toList(),
+    );
+  }
+  
+}
+
+
 class Photo {
   final String id;
   final String secret;

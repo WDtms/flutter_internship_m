@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/branch_interactor.dart';
-import 'package:flutter_internship_v2/presentation/cubit/branch/branch_cubit.dart';
-
+import 'package:flutter_internship_v2/presentation/bloc/branch/branch_cubit.dart';
 import 'all_branch_card.dart';
 import 'branch_create.dart';
 import 'one_branch_card.dart';

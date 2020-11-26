@@ -15,34 +15,23 @@ class _CreateInnerTaskState extends State<CreateInnerTask> {
   @override
   Widget build(BuildContext context) {
     final _key = GlobalKey<FormState>();
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      child: Form(
-        key: _key,
+    return Form(
+      key: _key,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
         child: TextFormField(
-          maxLength: 40,
           onSaved: (String value) {
             widget.createInnerTask(value);
-            },
+          },
           onEditingComplete: () {
             _key.currentState.save();
-            },
-          validator: (value){
-            if(value.length > 40){
-              return 'Превышена допустимая длина задачи';
-            }
-            return null;
-            },
+          },
           decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.add,
-              color: Color(0xff1A9FFF),
-            ),
-            hintText: "Добавить шаг",
-            hintStyle: TextStyle(
-              color: Color(0xff1A9FFF),
-            ),
+              prefixIcon: Icon(Icons.add),
+              hintText: "Добавить шаг",
+              hintStyle: TextStyle(
+                color: Color(0xff1A9FFF),
+              )
           ),
         ),
       ),

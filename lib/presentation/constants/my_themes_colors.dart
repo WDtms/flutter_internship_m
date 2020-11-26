@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 final firstTheme = {
-  Color(0xff6200EE) : Color.fromRGBO(181, 201, 253, 1)
+  Color(0xff6202EE) : Color.fromRGBO(181, 201, 253, 1)
 };
 
 final secondTheme = {

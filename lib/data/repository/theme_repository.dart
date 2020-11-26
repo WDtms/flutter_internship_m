@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/data/database/db_storage/branch_db_storage.dart';
+import 'package:flutter_internship_v2/data/database/db_wrappers/branch_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/storage/theme_wrapper.dart';
 
 class ThemeRepository{

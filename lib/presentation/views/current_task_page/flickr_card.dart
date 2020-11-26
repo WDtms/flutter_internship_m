@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_bloc.dart';
+import 'package:flutter_internship_v2/presentation/pages/flickr_page.dart';
+import 'package:provider/provider.dart';
 
 class MyFlickrCard extends StatelessWidget {
+
+  final Map<Color, Color> theme;
+
+  MyFlickrCard({this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +29,17 @@ class MyFlickrCard extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          _displayAddButton(),
+          _displayAddButton(context),
         ],
       ),
     );
   }
 
-  _displayAddButton(){
+  _displayAddButton(BuildContext context){
     return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeNotifierProvider(create: (context) => DataProvider(),child: FlickrPage(theme: theme))));
+      },
       child: Container(
         width: 80,
         decoration: BoxDecoration(

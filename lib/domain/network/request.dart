@@ -5,19 +5,21 @@ import 'package:http/http.dart' as http;
 
 import 'photos.dart';
 
-List<Photo> parsePhotos(String responseBody) {
-  final Map<String, dynamic> parsed = json.decode(responseBody);
-
-  return List<Photo>.from(
-    parsed["photos"]["photo"].map((x) => Photo.fromMap(x))
-  );
+DataModel parsePhotos(String responseBody) {
+  return DataModel.fromJson(json.decode(responseBody));
 }
 
 class Requests{
 
-  Future<List<Photo>> fetchPhotos(http.Client client) async {
+  final String web = "https://www.flickr.com";
+  final String service = "services/rest/";
+  final String getRecent = "flickr.photos.getRecent";
+  final String apiKey = "18353747255e0f7e362243baf563348e";
+
+  Future<DataModel> fetchPhotos(int page) async {
     final response =
-    await client.get('https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=18353747255e0f7e362243baf563348e&format=json&nojsoncallback=1');
+    await http.Client().get('$web/$service?method=$getRecent'
+        '&api_key=$apiKey&per_page=20&page=$page&format=json&nojsoncallback=1');
 
     // Use the compute function to run parsePhotos in a separate isolate.
     return compute(parsePhotos, response.body);

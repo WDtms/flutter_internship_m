@@ -6,7 +6,7 @@ import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
 import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
 
-import 'db_storage.dart';
+import 'db_wrapper.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../db.dart';
@@ -91,6 +91,7 @@ class BranchDBStorage implements DBStorage{
             notificationTime: row[DBConstants.taskNotificationTime] == 0 ? null
                 : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskNotificationTime]),
             innerTasks: [],
+            description: row[DBConstants.taskDescription],
           )
       );
     });
