@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/pages/main_page.dart';
-
+import 'presentation/pages/main_page.dart';
 
 void main() {
 

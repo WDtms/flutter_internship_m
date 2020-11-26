@@ -13,7 +13,7 @@ import com.example.flutter_internship_v2.MainActivity.Companion.NOTIFICATION_CHA
 class NotificationPublisher : BroadcastReceiver() {
     companion object{
         const val NOTIFICATION_ID = "notification_id"
-        const val NOTIFICATION = "notification"
+        const val NOTIFICATION = "domain.notification"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
