@@ -57,7 +57,7 @@ class _TaskPageState extends State<TaskPage> {
                       BlocBuilder<TaskCubit, TaskState>(
                         builder: (context, state) {
                           if (state is TaskInUsageState) {
-                            return PopupMenu1(
+                            return PopupMenu(
                               updateBranchesInfo: widget.updateBranchesInfo,
                               branchID: widget.branchID,
                             );
@@ -69,8 +69,8 @@ class _TaskPageState extends State<TaskPage> {
                   ),
                   floatingActionButton: FloatingActionButton(
                     child: Icon(Icons.add_sharp),
-                    onPressed: () {
-                      showDialog(
+                    onPressed: () async {
+                      await showDialog(
                           context: context,
                           builder: (BuildContext context0) {
                             return FormDialog(
@@ -92,7 +92,7 @@ class _TaskPageState extends State<TaskPage> {
                         );
                       }
                       else if (state is TaskInUsageState) {
-                        return TaskList1(
+                        return TaskList(
                           theme: theme,
                           updateBranchesInfo: widget.updateBranchesInfo,
                           branchID: widget.branchID,

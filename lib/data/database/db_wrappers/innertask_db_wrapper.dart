@@ -37,17 +37,6 @@ class InnerTaskDBStorage implements DBStorage{
     );
   }
 
-  Future<void> updateParentObject(Map<String, dynamic> task) async {
-    Database db = await DB.instance.database;
-
-    await db.update(
-      DBConstants.taskTable,
-      task,
-      where: "${DBConstants.taskId} = ?",
-      whereArgs: [task[DBConstants.taskId]],
-    );
-  }
-
   @override
   Future<void> deleteObject(String innerTaskID) async {
     Database db = await DB.instance.database;
@@ -56,16 +45,6 @@ class InnerTaskDBStorage implements DBStorage{
       DBConstants.innerTaskTable,
       where: "${DBConstants.innerTaskId} = ?",
       whereArgs: [innerTaskID],
-    );
-  }
-
-  Future<void> deleteParentObject(String taskID) async {
-    Database db = await DB.instance.database;
-
-    await db.delete(
-      DBConstants.taskTable,
-      where: "${DBConstants.taskId} = ?",
-      whereArgs: [taskID],
     );
   }
 

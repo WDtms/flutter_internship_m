@@ -38,39 +38,42 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
                 )
             );
           } else if (state is BranchInUsageState){
-            return  Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    AllBranchCard(allBranchesProgressInfo: state.allBranchesTasksInfo),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Text(
-                        'Ветки задач',
-                        style: TextStyle(
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                    child: AllBranchCard(allBranchesProgressInfo: state.allBranchesTasksInfo),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+                    child: Text(
+                      'Ветки задач',
+                      style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30
-                        ),
                       ),
                     ),
-                    Expanded(
-                      child: GridView.count(
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        crossAxisCount: 2,
-                        children: <Widget>[
-                          for (int i = 0; i<state.allBranchesInfo.length; i++)
-                            OneBranchCard(
-                              branchInfo: state.allBranchesInfo[i],
-                            ),
-                          displayAddButton(context),
-                        ],
-                      ),
-                    )
-                  ]
-              ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                  sliver: SliverGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    children: <Widget>[
+                      for (int i = 0; i<state.allBranchesInfo.length; i++)
+                        OneBranchCard(
+                          branchInfo: state.allBranchesInfo[i],
+                        ),
+                      displayAddButton(context),
+                    ],
+                  ),
+                )
+              ],
             );
           }
           return Center(

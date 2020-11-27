@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/domain/network/photos.dart';
-import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/data/models/image.dart';
+import 'package:flutter_internship_v2/data/network_storage.dart';
+import 'package:flutter_internship_v2/data/repository/flickr_repository.dart';
+import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_cubit.dart';
+import 'package:flutter_internship_v2/presentation/models/net_parameters.dart';
 import 'package:flutter_internship_v2/presentation/views/flickr_page/search_appbar.dart';
-import 'package:provider/provider.dart';
 
 class FlickrPage extends StatefulWidget {
 
@@ -17,69 +19,93 @@ class FlickrPage extends StatefulWidget {
 
 class _FlickrPageState extends State<FlickrPage> {
 
-  ScrollController _scrollController = ScrollController();
-  int _page = 1;
-  bool isLoading = false;
-  bool isSearching = false;
+  ScrollController _scrollController;
+  bool isSearching;
+  int _page;
+  FlickrCubit cubit;
+  String _tag;
 
 
   @override
   void initState() {
     super.initState();
-
-    var photoBloc = Provider.of<DataProvider>(context, listen: false);
-    photoBloc.resetStreams();
-    photoBloc.fetchAllPhotos(_page);
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        photoBloc.setLoadingState(LoadMoreStatus.LOADING);
-        photoBloc.fetchAllPhotos(++_page);
-      }
-    });
+    isSearching = false;
+    _tag = "";
+    _scrollController = ScrollController();
+    cubit = FlickrCubit(flickrRepository: FlickrRepository(networkStorage: NetworkStorage()));
+    _page = 1;
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: widget.theme.values.toList().first,
-      appBar: _buildAppBar(widget.theme.keys.toList().first),
-      body: Consumer<DataProvider>(
-        builder: (context, usersModel, child) {
-          if (usersModel.allPhotos != null && usersModel.allPhotos.length > 0){
-            return _gridView(usersModel);
-          }
-          return Center(child: CircularProgressIndicator());
-        },
+    return BlocProvider(
+      create: (context) => cubit,
+      child: Scaffold(
+        backgroundColor: widget.theme.values.toList().first,
+        appBar: _buildAppBar(widget.theme.keys.toList().first),
+        body: BlocBuilder<FlickrCubit, FlickrState>(
+          builder: (context, state) {
+            if (state is FlickrUsageState){
+              _scrollController.addListener(() {
+                if (_scrollController.position.pixels ==
+                    _scrollController.position.maxScrollExtent) {
+                  cubit.fetchPhotos(NetParameters(
+                    page: ++_page,
+                    tag: _tag,
+                  ));
+                }
+              });
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildImage(state.photos[index]);
+                        },
+                        childCount: state.photos.length,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(28),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else if (state is FlickrInitialState) {
+              cubit.initiate(
+                  NetParameters(
+                    page: _page,
+                    tag: _tag,
+                  )
+              );
+              return Center(child: CircularProgressIndicator());
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }
 
-  Widget _gridView(DataProvider dataProvider){
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      controller: _scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: dataProvider.allPhotos.length,
-      itemBuilder: (context, index) {
-        if ((index == dataProvider.allPhotos.length - 1) && 
-            dataProvider.allPhotos.length < dataProvider.totalRecords) {
-          return Center(child: CircularProgressIndicator());
-        }
-        
-        return _buildImage(dataProvider.allPhotos[index]);
-      },
-    );
-  }
-  
   Widget _buildImage(Photo photo) {
     return Image.network(
       'https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg',
       fit: BoxFit.cover,
     );
   }
-  
+
   Widget _buildAppBar(Color appBarColor) {
     return PreferredSize(
       preferredSize: Size.fromHeight(60),
@@ -108,9 +134,32 @@ class _FlickrPageState extends State<FlickrPage> {
         setBoolToFalse: () {
           setState(() {
             isSearching = false;
+            _tag = "";
+            _page = 1;
           });
+          cubit.initiate(NetParameters(
+            tag: _tag,
+            page: _page,
+          ));
+        },
+        onSubmitted: (String tag) {
+          setState(() {
+            _tag = tag;
+            _page = 1;
+          });
+          cubit.initiate(NetParameters(
+            page: _page,
+            tag: tag,
+          ));
         },
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 }

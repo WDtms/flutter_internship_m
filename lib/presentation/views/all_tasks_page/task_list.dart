@@ -11,14 +11,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class TaskList1 extends StatelessWidget {
+class TaskList extends StatelessWidget {
 
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
   final List<Task> taskList;
   final String branchID;
 
-  TaskList1({this.updateBranchesInfo, this.taskList, this.branchID, this.theme});
+  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -72,85 +72,87 @@ class TaskList1 extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Container(
-          height: 65,
           decoration: BoxDecoration(
               borderRadius:BorderRadius.circular(16),
               color: Colors.white
           ),
-          child: Row(
-            children: [
-              CircularCheckBox(
-                value: taskList[index].isDone,
-                activeColor: theme.keys.toList().first,
-                onChanged: (bool value) async {
-                  bool isCompleted = taskList[index].isDone;
-                  context.bloc<TaskCubit>().editTask(branchID, index, taskList[index].copyWith(isDone: !isCompleted));
-                  updateBranchesInfo();
-                }
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
-                      theme: theme,
-                      updateBranchesInfo: updateBranchesInfo,
-                      updateTaskList: () {
-                        context.bloc<TaskCubit>().updateTaskList(branchID);
-                      },
-                      branchID: branchID,
-                      indexTask: index,
-                    )));
-                  },
-                  child: Builder(
-                    builder: (BuildContext context) {
-                      if (taskList[index].innerTasks.isEmpty) {
-                        return Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              taskList[index].title,
-                              style: TextStyle(
-                                fontSize: 16,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                CircularCheckBox(
+                  value: taskList[index].isDone,
+                  activeColor: theme.keys.toList().first,
+                  onChanged: (bool value) async {
+                    bool isCompleted = taskList[index].isDone;
+                    context.bloc<TaskCubit>().editTask(branchID, index, taskList[index].copyWith(isDone: !isCompleted));
+                    updateBranchesInfo();
+                  }
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
+                        theme: theme,
+                        updateBranchesInfo: updateBranchesInfo,
+                        updateTaskList: () {
+                          context.bloc<TaskCubit>().updateTaskList(branchID);
+                        },
+                        branchID: branchID,
+                        indexTask: index,
+                      )));
+                    },
+                    child: Builder(
+                      builder: (BuildContext context) {
+                        if (taskList[index].innerTasks.isEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              child: Text(
+                                taskList[index].title,
+                                style: TextStyle(
+                                  fontSize: 18
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }
-                      else {
-                        return Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 2),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 4),
-                                  child: Text(
-                                    taskList[index].title,
-                                    style: TextStyle(
-                                      fontSize: 16,
+                          );
+                        }
+                        else {
+                          return Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 2),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 4),
+                                    child: Text(
+                                      taskList[index].title,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                  ),
-                                )
-                              ],
+                                  Text(
+                                    '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black54,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -50,6 +50,11 @@ class TaskDBStorage implements DBStorage{
       where: "${DBConstants.taskId} = ?",
       whereArgs: [taskID],
     );
+    await db.delete(
+      DBConstants.innerTaskTable,
+      where: "${DBConstants.taskId} = ?",
+      whereArgs: [taskID],
+    );
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {

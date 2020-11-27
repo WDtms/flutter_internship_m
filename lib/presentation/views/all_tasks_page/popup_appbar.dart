@@ -8,12 +8,12 @@ import 'package:flutter_internship_v2/presentation/constants/popup_constans.dart
 import 'bottom_dialog.dart';
 
 
-class PopupMenu1 extends StatelessWidget {
+class PopupMenu extends StatelessWidget {
 
   final Function() updateBranchesInfo;
   final String branchID;
 
-  PopupMenu1({this.branchID, this.updateBranchesInfo});
+  PopupMenu({this.branchID, this.updateBranchesInfo});
 
   @override
   Widget build(BuildContext context) {

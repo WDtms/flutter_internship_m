@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_bloc.dart';
 import 'package:flutter_internship_v2/presentation/pages/flickr_page.dart';
-import 'package:provider/provider.dart';
 
 class MyFlickrCard extends StatelessWidget {
 
@@ -38,7 +36,7 @@ class MyFlickrCard extends StatelessWidget {
   _displayAddButton(BuildContext context){
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeNotifierProvider(create: (context) => DataProvider(),child: FlickrPage(theme: theme))));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FlickrPage(theme: theme)));
       },
       child: Container(
         width: 80,
