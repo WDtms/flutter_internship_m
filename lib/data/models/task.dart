@@ -14,8 +14,9 @@ class Task{
   DateTime dateToComplete;
   DateTime notificationTime;
   List<InnerTask> innerTasks;
+  List<String> imagesPath;
 
-  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete, this.notificationTime, this.description = ""});
+  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete, this.notificationTime, this.description = "", this.imagesPath});
 
   Map<String, dynamic> toMap(String branchID) {
     return {
@@ -27,7 +28,19 @@ class Task{
       DBConstants.taskDateOfCreation: dateOfCreation.millisecondsSinceEpoch,
       DBConstants.taskDateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
       DBConstants.taskNotificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
+      DBConstants.taskImages: _allImages(imagesPath),
     };
+  }
+
+  String _allImages(List<String> imagesPath) {
+    String allPath = "";
+    for (int i = 0; i<imagesPath.length; i++){
+      if (i == imagesPath.length - 1)
+        allPath += imagesPath.elementAt(i);
+      else
+        allPath += imagesPath.elementAt(i)+"*";
+    }
+    return allPath;
   }
 
   Task copyWith({
@@ -39,6 +52,7 @@ class Task{
     DateTime notificationTime,
     List<InnerTask> innerTasks,
     String description,
+    List<String> imagesPath,
   }) {
     return Task(
       id: id ?? this.id,
@@ -48,7 +62,8 @@ class Task{
       dateToComplete: dateToComplete ?? this.dateToComplete,
       notificationTime: notificationTime ?? this.notificationTime,
       innerTasks: innerTasks ?? this.innerTasks,
-      description: description ?? this.description
+      description: description ?? this.description,
+      imagesPath: imagesPath ?? this.imagesPath,
     );
   }
 

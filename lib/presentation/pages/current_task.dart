@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_internship_v2/data/repository/innertask_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
@@ -119,7 +120,11 @@ class _CurrentTask1State extends State<CurrentTask1> {
                             },
                           ),
                           MyDateCard(indexTask: widget.indexTask, branchID: widget.branchID, task: state.task),
-                          MyFlickrCard(theme: widget.theme),
+                          MyFlickrCard(theme: widget.theme, task: state.task, indexTask: widget.indexTask, branchID: widget.branchID, addImage: (String v) async {
+                            List<String> imagesList = state.task.imagesPath;
+                            imagesList.add(v);
+                            context.bloc<CurrentTaskCubit>().editTask(widget.branchID, widget.indexTask, state.task.copyWith(imagesPath: imagesList));
+                          },),
                         ]
                     ),
                   )

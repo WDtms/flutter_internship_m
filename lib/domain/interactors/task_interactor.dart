@@ -27,6 +27,7 @@ class TaskInteractor {
           dateToComplete: dateToComplete,
           notificationTime: notificationTime,
           innerTasks: [],
+          imagesPath: [],
         )
     );
   }

@@ -11,19 +11,41 @@ class FlickrCubit extends Cubit<FlickrState> {
 
   FlickrCubit({this.flickrRepository}) : super(FlickrInitialState());
 
-  Future<void> initiate(NetParameters parameters) async {
-    emit(FlickrLoadingState());
-    await flickrRepository.fetchPhotos(parameters);
-    final photos = await flickrRepository.getPhotosList();
-    final totalCount = await flickrRepository.getTotalCount();
-    emit(FlickrUsageState(photos: photos, totalCount: totalCount));
+  String tag = "";
+  int pageNumber = 1;
+
+  setTag(String tag){
+    this.tag = tag;
+    this.pageNumber = 1;
   }
 
-  Future<void> fetchPhotos(NetParameters parameters) async {
-    await flickrRepository.fetchPhotos(parameters);
+  resetTag() async {
+    if (this.tag != "") {
+      this.tag = "";
+      this.pageNumber = 1;
+      await initiate();
+    }
+  }
+
+  Future<void> initiate() async {
+    emit(FlickrLoadingState());
+    await flickrRepository.initFetchPhotos(NetParameters(
+      page: this.pageNumber,
+      tag: this.tag,
+    ));
     final photos = await flickrRepository.getPhotosList();
     final totalCount = await flickrRepository.getTotalCount();
-    emit(FlickrUsageState(photos: photos, totalCount: totalCount));
+    emit(FlickrUsageState(photos: photos, totalCount: totalCount, tag: ""));
+  }
+
+  Future<void> fetchPhotos() async {
+    await flickrRepository.fetchPhotos(NetParameters(
+      page: ++this.pageNumber,
+      tag: this.tag,
+    ));
+    final photos = await flickrRepository.getPhotosList();
+    final totalCount = await flickrRepository.getTotalCount();
+    emit(FlickrUsageState(photos: photos, totalCount: totalCount, tag: tag));
   }
 
 }

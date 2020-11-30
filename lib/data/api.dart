@@ -8,17 +8,12 @@ import 'package:flutter_internship_v2/data/models/network_data.dart';
 
 class ApiRequest{
 
-  static NetworkData parsePhotosFromGetRecent(String responseBody) {
-    return NetworkData.fromJson(json.decode(responseBody));
-  }
-
-  static NetworkData parsePhotosFromSearchPhoto(String responseBody) {
+  static NetworkData parsePhotos(String responseBody) {
     return NetworkData.fromSearchJson(json.decode(responseBody));
   }
 
   final String web = "https://www.flickr.com";
   final String service = "services/rest/";
-  final String getRecent = "flickr.photos.getRecent";
   final String searchPhoto = "flickr.photos.search";
   final String apiKey = "18353747255e0f7e362243baf563348e";
 
@@ -26,15 +21,14 @@ class ApiRequest{
     http.Response response;
     if (parameters.tag == "") {
       response =
-      await http.Client().get('$web/$service?method=$getRecent'
-          '&api_key=$apiKey&per_page=20&page=${parameters
-          .page}&format=json&nojsoncallback=1');
-      return compute(parsePhotosFromGetRecent, response.body);
+      await http.Client().get('$web/$service?method=$searchPhoto'
+          '&api_key=$apiKey&tags=waterfall&per_page=20&page=${parameters.page}&format=json&nojsoncallback=1');
+      return compute(parsePhotos, response.body);
     } else {
       response =
       await http.Client().get('$web/$service?method=$searchPhoto'
-          '&api_key=$apiKey&tags=${parameters.tag}&per_page=20&format=json&nojsoncallback=1');
-      return compute(parsePhotosFromSearchPhoto, response.body);
+          '&api_key=$apiKey&tags=${parameters.tag}&per_page=20&page=${parameters.page}&format=json&nojsoncallback=1');
+      return compute(parsePhotos, response.body);
     }
   }
 

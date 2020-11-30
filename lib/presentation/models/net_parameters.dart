@@ -1,7 +1,7 @@
 class NetParameters{
 
   final int page;
-  final String tag;
+  String tag;
 
   NetParameters({this.page, this.tag = ""});
 

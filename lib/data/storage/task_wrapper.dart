@@ -7,7 +7,7 @@ import 'local_storage.dart';
 class LocalStorageTaskWrapper{
 
   List<Task> getTaskList(String branchID){
-    return LocalStorage.getInstance().branches[branchID].taskList;
+    return getTaskListCopy(LocalStorage.getInstance().branches[branchID].taskList);
   }
 
   Map<Color, Color> getBranchTheme(String branchID){
@@ -32,6 +32,12 @@ class LocalStorageTaskWrapper{
 
   void changeTheme(String branchID, Map<Color, Color> theme) {
     LocalStorage.getInstance().branches[branchID].theme = theme;
+  }
+
+  List<Task> getTaskListCopy(List<Task> taskList){
+    List<Task> taskListCopy = List<Task>();
+    taskListCopy.addAll(taskList);
+    return taskListCopy;
   }
 
 }

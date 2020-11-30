@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/pages/flickr_page.dart';
 
 class MyFlickrCard extends StatelessWidget {
 
   final Map<Color, Color> theme;
+  final String branchID;
+  final int indexTask;
+  final Task task;
+  final Function(String path) addImage;
 
-  MyFlickrCard({this.theme});
+  MyFlickrCard({this.theme, this.branchID, this.indexTask, this.task, this.addImage});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +34,24 @@ class MyFlickrCard extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
+          for (String image in task.imagesPath)
+            _displayImages(image),
           _displayAddButton(context),
         ],
+      ),
+    );
+  }
+
+  _displayImages(String filePath){
+    return Container(
+      width: 120,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      child: Image.file(
+        File(filePath),
+        fit: BoxFit.cover,
       ),
     );
   }
@@ -36,7 +59,10 @@ class MyFlickrCard extends StatelessWidget {
   _displayAddButton(BuildContext context){
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => FlickrPage(theme: theme)));
+        Navigator.push(context, MaterialPageRoute(builder: (context1) => FlickrPage(
+          theme: theme,
+          addImage: addImage,
+        )));
       },
       child: Container(
         width: 80,

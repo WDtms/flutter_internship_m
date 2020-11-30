@@ -10,38 +10,53 @@ class TaskCubit extends Cubit<TaskState>{
 
   TaskCubit(this._taskInteractor) : super(TaskInitialState());
 
+  bool _isHidden = false;
+
+  toggleIsHidden(String branchID) async {
+    _isHidden = !_isHidden;
+    await updateTaskList(branchID);
+  }
+
+  checkIfIsHidden(List<Task> taskList){
+    if (_isHidden){
+      taskList.removeWhere((task) => task.isDone);
+      return taskList;
+    }
+    return taskList;
+  }
+
   Future<void> getTasks(String branchID) async {
     emit(TaskLoadingState());
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 
   Future<void> editTask(String branchID, int indexTask, Task task) async {
     await _taskInteractor.editTask(branchID, indexTask, task);
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 
   Future<void> createNewTask(String branchID, DateTime dateToComplete, DateTime notificationTime, String taskName) async {
     await _taskInteractor.createNewTask(branchID, taskName, dateToComplete, notificationTime);
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 
   Future<void> deleteTask(String branchID, int indexTask) async {
     await _taskInteractor.deleteTask(branchID, indexTask);
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {
     await _taskInteractor.deleteAllCompletedTasks(branchID);
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 
   Future<void> updateTaskList(String branchID) async {
     final taskList = await _taskInteractor.getTaskList(branchID);
-    emit(TaskInUsageState(taskList: taskList));
+    emit(TaskInUsageState(taskList: checkIfIsHidden(taskList)));
   }
 }

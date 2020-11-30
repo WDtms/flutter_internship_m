@@ -92,6 +92,7 @@ class BranchDBStorage implements DBStorage{
                 : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskNotificationTime]),
             innerTasks: [],
             description: row[DBConstants.taskDescription],
+            imagesPath: _imageToList(row[DBConstants.taskImages]),
           )
       );
     });
@@ -109,6 +110,11 @@ class BranchDBStorage implements DBStorage{
     });
 
     return branches;
+  }
+
+  _imageToList(String images){
+    List<String> imagesList = images.split("*");
+    return imagesList;
   }
 
 }

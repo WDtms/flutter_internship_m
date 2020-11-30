@@ -18,6 +18,7 @@ class DBConstants{
   static const taskDateOfCreation = 'taskDateOfCreation';
   static const taskNotificationTime = 'taskNotificationTime';
   static const taskDescription = 'taskDescription';
+  static const taskImages = 'taskImages';
 
   //Поля таблицы внутренних задач
   static const innerTaskId = 'innerTaskID';

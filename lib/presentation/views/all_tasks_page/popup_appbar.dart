@@ -24,7 +24,7 @@ class PopupMenu extends StatelessWidget {
           updateBranchesInfo();
         }
         if (choice == Constants.hide){
-
+          await context.bloc<TaskCubit>().toggleIsHidden(branchID);
         }
         if (choice == Constants.changeTheme){
           showModalBottomSheet(

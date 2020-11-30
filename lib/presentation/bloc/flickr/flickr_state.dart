@@ -13,8 +13,9 @@ class FlickrLoadingState extends FlickrState{
 }
 
 class FlickrUsageState extends FlickrState{
+  final String tag;
   final List<Photo> photos;
   final int totalCount;
 
-  FlickrUsageState({this.photos, this.totalCount});
+  FlickrUsageState({this.photos, this.totalCount, this.tag});
 }
