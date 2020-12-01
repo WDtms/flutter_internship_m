@@ -9,7 +9,7 @@ class Branch{
   String id;
   String title;
   Map<Color, Color> theme;
-  final List<Task> taskList;
+  Map<String, Task> taskList;
 
   Branch({this.id, this.title, this.taskList, this.theme});
 
@@ -19,6 +19,15 @@ class Branch{
       DBConstants.branchTitle: title,
       DBConstants.branchTheme: themes.indexOf(theme),
     };
+  }
+
+  Branch fromMap(Map<String, dynamic> row){
+    return Branch(
+        id: row[DBConstants.branchId],
+        title: row[DBConstants.branchTitle],
+        theme: themes[row[DBConstants.branchTheme]],
+        taskList: {},
+    );
   }
 
   Branch copyWith({

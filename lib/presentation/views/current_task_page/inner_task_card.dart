@@ -7,14 +7,12 @@ import 'package:flutter_internship_v2/presentation/bloc/current_task/current_tas
 class InnerTaskCard extends StatelessWidget {
 
   final Task task;
-  final int indexInnerTask;
+  final String innerTaskID;
   final Color activeColor;
-  final String branchID;
-  final int indexTask;
   final Function() updateTaskList;
 
 
-  InnerTaskCard({this.task, this.activeColor, this.branchID, this.indexTask, this.indexInnerTask, this.updateTaskList});
+  InnerTaskCard({this.task, this.activeColor, this.innerTaskID, this.updateTaskList});
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +22,13 @@ class InnerTaskCard extends StatelessWidget {
         child: Row(
           children: [
             CircularCheckBox(
-              value: task.innerTasks[indexInnerTask].isDone,
+              value: task.innerTasks[innerTaskID].isDone,
               activeColor: activeColor,
               onChanged: (bool value) async {
-                bool isCompleted = task.innerTasks[indexInnerTask].isDone;
+                bool isCompleted = task.innerTasks[innerTaskID].isDone;
                 await context.bloc<CurrentTaskCubit>().editInnerTask(
-                    branchID,
-                    indexTask,
-                    indexInnerTask,
-                    task.innerTasks[indexInnerTask].copyWith(isDone: !isCompleted)
+                    innerTaskID,
+                    task.innerTasks[innerTaskID].copyWith(isDone: !isCompleted)
                 );
                 updateTaskList();
               },
@@ -41,7 +37,7 @@ class InnerTaskCard extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(bottom: 4),
                 child: Text(
-                    task.innerTasks[indexInnerTask].title,
+                    task.innerTasks[innerTaskID].title,
                     style: TextStyle(
                       fontSize: 16,
                     )
@@ -51,7 +47,7 @@ class InnerTaskCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () async {
-                await context.bloc<CurrentTaskCubit>().deleteInnerTask(branchID, indexTask, indexInnerTask);
+                await context.bloc<CurrentTaskCubit>().deleteInnerTask(innerTaskID);
                 updateTaskList();
               },
             )

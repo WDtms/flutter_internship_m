@@ -22,7 +22,7 @@ class BranchInteractor {
         Branch(
           id: Uuid().v4(),
           title: branchName,
-          taskList: [],
+          taskList: {},
           theme: themes[0],
         )
     );
@@ -77,11 +77,11 @@ class BranchInteractor {
           (info.values.toList().first+info.keys.toList().first);
   }
 
-  Map<int, int> _calculateTaskInfo(List<Task> taskList){
+  Map<int, int> _calculateTaskInfo(Map<String, Task> taskList){
     int countCompleted = 0;
     int countUncompleted = 0;
-    for (Task task in taskList){
-      if (task.isDone)
+    for (int i = 0; i<taskList.length; i++){
+      if (taskList.values.toList().elementAt(i).isDone)
         countCompleted++;
       else
         countUncompleted++;

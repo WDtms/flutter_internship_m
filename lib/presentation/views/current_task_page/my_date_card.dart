@@ -9,10 +9,8 @@ import 'package:flutter_internship_v2/presentation/views/current_task_page/selec
 class MyDateCard extends StatelessWidget {
 
   final Task task;
-  final int indexTask;
-  final String branchID;
 
-  MyDateCard({this.task, this.indexTask, this.branchID});
+  MyDateCard({this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +76,8 @@ class MyDateCard extends StatelessWidget {
             );
             if (date != null && time != null) {
               context.bloc<CurrentTaskCubit>().editTask(
-                  branchID, indexTask, task.copyWith(
-                  notificationTime: DateTime(
+                  task.copyWith(
+                      notificationTime: DateTime(
                       date.year, date.month, date.day, time.hour, time.minute)
               ));
             }
@@ -148,10 +146,10 @@ class MyDateCard extends StatelessWidget {
                     selectDateToComplete: (DateTime dateTime) {
                       if (dateTime != null) {
                         context.bloc<CurrentTaskCubit>().editTask(
-                            branchID, indexTask, task.copyWith(
-                            dateToComplete: DateTime(
-                                dateTime.year, dateTime.month, dateTime.day, 23,
-                                59, 59)
+                            task.copyWith(
+                                dateToComplete: DateTime(
+                                    dateTime.year, dateTime.month, dateTime.day,
+                                    23, 59, 59)
                         ));
                       }
                     },

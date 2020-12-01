@@ -6,9 +6,8 @@ import 'package:flutter_internship_v2/presentation/bloc/current_task/current_tas
 class CurrentTaskFloatingButton extends StatefulWidget {
 
   final Function() toggleTaskComplete;
-  final index;
 
-  CurrentTaskFloatingButton({this.index, this.toggleTaskComplete});
+  CurrentTaskFloatingButton({this.toggleTaskComplete});
 
   @override
   _CurrentTaskFloatingButtonState createState() => _CurrentTaskFloatingButtonState();

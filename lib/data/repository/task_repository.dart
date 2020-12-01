@@ -9,7 +9,7 @@ class TaskRepository{
   TaskDBStorage _taskDBStorage = TaskDBStorage();
   LocalStorageTaskWrapper taskWrapper = LocalStorageTaskWrapper();
 
-  List<Task> getTaskList(String branchID){
+  Map<String, Task> getTaskList(String branchID){
     return  taskWrapper.getTaskList(branchID);
   }
 
@@ -18,19 +18,23 @@ class TaskRepository{
     await _taskDBStorage.insertObject(task.toMap(branchID));
   }
 
-  Future<void> editTask(String branchID, int indexTask, Task task) async {
-    taskWrapper.editTask(branchID, indexTask, task);
+  Future<void> editTask(String branchID, Task task) async {
+    taskWrapper.editTask(branchID, task);
     await _taskDBStorage.updateObject(task.toMap(branchID));
   }
 
-  Future<void> deleteTask(String branchID, int taskIndex) async {
-    await _taskDBStorage.deleteObject(taskWrapper.getTaskList(branchID)[taskIndex].id);
-    taskWrapper.deleteTask(branchID, taskIndex);
+  Future<void> deleteTask(String branchID, String taskID) async {
+    await _taskDBStorage.deleteObject(taskWrapper.getTaskList(branchID)[taskID].id);
+    taskWrapper.deleteTask(branchID, taskID);
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {
     await _taskDBStorage.deleteAllCompletedTasks(branchID);
     taskWrapper.deleteAllCompletedTasks(branchID);
+  }
+
+  Task getTask(String branchID, String taskID){
+    return taskWrapper.getTask(branchID, taskID);
   }
 
 }

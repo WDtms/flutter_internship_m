@@ -4,8 +4,6 @@ import 'package:flutter_internship_v2/data/models/branch.dart';
 import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
-
 import 'db_wrapper.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -70,51 +68,20 @@ class BranchDBStorage implements DBStorage{
 
     List<Map> branchesDB = await db.query(DBConstants.branchTable);
     branchesDB.forEach((row) {
-      branches[row[DBConstants.branchId]] = Branch(
-          id: row[DBConstants.branchId],
-          title: row[DBConstants.branchTitle],
-          theme: themes[row[DBConstants.branchTheme]],
-          taskList: []
-      );
+      branches[row[DBConstants.branchId]] = Branch().fromMap(row);
     });
 
     List<Map> tasksDB = await db.query(DBConstants.taskTable);
     tasksDB.forEach((row) {
-      branches[row[DBConstants.branchId]].taskList.add(
-          Task(
-            id: row[DBConstants.taskId],
-            title: row[DBConstants.taskTitle],
-            isDone: row[DBConstants.taskIsDone] == 1 ? true : false,
-            dateToComplete: row[DBConstants.taskDateToComplete] == 0 ? null
-                : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateToComplete]),
-            dateOfCreation: DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateOfCreation]),
-            notificationTime: row[DBConstants.taskNotificationTime] == 0 ? null
-                : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskNotificationTime]),
-            innerTasks: [],
-            description: row[DBConstants.taskDescription],
-            imagesPath: _imageToList(row[DBConstants.taskImages]),
-          )
-      );
+      branches[row[DBConstants.branchId]].taskList[row[DBConstants.taskId]] = Task().fromMap(row);
     });
 
     List<Map> innerTaskDB = await db.query(DBConstants.innerTaskTable);
     innerTaskDB.forEach((row) {
-      int index = branches[row[DBConstants.branchId]].taskList.indexWhere((task) => task.id == row[DBConstants.taskId]);
-      branches[row[DBConstants.branchId]].taskList[index].innerTasks.add(
-          InnerTask(
-            id: row[DBConstants.innerTaskId],
-            title: row[DBConstants.innerTaskTitle],
-            isDone: row[DBConstants.innerTaskIsDone] == 1 ? true : false,
-          )
-      );
+      branches[row[DBConstants.branchId]].taskList[row[DBConstants.taskId]].innerTasks[row[DBConstants.innerTaskId]] = InnerTask().fromMap(row);
     });
 
     return branches;
-  }
-
-  _imageToList(String images){
-    List<String> imagesList = images.split("*");
-    return imagesList;
   }
 
 }

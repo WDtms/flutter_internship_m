@@ -21,6 +21,14 @@ class InnerTask{
     };
   }
 
+  InnerTask fromMap(Map<String, dynamic> row){
+    return InnerTask(
+      id: row[DBConstants.innerTaskId],
+      title: row[DBConstants.innerTaskTitle],
+      isDone: row[DBConstants.innerTaskIsDone] == 1 ? true : false,
+    );
+  }
+
   InnerTask copyWith({
     String id,
     String title,

@@ -6,7 +6,7 @@ import 'local_storage.dart';
 
 class LocalStorageTaskWrapper{
 
-  List<Task> getTaskList(String branchID){
+  Map<String, Task> getTaskList(String branchID){
     return getTaskListCopy(LocalStorage.getInstance().branches[branchID].taskList);
   }
 
@@ -15,29 +15,33 @@ class LocalStorageTaskWrapper{
   }
 
   void createNewTask(String branchID, Task task) {
-    LocalStorage.getInstance().branches[branchID].taskList.add(task);
+    LocalStorage.getInstance().branches[branchID].taskList[task.id] = task;
   }
 
-  void editTask(String branchID, int indexTask, Task task) {
-    LocalStorage.getInstance().branches[branchID].taskList[indexTask] = task;
+  void editTask(String branchID, Task task) {
+    LocalStorage.getInstance().branches[branchID].taskList[task.id] = task;
   }
 
-  void deleteTask(String branchID, int taskIndex) {
-    LocalStorage.getInstance().branches[branchID].taskList.removeAt(taskIndex);
+  void deleteTask(String branchID, String taskID) {
+    LocalStorage.getInstance().branches[branchID].taskList.remove(taskID);
   }
 
   void deleteAllCompletedTasks(String branchID) {
-    LocalStorage.getInstance().branches[branchID].taskList.removeWhere((task) => task.isDone);
+    LocalStorage.getInstance().branches[branchID].taskList.removeWhere((taskID, task) => task.isDone);
   }
 
   void changeTheme(String branchID, Map<Color, Color> theme) {
     LocalStorage.getInstance().branches[branchID].theme = theme;
   }
 
-  List<Task> getTaskListCopy(List<Task> taskList){
-    List<Task> taskListCopy = List<Task>();
+  Map<String, Task> getTaskListCopy(Map<String, Task> taskList){
+    Map<String, Task> taskListCopy = Map<String, Task>();
     taskListCopy.addAll(taskList);
     return taskListCopy;
+  }
+
+  Task getTask(String branchID, String taskID){
+    return LocalStorage.getInstance().branches[branchID].taskList[taskID];
   }
 
 }

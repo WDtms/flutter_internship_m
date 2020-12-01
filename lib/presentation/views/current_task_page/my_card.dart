@@ -13,10 +13,8 @@ class MyCard extends StatefulWidget {
   final Function() updateTaskList;
   final Function(String value) onSubmitDescription;
   final Map<Color, Color> theme;
-  final int indexTask;
-  final String branchID;
 
-  MyCard({this.branchID, this.indexTask, this.updateTaskList, this.theme, this.description, this.onSubmitDescription});
+  MyCard({this.updateTaskList, this.theme, this.description, this.onSubmitDescription});
 
   @override
   _MyCardState createState() => _MyCardState();
@@ -30,7 +28,7 @@ class _MyCardState extends State<MyCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          margin: const EdgeInsets.fromLTRB(16, 30, 16, 8),
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -52,15 +50,13 @@ class _MyCardState extends State<MyCard> {
                     for (int i = 0; i <state.task.innerTasks.length; i++)
                       InnerTaskCard(
                         activeColor: widget.theme.keys.toList().first,
-                        indexInnerTask: i,
-                        indexTask: widget.indexTask,
+                        innerTaskID: state.task.innerTasks.values.toList().elementAt(i).id,
                         updateTaskList: widget.updateTaskList,
                         task: state.task,
-                        branchID: widget.branchID,
                       ),
                     CreateInnerTask(
                       createInnerTask: (String value) async {
-                        await context.bloc<CurrentTaskCubit>().createNewInnerTask(widget.branchID, widget.indexTask, value);
+                        await context.bloc<CurrentTaskCubit>().createNewInnerTask(value);
                         widget.updateTaskList();
                       },
                     ),

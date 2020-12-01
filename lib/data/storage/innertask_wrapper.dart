@@ -7,28 +7,28 @@ import 'local_storage.dart';
 
 class LocalStorageInnerTaskWrapper{
 
-  Task getTask(String branchID, int indexTask){
-    return LocalStorage.getInstance().branches[branchID].taskList[indexTask];
+  Task getTask(String branchID, String taskID){
+    return LocalStorage.getInstance().branches[branchID].taskList[taskID];
   }
 
-  void createNewInnerTask(String branchID, int indexTask, InnerTask innerTask) {
-    LocalStorage.getInstance().branches[branchID].taskList[indexTask].innerTasks.add(innerTask);
+  void createNewInnerTask(String branchID, String taskID, InnerTask innerTask) {
+    LocalStorage.getInstance().branches[branchID].taskList[taskID].innerTasks[innerTask.id] = innerTask;
   }
 
-  void editInnerTask(String branchID, int indexTask, int innerTaskIndex, InnerTask innerTask) {
-    LocalStorage.getInstance().branches[branchID].taskList[indexTask].innerTasks[innerTaskIndex] = innerTask;
+  void editInnerTask(String branchID, String taskID, String innerTaskID, InnerTask innerTask) {
+    LocalStorage.getInstance().branches[branchID].taskList[taskID].innerTasks[innerTaskID] = innerTask;
   }
 
-  void deleteInnerTask(String branchID, int indexTask, int innerTaskIndex) {
-    LocalStorage.getInstance().branches[branchID].taskList[indexTask].innerTasks.removeAt(innerTaskIndex);
+  void deleteInnerTask(String branchID, String taskID, String innerTaskID) {
+    LocalStorage.getInstance().branches[branchID].taskList[taskID].innerTasks.remove(innerTaskID);
   }
 
-  void editTask(String branchID, int indexTask, Task task) {
-    LocalStorage.getInstance().branches[branchID].taskList[indexTask] = task;
+  void editTask(String branchID, Task task) {
+    LocalStorage.getInstance().branches[branchID].taskList[task.id] = task;
   }
 
-  void deleteTask(String branchID, int taskIndex) {
-    LocalStorage.getInstance().branches[branchID].taskList.removeAt(taskIndex);
+  void deleteTask(String branchID, String taskID) {
+    LocalStorage.getInstance().branches[branchID].taskList.remove(taskID);
   }
 
 }

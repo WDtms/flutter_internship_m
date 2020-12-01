@@ -15,7 +15,8 @@ class TaskLoadingState extends TaskState{
 }
 
 class TaskInUsageState extends TaskState{
-  final taskList;
+  final Map<String, Task> taskList;
+  final bool isHidden;
 
-  TaskInUsageState({this.taskList});
+  TaskInUsageState({this.taskList, this.isHidden});
 }

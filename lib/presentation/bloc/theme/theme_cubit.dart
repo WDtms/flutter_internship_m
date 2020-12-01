@@ -8,15 +8,21 @@ class ThemeCubit extends Cubit<ThemeState>{
 
   ThemeCubit(this._themeRepository) : super (ThemeInitialState());
 
-  Future<void> getThemeBranch(String branchID) async {
+  String currentBranchID;
+
+  void setBranchID(String branchID){
+    currentBranchID = branchID;
+  }
+
+  Future<void> getThemeBranch() async {
     emit(ThemeLoadingState());
-    final theme = await _themeRepository.getBranchTheme(branchID);
+    final theme = await _themeRepository.getBranchTheme(currentBranchID);
     emit(ThemeUsageState(theme: theme));
   }
 
-  Future<void> changeTheme(String branchID, Map<Color, Color> newTheme) async {
-    await _themeRepository.changeTheme(branchID, newTheme);
-    final theme = await _themeRepository.getBranchTheme(branchID);
+  Future<void> changeTheme(Map<Color, Color> newTheme) async {
+    await _themeRepository.changeTheme(currentBranchID, newTheme);
+    final theme = await _themeRepository.getBranchTheme(currentBranchID);
     emit(ThemeUsageState(theme: theme));
   }
 

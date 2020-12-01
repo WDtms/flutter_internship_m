@@ -10,15 +10,15 @@ class InnerTaskInteractor {
 
   InnerTaskInteractor({this.innerTaskRepository});
 
-  Future<Task> getTask(String branchID, int indexTask) async {
-    return innerTaskRepository.getTask(branchID, indexTask);
+  Future<Task> getTask(String branchID, String taskID) async {
+    return innerTaskRepository.getTask(branchID, taskID);
   }
 
 
-  Future<void> createNewInnerTask(String branchID, int indexTask, String innerTaskName) async {
+  Future<void> createNewInnerTask(String branchID, String taskID, String innerTaskName) async {
     await innerTaskRepository.createNewInnerTask(
       branchID,
-      indexTask,
+      taskID,
       InnerTask(
         id: Uuid().v4(),
         title: innerTaskName,
@@ -27,21 +27,21 @@ class InnerTaskInteractor {
   }
 
 
-  Future<void> deleteInnerTask(String branchID, int indexTask, int indexInnerTask) async {
-    await innerTaskRepository.deleteInnerTask(branchID, indexTask, indexInnerTask);
+  Future<void> deleteInnerTask(String branchID, String taskID, String innerTaskID) async {
+    await innerTaskRepository.deleteInnerTask(branchID, taskID, innerTaskID);
   }
 
 
-  Future<void> editInnerTask(String branchID, int indexTask, int innerTaskIndex, InnerTask innerTask) async {
-    await innerTaskRepository.editInnerTask(branchID, indexTask, innerTaskIndex, innerTask);
+  Future<void> editInnerTask(String branchID, String taskID, String innerTaskID, InnerTask innerTask) async {
+    await innerTaskRepository.editInnerTask(branchID, taskID, innerTaskID, innerTask);
   }
 
-  Future<void> editTask(String branchID, int indexTask, Task task) async {
-    await innerTaskRepository.editTask(branchID, indexTask, task);
+  Future<void> editTask(String branchID, Task task) async {
+    await innerTaskRepository.editTask(branchID, task);
   }
 
-  Future<void> deleteTask(String branchID, int taskIndex) async {
-    await innerTaskRepository.deleteTask(branchID, taskIndex);
+  Future<void> deleteTask(String branchID, String taskID) async {
+    await innerTaskRepository.deleteTask(branchID, taskID);
   }
 
 }

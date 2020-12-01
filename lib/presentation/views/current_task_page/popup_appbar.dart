@@ -3,41 +3,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
-import 'package:flutter_internship_v2/presentation/constants/popup_current_task.dart';
-
 import 'form_dialog.dart';
 
 
 
 class PopupMenuCurrentTask extends StatelessWidget {
 
-  final Function() onDelete;
   final Function() updateBranchesInfo;
   final Function() updateTaskList;
-  final String branchID;
   final Task task;
-  final int indexTask;
 
-  PopupMenuCurrentTask({this.onDelete, this.branchID, this.indexTask, this.updateTaskList, this.updateBranchesInfo, this.task});
+  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.task});
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<String>(
-      onSelected: (String choice) async {
-        if (choice == ConstantsOnPopUpCurrentTask.delete) {
+    return PopupMenuButton(
+      onSelected: (int value) async {
+        if (value == 1){
           showDialog(
             context: context,
-            builder: (context0) {
+            builder: (context1) {
+              return FormDialogCurrentTask(
+                taskName: task.title,
+                editTaskName: (String newTitle) async {
+                  await context.bloc<CurrentTaskCubit>().editTask(task.copyWith(title: newTitle));
+                  updateTaskList();
+                },
+              );
+            }
+          );
+        } else {
+          await showDialog(
+            context: context,
+            builder: (context1) {
               return SimpleDialog(
-                contentPadding: EdgeInsets.all(16),
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Вы точно хотите удалить это задание?',
+                      "Вы точно хотите удалить эту задачу?",
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w400
                       ),
                     ),
                   ),
@@ -46,27 +52,28 @@ class PopupMenuCurrentTask extends StatelessWidget {
                     children: <Widget>[
                       SimpleDialogOption(
                         child: Text(
-                          'ОТМЕНА',
+                          "Удалить",
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
+                        onPressed: () async {
+                          await context.bloc<CurrentTaskCubit>().deleteTask();
+                          await updateTaskList();
+                          await updateBranchesInfo();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       ),
                       SimpleDialogOption(
                         child: Text(
-                          'УДАЛИТЬ',
+                          "Отмена",
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ),
-                        onPressed: () async {
+                        onPressed: () {
                           Navigator.pop(context);
-                          onDelete();
                         },
                       ),
                     ],
@@ -75,35 +82,54 @@ class PopupMenuCurrentTask extends StatelessWidget {
               );
             }
           );
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context1) {
-                return FormDialogCurrentTask(
-                  taskName: task.title,
-                  editTaskName: (String value) async {
-                    await context.bloc<CurrentTaskCubit>().editTask(
-                        branchID,
-                        indexTask,
-                        task.copyWith(
-                          title: value,
-                        ),
-                    );
-                    updateTaskList();
-                  },
-                );
-              }
-              );
         }
-        },
-      itemBuilder: (BuildContext context) {
-        return ConstantsOnPopUpCurrentTask.choices.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(choice),
-          );
-        }).toList();
-        },
+      },
+      itemBuilder: (BuildContext context) => [
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.edit,
+                  size: 32,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Редактировать',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.delete,
+                  size: 32,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Удалить',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

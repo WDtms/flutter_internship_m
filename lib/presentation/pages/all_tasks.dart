@@ -31,6 +31,8 @@ class _TaskPageState extends State<TaskPage> {
   void initState() {
     themeCubit = ThemeCubit(ThemeRepository());
     taskCubit = TaskCubit(TaskInteractor(taskRepository: TaskRepository()));
+    themeCubit.setBranchID(widget.branchID);
+    taskCubit.setBranchID(widget.branchID);
     super.initState();
   }
   
@@ -44,7 +46,7 @@ class _TaskPageState extends State<TaskPage> {
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {
             if (state is ThemeInitialState){
-              themeCubit.getThemeBranch(widget.branchID);
+              themeCubit.getThemeBranch();
               return CircularProgressIndicator();
             } else if (state is ThemeUsageState){
               Map<Color, Color> theme = state.theme;
@@ -58,8 +60,8 @@ class _TaskPageState extends State<TaskPage> {
                         builder: (context, state) {
                           if (state is TaskInUsageState) {
                             return PopupMenu(
+                              isHidden: state.isHidden,
                               updateBranchesInfo: widget.updateBranchesInfo,
-                              branchID: widget.branchID,
                             );
                           }
                           return const SizedBox.shrink();
@@ -75,7 +77,7 @@ class _TaskPageState extends State<TaskPage> {
                           builder: (BuildContext context0) {
                             return FormDialog(
                               createTask: (String taskName, DateTime dateToComplete, DateTime notificationTime) async {
-                                await taskCubit.createNewTask(widget.branchID, dateToComplete, notificationTime, taskName);
+                                await taskCubit.createNewTask(dateToComplete, notificationTime, taskName);
                                 widget.updateBranchesInfo();
                               },
                             );
@@ -99,7 +101,7 @@ class _TaskPageState extends State<TaskPage> {
                           taskList: state.taskList,
                         );
                       }
-                      taskCubit.getTasks(widget.branchID);
+                      taskCubit.getTasks();
                       return Center(
                         child: CircularProgressIndicator(),
                       );

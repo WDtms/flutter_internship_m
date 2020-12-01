@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_internship_v2/data/models/image.dart';
 import 'package:flutter_internship_v2/data/photo_net_storage.dart';
 import 'package:flutter_internship_v2/data/repository/flickr_repository.dart';
 import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/flickr_page/flickr_appbar.dart';
+import 'package:flutter_internship_v2/presentation/views/flickr_page/image.dart';
 
 class FlickrPage extends StatefulWidget {
 
@@ -71,7 +70,7 @@ class _FlickrPageState extends State<FlickrPage> {
                         crossAxisSpacing: 16,
                       ),
                       delegate: SliverChildBuilderDelegate((context, index) {
-                        return _buildImage(state.photos[index]);
+                        return ImageDisplay(photoURL: state.photos[index].photoURL, addImage: widget.addImage, iconColor: widget.theme.keys.toList().first,);
                         },
                         childCount: state.photos.length,
                       ),
@@ -94,23 +93,6 @@ class _FlickrPageState extends State<FlickrPage> {
             return Center(child: CircularProgressIndicator());
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildImage(Photo photo) {
-    return CachedNetworkImage(
-      imageUrl: photo.photoURL,
-      imageBuilder: (context, imageProvider) => InkWell(
-        child: Image(
-          image: imageProvider,
-          fit: BoxFit.cover,
-        ),
-        onTap: () async {
-          final file = await DefaultCacheManager().getSingleFile(photo.photoURL);
-          String filePath = file.path;
-          widget.addImage(filePath);
-        },
       ),
     );
   }

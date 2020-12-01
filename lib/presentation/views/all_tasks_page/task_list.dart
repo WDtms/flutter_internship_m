@@ -2,7 +2,6 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/constants/my_images.dart';
@@ -15,7 +14,7 @@ class TaskList extends StatelessWidget {
 
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
-  final List<Task> taskList;
+  final Map<String, Task> taskList;
   final String branchID;
 
   TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme});
@@ -28,7 +27,7 @@ class TaskList extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
       itemCount: taskList.length,
       itemBuilder: (context, index) {
-        return _displayTask(context, index);
+        return _displayTask(context, taskList.keys.elementAt(index));
       },
     );
   }
@@ -48,12 +47,12 @@ class TaskList extends StatelessWidget {
     );
   }
 
-  Widget _displayTask(BuildContext context, int index) {
+  Widget _displayTask(BuildContext context, String taskID) {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
-        await context.bloc<TaskCubit>().deleteTask(branchID, index);
+        await context.bloc<TaskCubit>().deleteTask(taskID);
         updateBranchesInfo();
       },
       background: Container(
@@ -81,36 +80,39 @@ class TaskList extends StatelessWidget {
             child: Row(
               children: [
                 CircularCheckBox(
-                  value: taskList[index].isDone,
+                  value: taskList[taskID].isDone,
                   activeColor: theme.keys.toList().first,
                   onChanged: (bool value) async {
-                    bool isCompleted = taskList[index].isDone;
-                    context.bloc<TaskCubit>().editTask(branchID, index, taskList[index].copyWith(isDone: !isCompleted));
+                    bool isCompleted = taskList[taskID].isDone;
+                    context.bloc<TaskCubit>().editTask(
+                      taskID,
+                      taskList[taskID].copyWith(isDone: !isCompleted),
+                    );
                     updateBranchesInfo();
                   }
                 ),
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask1(
+                      Navigator.push(context, MaterialPageRoute(builder: (context1) => CurrentTask(
                         theme: theme,
                         updateBranchesInfo: updateBranchesInfo,
                         updateTaskList: () {
-                          context.bloc<TaskCubit>().updateTaskList(branchID);
+                          context.bloc<TaskCubit>().updateTaskList();
                         },
                         branchID: branchID,
-                        indexTask: index,
+                        taskID: taskID,
                       )));
                     },
                     child: Builder(
                       builder: (BuildContext context) {
-                        if (taskList[index].innerTasks.isEmpty) {
+                        if (taskList[taskID].innerTasks.isEmpty) {
                           return Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Container(
                               margin: EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                taskList[index].title,
+                                taskList[taskID].title,
                                 style: TextStyle(
                                   fontSize: 18
                                 ),
@@ -129,14 +131,14 @@ class TaskList extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 4),
                                     child: Text(
-                                      taskList[index].title,
+                                      taskList[taskID].title,
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),
                                     ),
                                   ),
                                   Text(
-                                    '${_countCompletedInnerTasks(index)} из ${taskList[index].innerTasks.length}',
+                                    '${_countCompletedInnerTasks(taskID)} из ${taskList[taskID].innerTasks.length}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black54,
@@ -159,12 +161,11 @@ class TaskList extends StatelessWidget {
     );
   }
 
-  int _countCompletedInnerTasks(int index){
+  int _countCompletedInnerTasks(String taskID){
     int count = 0;
-    for (InnerTask task in taskList[index].innerTasks){
-      if (task.isDone){
+    for (int i = 0; i<taskList[taskID].innerTasks.length; i++){
+      if (taskList[taskID].innerTasks.values.elementAt(i).isDone)
         count++;
-      }
     }
     return count;
   }

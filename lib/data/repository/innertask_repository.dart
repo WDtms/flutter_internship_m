@@ -11,33 +11,33 @@ class InnerTaskRepository{
   TaskDBStorage taskDBStorage = TaskDBStorage();
   LocalStorageInnerTaskWrapper innerTaskWrapper = LocalStorageInnerTaskWrapper();
 
-  Task getTask(String branchID, int indexTask){
-    return innerTaskWrapper.getTask(branchID, indexTask);
+  Task getTask(String branchID, String taskID){
+    return innerTaskWrapper.getTask(branchID, taskID);
   }
 
-  Future<void> createNewInnerTask(String branchID, int indexTask, InnerTask innerTask) async {
-    innerTaskWrapper.createNewInnerTask(branchID, indexTask, innerTask);
-    await innerTaskDBStorage.insertObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, indexTask).id));
+  Future<void> createNewInnerTask(String branchID, String taskID, InnerTask innerTask) async {
+    innerTaskWrapper.createNewInnerTask(branchID, taskID, innerTask);
+    await innerTaskDBStorage.insertObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, taskID).id));
   }
 
-  Future<void> editInnerTask(String branchID, int indexTask, int innerTaskIndex, InnerTask innerTask) async {
-    innerTaskWrapper.editInnerTask(branchID, indexTask, innerTaskIndex, innerTask);
-    await innerTaskDBStorage.updateObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, indexTask).id));
+  Future<void> editInnerTask(String branchID, String taskID, String innerTaskID, InnerTask innerTask) async {
+    innerTaskWrapper.editInnerTask(branchID, taskID, innerTaskID, innerTask);
+    await innerTaskDBStorage.updateObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, taskID).id));
   }
 
-  Future<void> deleteInnerTask(String branchID, int indexTask, int innerTaskIndex) async {
-    await innerTaskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, indexTask).innerTasks[innerTaskIndex].id);
-    innerTaskWrapper.deleteInnerTask(branchID, indexTask, innerTaskIndex);
+  Future<void> deleteInnerTask(String branchID, String taskID, String innerTaskID) async {
+    await innerTaskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, taskID).innerTasks[innerTaskID].id);
+    innerTaskWrapper.deleteInnerTask(branchID, taskID, innerTaskID);
   }
 
-  Future<void> editTask(String branchID, int indexTask, Task task) async {
-    innerTaskWrapper.editTask(branchID, indexTask, task);
+  Future<void> editTask(String branchID, Task task) async {
+    innerTaskWrapper.editTask(branchID, task);
     await taskDBStorage.updateObject(task.toMap(branchID));
   }
 
-  Future<void> deleteTask(String branchID, int indexTask) async {
-    await taskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, indexTask).id);
-    innerTaskWrapper.deleteTask(branchID, indexTask);
+  Future<void> deleteTask(String branchID, String taskID) async {
+    await taskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, taskID).id);
+    innerTaskWrapper.deleteTask(branchID, taskID);
   }
 
 }

@@ -8,11 +8,11 @@ class MyFlickrCard extends StatelessWidget {
 
   final Map<Color, Color> theme;
   final String branchID;
-  final int indexTask;
+  final String taskID;
   final Task task;
   final Function(String path) addImage;
 
-  MyFlickrCard({this.theme, this.branchID, this.indexTask, this.task, this.addImage});
+  MyFlickrCard({this.theme, this.branchID, this.taskID, this.task, this.addImage});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class MyFlickrCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Center(
           child: Icon(
-            Icons.add,
+            Icons.attachment,
             size: 36,
             color: Colors.white,
           ),

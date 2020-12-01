@@ -9,12 +9,12 @@ class TaskInteractor {
 
   TaskInteractor({this.taskRepository});
 
-  Future<List<Task>> getTaskList(String branchID) async {
+  Future<Map<String, Task>> getTaskList(String branchID) async {
     return taskRepository.getTaskList(branchID);
   }
 
-  Future<void> editTask(String branchID, int indexTask, Task task) async {
-    await taskRepository.editTask(branchID, indexTask, task);
+  Future<void> editTask(String branchID, Task task) async {
+    await taskRepository.editTask(branchID, task);
   }
 
   Future<void> createNewTask(String branchID, String taskName, DateTime dateToComplete, DateTime notificationTime) async {
@@ -26,14 +26,14 @@ class TaskInteractor {
           dateOfCreation: DateTime.now(),
           dateToComplete: dateToComplete,
           notificationTime: notificationTime,
-          innerTasks: [],
+          innerTasks: {},
           imagesPath: [],
         )
     );
   }
 
-  Future<void> deleteTask(String branchID, int indexTask) async {
-    await taskRepository.deleteTask(branchID, indexTask);
+  Future<void> deleteTask(String branchID, String taskID) async {
+    await taskRepository.deleteTask(branchID, taskID);
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {
