@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/domain/interactors/branch_interactor.dart';
@@ -32,8 +33,8 @@ class BranchCubit extends Cubit<BranchState>{
     ));
   }
 
-  Future<void> createNewBranch(String branchName) async {
-    await _branchInteractor.createNewBranch(branchName);
+  Future<void> createNewBranch(String branchName, Map<Color, Color> theme) async {
+    await _branchInteractor.createNewBranch(branchName, theme);
     final allBranchesTasksInfo = await _branchInteractor.getAllBranchesTasksInfo();
     final branchesInfo = await _branchInteractor.getAllBranchesInfo();
     emit(BranchInUsageState(

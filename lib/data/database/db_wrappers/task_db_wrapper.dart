@@ -16,6 +16,7 @@ class TaskDBStorage implements DBStorage{
       "${DBConstants.taskDateToComplete} INTEGER,"
       "${DBConstants.taskNotificationTime} INTEGER,"
       "${DBConstants.taskImages} TEXT,"
+      "${DBConstants.taskSelectedImage} TEXT,"
       "${DBConstants.branchId} TEXT"
       ")";
 

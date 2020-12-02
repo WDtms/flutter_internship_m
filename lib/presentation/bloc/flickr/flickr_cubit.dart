@@ -19,14 +19,6 @@ class FlickrCubit extends Cubit<FlickrState> {
     this.pageNumber = 1;
   }
 
-  resetTag() async {
-    if (this.tag != "") {
-      this.tag = "";
-      this.pageNumber = 1;
-      await initiate();
-    }
-  }
-
   Future<void> initiate() async {
     emit(FlickrLoadingState());
     await flickrRepository.initFetchPhotos(NetParameters(

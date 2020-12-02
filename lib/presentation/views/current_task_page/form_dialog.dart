@@ -44,28 +44,6 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
                 return null;
               }
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: InkWell(
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.add,
-                    color: Color(0xff1A9FFF),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Text(
-                      'Добавить главное фото',
-                      style: TextStyle(
-                        color: Color(0xff1A9FFF),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[

@@ -29,10 +29,8 @@ class _TaskPageState extends State<TaskPage> {
   
   @override
   void initState() {
-    themeCubit = ThemeCubit(ThemeRepository());
-    taskCubit = TaskCubit(TaskInteractor(taskRepository: TaskRepository()));
-    themeCubit.setBranchID(widget.branchID);
-    taskCubit.setBranchID(widget.branchID);
+    themeCubit = ThemeCubit(ThemeRepository(), currentBranchID: widget.branchID);
+    taskCubit = TaskCubit(TaskInteractor(taskRepository: TaskRepository()), currentBranchID: widget.branchID);
     super.initState();
   }
   
@@ -60,6 +58,7 @@ class _TaskPageState extends State<TaskPage> {
                         builder: (context, state) {
                           if (state is TaskInUsageState) {
                             return PopupMenu(
+                              theme: theme,
                               isHidden: state.isHidden,
                               updateBranchesInfo: widget.updateBranchesInfo,
                             );

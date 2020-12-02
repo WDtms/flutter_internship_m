@@ -5,14 +5,9 @@ part 'theme_state.dart';
 
 class ThemeCubit extends Cubit<ThemeState>{
   final ThemeRepository _themeRepository;
+  final String currentBranchID;
 
-  ThemeCubit(this._themeRepository) : super (ThemeInitialState());
-
-  String currentBranchID;
-
-  void setBranchID(String branchID){
-    currentBranchID = branchID;
-  }
+  ThemeCubit(this._themeRepository, {this.currentBranchID}) : super (ThemeInitialState());
 
   Future<void> getThemeBranch() async {
     emit(ThemeLoadingState());

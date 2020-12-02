@@ -1,10 +1,10 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/branch.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
 import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
 import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
 import 'package:uuid/uuid.dart';
 
 class BranchInteractor {
@@ -17,13 +17,13 @@ class BranchInteractor {
     await branchRepository.initializeBranches();
   }
 
-  Future<void> createNewBranch(String branchName) async{
+  Future<void> createNewBranch(String branchName, Map<Color, Color> theme) async{
     await branchRepository.createNewBranch(
         Branch(
           id: Uuid().v4(),
           title: branchName,
           taskList: {},
-          theme: themes[0],
+          theme: theme,
         )
     );
   }

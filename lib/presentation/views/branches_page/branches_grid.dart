@@ -93,8 +93,8 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
           context: context,
           builder: (context0) {
             return CreateBranchForm(
-              createBranch: (String branchName) {
-                cubit.createNewBranch(branchName);
+              createBranch: (String branchName, Map<Color, Color> theme) {
+                cubit.createNewBranch(branchName, theme);
               },
             );
           }

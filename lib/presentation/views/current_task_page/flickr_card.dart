@@ -1,8 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
+import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/pages/flickr_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyFlickrCard extends StatelessWidget {
 
@@ -35,23 +36,137 @@ class MyFlickrCard extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           for (String image in task.imagesPath)
-            _displayImages(image),
+            _displayImages(context, image),
           _displayAddButton(context),
         ],
       ),
     );
   }
 
-  _displayImages(String filePath){
-    return Container(
-      width: 120,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-      ),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-      child: Image.file(
-        File(filePath),
-        fit: BoxFit.cover,
+  _displayImages(BuildContext context, String filePath){
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context1){
+            return SimpleDialog(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Установить эту картинку как заглавную?",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      SimpleDialogOption(
+                        child: Text(
+                          'УСТАНОВИТЬ',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        onPressed: () {
+                          context.bloc<CurrentTaskCubit>().editTask(task.copyWith(selectedImage: filePath));
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      SimpleDialogOption(
+                        child: Text(
+                          'ОТМЕНА',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+        );
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (context1){
+              return SimpleDialog(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Удалить эту картинку?",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        SimpleDialogOption(
+                          child: Text(
+                            'УДАЛИТЬ',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          onPressed: () {
+                            List<String> allImages = task.imagesPath;
+                            allImages.remove(filePath);
+                            if (task.selectedImage == filePath)
+                              context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
+                                imagesPath: allImages,
+                                selectedImage: "",
+                              ));
+                            else
+                              context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
+                                imagesPath: allImages,
+                              ));
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        SimpleDialogOption(
+                          child: Text(
+                            'ОТМЕНА',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+        );
+      },
+      child: Container(
+        width: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        child: Image.file(
+          File(filePath),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

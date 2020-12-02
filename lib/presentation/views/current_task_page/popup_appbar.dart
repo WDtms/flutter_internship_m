@@ -12,12 +12,26 @@ class PopupMenuCurrentTask extends StatelessWidget {
   final Function() updateBranchesInfo;
   final Function() updateTaskList;
   final Task task;
+  final double opacity;
 
-  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.task});
+  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.task, this.opacity});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+      icon: Container(
+        decoration: BoxDecoration(
+          color: Color(0xff01A39D).withOpacity(opacity),
+          shape: BoxShape.circle,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Icon(
+            Icons.more_vert,
+            color: Colors.white,
+          ),
+        ),
+      ),
       onSelected: (int value) async {
         if (value == 1){
           showDialog(
@@ -84,6 +98,7 @@ class PopupMenuCurrentTask extends StatelessWidget {
           );
         }
       },
+      color: Colors.white,
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
           value: 1,

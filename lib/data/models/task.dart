@@ -15,8 +15,9 @@ class Task{
   DateTime notificationTime;
   Map<String, InnerTask> innerTasks;
   List<String> imagesPath;
+  String selectedImage;
 
-  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete, this.notificationTime, this.description = "", this.imagesPath});
+  Task({this.id, this.title, this.isDone = false, this.innerTasks, this.dateOfCreation, this.dateToComplete, this.notificationTime, this.description = "", this.imagesPath, this.selectedImage = ""});
 
   Map<String, dynamic> toMap(String branchID) {
     return {
@@ -29,6 +30,7 @@ class Task{
       DBConstants.taskDateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
       DBConstants.taskNotificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
       DBConstants.taskImages: _encodeImagesToDB(imagesPath),
+      DBConstants.taskSelectedImage: selectedImage
     };
   }
 
@@ -45,6 +47,7 @@ class Task{
       innerTasks: {},
       description: row[DBConstants.taskDescription],
       imagesPath: _decodeImagesFromDB(row[DBConstants.taskImages]),
+      selectedImage: row[DBConstants.taskSelectedImage],
     );
   }
 
@@ -76,6 +79,7 @@ class Task{
     List<InnerTask> innerTasks,
     String description,
     List<String> imagesPath,
+    String selectedImage,
   }) {
     return Task(
       id: id ?? this.id,
@@ -87,6 +91,7 @@ class Task{
       innerTasks: innerTasks ?? this.innerTasks,
       description: description ?? this.description,
       imagesPath: imagesPath ?? this.imagesPath,
+      selectedImage: selectedImage ?? this.selectedImage,
     );
   }
 

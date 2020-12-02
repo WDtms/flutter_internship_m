@@ -19,6 +19,7 @@ class DBConstants{
   static const taskNotificationTime = 'taskNotificationTime';
   static const taskDescription = 'taskDescription';
   static const taskImages = 'taskImages';
+  static const taskSelectedImage = 'taskSelectedImage';
 
   //Поля таблицы внутренних задач
   static const innerTaskId = 'innerTaskID';

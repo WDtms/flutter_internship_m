@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +27,55 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
         Padding(
           padding: const EdgeInsets.only(bottom: fabSize/2),
           child: Container(
-            padding: EdgeInsets.fromLTRB(0, 20, 16, 0),
             color: appBarColor,
           ),
         ),
+        _buildImage(shrinkOffset),
+        _buildShadow(shrinkOffset),
         _buildTitle(shrinkOffset),
         _buildFab(shrinkOffset, context),
-        _buildButtons(context),
+        _buildButtons(context, shrinkOffset),
       ],
     );
+  }
+
+  Widget _buildImage(double shrinkOffset) {
+    if(task.selectedImage != "") {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: fabSize / 2),
+        child: Opacity(
+          opacity: _calculateFabScale(shrinkOffset),
+          child: Image.file(
+            File(task.selectedImage),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildShadow(double shrinkOffset) {
+    if (task.selectedImage != ""){
+      return Padding(
+        padding: const EdgeInsets.only(bottom: fabSize / 2),
+        child: Opacity(
+          opacity: _calculateFabScale(shrinkOffset),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 0,
+                  blurRadius: 0,
+                )
+              ]
+            ),
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 
   Widget _buildTitle(double shrinkOffset) {
@@ -58,7 +99,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
               task.title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18
+                fontSize: 18,
               ),
             ),
           ),
@@ -67,7 +108,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _buildButtons(BuildContext context) {
+  Widget _buildButtons(BuildContext context, double shrinkOffset) {
     return Positioned(
       width: MediaQuery.of(context).size.width,
       top: 30,
@@ -75,9 +116,19 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
+              icon: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xff01A39D).withOpacity(task.selectedImage != ""
+                      ? _calculateFabScale(shrinkOffset) : 0),
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
             ),
@@ -85,6 +136,8 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
               updateBranchesInfo: updateBranchesInfo,
               updateTaskList: updateTaskList,
               task: task,
+              opacity: task.selectedImage != "" ? _calculateFabScale(shrinkOffset)
+              : 0,
             ),
           ],
         ),
@@ -125,7 +178,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     return {38+(46*scale): 38+(16*scale)};
   }
 
-  _calculateFabScale(double shrinkOffset){
+  double _calculateFabScale(double shrinkOffset){
     double scale;
     if (shrinkOffset < expandedHeight - minHeight - fabSize)
       scale = 1.0;

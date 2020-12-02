@@ -4,9 +4,8 @@ class FlickrAppBar extends StatefulWidget {
 
   final Color appBarColor;
   final Function(String searchText) searchPhotos;
-  final Function() reset;
 
-  FlickrAppBar({this.appBarColor, this.searchPhotos, this.reset});
+  FlickrAppBar({this.appBarColor, this.searchPhotos});
 
   @override
   _FlickrAppBarState createState() => _FlickrAppBarState();
@@ -69,14 +68,12 @@ class _FlickrAppBarState extends State<FlickrAppBar> {
                     setState(() {
                       _controller.text = "";
                       _isSearching = false;
-                      widget.reset();
                     });
                   },
                 ),
                 fillColor: Colors.white,
                 filled: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                isDense: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

@@ -98,10 +98,6 @@ class MyHorizontalProgressBar extends CustomPainter{
       canvas.drawLine(p1, as, completedLine);
     }
 
-
-
-
-
   }
 
   @override

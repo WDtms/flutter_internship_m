@@ -50,9 +50,6 @@ class _FlickrPageState extends State<FlickrPage> {
               cubit.setTag(searchTag);
               cubit.initiate();
             },
-            reset: () {
-              cubit.resetTag();
-            },
           ),
         ),
         body: BlocBuilder<FlickrCubit, FlickrState>(

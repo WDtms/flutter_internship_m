@@ -6,15 +6,11 @@ part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState>{
   final TaskInteractor _taskInteractor;
+  final String currentBranchID;
 
-  TaskCubit(this._taskInteractor) : super(TaskInitialState());
+  TaskCubit(this._taskInteractor, {this.currentBranchID}) : super(TaskInitialState());
 
-  String currentBranchID;
   bool _isHidden = false;
-
-  setBranchID(String branchID){
-    this.currentBranchID = branchID;
-  }
 
   toggleIsHidden() async {
     _isHidden = !_isHidden;
