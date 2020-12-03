@@ -34,18 +34,19 @@ class InnerTaskCard extends StatelessWidget {
               },
             ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 4),
-                child: Text(
-                    task.innerTasks[innerTaskID].title,
-                    style: TextStyle(
-                      fontSize: 16,
-                    )
-                ),
+              child: Text(
+                  task.innerTasks[innerTaskID].title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff616161),
+                  )
               ),
             ),
             IconButton(
-              icon: Icon(Icons.close),
+              icon: Icon(
+                Icons.close,
+                color: Color(0xff616161),
+              ),
               onPressed: () async {
                 await context.bloc<CurrentTaskCubit>().deleteInnerTask(innerTaskID);
                 updateTaskList();

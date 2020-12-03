@@ -27,7 +27,8 @@ class DisplayDateToComplete extends StatelessWidget {
                           task.copyWith(
                               dateToComplete: DateTime(
                                   dateTime.year, dateTime.month, dateTime.day,
-                                  23, 59, 59)
+                                  dateTime.hour < 1 ? 23 : dateTime.hour, 59, 59)
+                                  .millisecondsSinceEpoch
                           ));
                     }
                   },
@@ -39,10 +40,10 @@ class DisplayDateToComplete extends StatelessWidget {
           children: <Widget>[
             Builder(
               builder: (context) {
-                if (task.dateToComplete != null)
+                if (task.dateToComplete != 0)
                   return Icon(
                     Icons.calendar_today_outlined,
-                    color: isExpired(task.dateToComplete),
+                    color: _isExpired(task.dateToComplete),
                   );
                 return Icon(
                   Icons.calendar_today_outlined,
@@ -50,30 +51,44 @@ class DisplayDateToComplete extends StatelessWidget {
                 );
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Builder(
-                builder: (context) {
-                  if (task.dateToComplete == null)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Builder(
+                  builder: (context) {
+                    if (task.dateToComplete == 0)
+                      return Text(
+                        'Добавить дату выполнения',
+                        style: TextStyle(
+                          color: Color(0xff616161),
+                          fontSize: 15,
+                        ),
+                      );
                     return Text(
-                      'Добавить дату выполнения',
+                      '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.dateToComplete).day)}.'
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.dateToComplete).month)}.'
+                          '${DateTime.fromMillisecondsSinceEpoch(task.dateToComplete).year}',
                       style: TextStyle(
-                        color: Color(0xff616161),
-                        fontSize: 15,
+                          color: _isExpired(task.dateToComplete),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500
                       ),
                     );
-                  return Text(
-                    '${task.dateToComplete.day}.'
-                        '${task.dateToComplete.month}.'
-                        '${task.dateToComplete.year}',
-                    style: TextStyle(
-                        color: isExpired(task.dateToComplete),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
+            ),
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xff616161),
+                ),
+              ),
+              onTap: () {
+                context.bloc<CurrentTaskCubit>().editTask(task.copyWith(dateToComplete: 0));
+              },
             ),
           ],
         ),
@@ -81,7 +96,14 @@ class DisplayDateToComplete extends StatelessWidget {
     );
   }
 
-  Color isExpired(DateTime date){
+  _decideHowToDisplay(int val) {
+    if (val<10)
+      return "0$val";
+    return "$val";
+  }
+
+  Color _isExpired(int dateInt){
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(dateInt);
     if (DateTime.now().isAfter(date))
       return Color(0xffF64444);
     return Color(0xff1A9FFF);

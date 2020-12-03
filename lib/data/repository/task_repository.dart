@@ -28,8 +28,8 @@ class TaskRepository{
     taskWrapper.deleteTask(branchID, taskID);
   }
 
-  Future<void> deleteAllCompletedTasks(String branchID) async {
-    await _taskDBStorage.deleteAllCompletedTasks(branchID);
+  Future<void> deleteAllCompletedTasks(String branchID, List<String> taskIDList) async {
+    await _taskDBStorage.deleteAllCompletedTasks(branchID, taskIDList);
     taskWrapper.deleteAllCompletedTasks(branchID);
   }
 

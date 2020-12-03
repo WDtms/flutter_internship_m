@@ -10,7 +10,7 @@ class NotificationHelper{
     return await platform.invokeMethod('scheduleNotification', {
       "task_id": task.id,
       "title": task.title,
-      "time_millis": task.notificationTime.millisecondsSinceEpoch,
+      "time_millis": task.notificationTime,
     });
   }
 

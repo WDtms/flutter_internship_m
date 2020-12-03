@@ -76,14 +76,15 @@ class _MyCardState extends State<MyCard> {
     );
   }
 
-  Widget _displayDateOfCreation(DateTime date){
+  Widget _displayDateOfCreation(int dateOfCreation){
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(dateOfCreation);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
             padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
             child: Text(
-              "Создано: ${date.day.toString()}.${date.month.toString()}.${date.year.toString()}",
+              "Создано: ${_decideHowToDisplay(date.day)}.${_decideHowToDisplay(date.month)}.${date.year.toString()}",
               style: TextStyle(
                   fontSize: 12
                 ),
@@ -91,6 +92,12 @@ class _MyCardState extends State<MyCard> {
           ),
         ],
       );
+  }
+
+  _decideHowToDisplay(int val) {
+    if (val<10)
+      return "0$val";
+    return "$val";
   }
 
   @override

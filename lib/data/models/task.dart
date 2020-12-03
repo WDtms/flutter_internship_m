@@ -1,7 +1,4 @@
-
-
 import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
-
 import 'inner_task.dart';
 
 class Task{
@@ -10,9 +7,9 @@ class Task{
   String title;
   bool isDone;
   String description;
-  DateTime dateOfCreation;
-  DateTime dateToComplete;
-  DateTime notificationTime;
+  int dateOfCreation;
+  int dateToComplete;
+  int notificationTime;
   Map<String, InnerTask> innerTasks;
   List<String> imagesPath;
   String selectedImage;
@@ -26,9 +23,9 @@ class Task{
       DBConstants.taskIsDone: isDone ? 1 : 0,
       DBConstants.taskDescription: description,
       DBConstants.branchId: branchID,
-      DBConstants.taskDateOfCreation: dateOfCreation.millisecondsSinceEpoch,
-      DBConstants.taskDateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
-      DBConstants.taskNotificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
+      DBConstants.taskDateOfCreation: dateOfCreation,
+      DBConstants.taskDateToComplete: dateToComplete,
+      DBConstants.taskNotificationTime: notificationTime,
       DBConstants.taskImages: _encodeImagesToDB(imagesPath),
       DBConstants.taskSelectedImage: selectedImage
     };
@@ -39,11 +36,9 @@ class Task{
       id: row[DBConstants.taskId],
       title: row[DBConstants.taskTitle],
       isDone: row[DBConstants.taskIsDone] == 1 ? true : false,
-      dateToComplete: row[DBConstants.taskDateToComplete] == 0 ? null
-          : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateToComplete]),
-      dateOfCreation: DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskDateOfCreation]),
-      notificationTime: row[DBConstants.taskNotificationTime] == 0 ? null
-          : DateTime.fromMillisecondsSinceEpoch(row[DBConstants.taskNotificationTime]),
+      dateToComplete: row[DBConstants.taskDateToComplete],
+      dateOfCreation: row[DBConstants.taskDateOfCreation],
+      notificationTime: row[DBConstants.taskNotificationTime],
       innerTasks: {},
       description: row[DBConstants.taskDescription],
       imagesPath: _decodeImagesFromDB(row[DBConstants.taskImages]),
@@ -73,9 +68,9 @@ class Task{
     String id,
     String title,
     bool isDone,
-    DateTime dateOfCreation,
-    DateTime dateToComplete,
-    DateTime notificationTime,
+    int dateOfCreation,
+    int dateToComplete,
+    int notificationTime,
     List<InnerTask> innerTasks,
     String description,
     List<String> imagesPath,

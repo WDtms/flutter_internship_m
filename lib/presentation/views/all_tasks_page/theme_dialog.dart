@@ -67,7 +67,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
   Widget themeButton(int index) {
     return SizedBox(
       child: Padding(
-        padding: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.only(right: 8),
           child: Container(
             height: 30,
             width: 30,

@@ -23,9 +23,9 @@ class TaskInteractor {
         Task(
           id: Uuid().v4(),
           title: taskName,
-          dateOfCreation: DateTime.now(),
-          dateToComplete: dateToComplete,
-          notificationTime: notificationTime,
+          dateOfCreation: DateTime.now().millisecondsSinceEpoch,
+          dateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
+          notificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
           innerTasks: {},
           imagesPath: [],
         )
@@ -37,7 +37,13 @@ class TaskInteractor {
   }
 
   Future<void> deleteAllCompletedTasks(String branchID) async {
-    await taskRepository.deleteAllCompletedTasks(branchID);
+    final taskList = taskRepository.getTaskList(branchID);
+    List<String> taskIDList = List<String>();
+    taskList.forEach((key, value) {
+      if (value.isDone)
+        taskIDList.add(key);
+    });
+    await taskRepository.deleteAllCompletedTasks(branchID, taskIDList);
   }
 
 }

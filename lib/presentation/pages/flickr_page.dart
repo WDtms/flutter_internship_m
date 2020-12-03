@@ -48,8 +48,10 @@ class _FlickrPageState extends State<FlickrPage> {
           child: FlickrAppBar(
             appBarColor: widget.theme.keys.toList().first,
             searchPhotos: (String searchTag) {
-              fliCu.setTag(searchTag);
-              fliCu.initiate();
+              if (searchTag != "") {
+                fliCu.setTag(searchTag);
+                fliCu.initiate();
+              }
             },
           ),
         ),
@@ -104,9 +106,13 @@ class _FlickrPageState extends State<FlickrPage> {
                 );
               } else if (state is FlickrInitialState) {
                 fliCu.initiate();
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(widget.theme.keys.toList().first,),
+                ));
               }
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(widget.theme.keys.toList().first,),
+              ));
             },
           ),
         ),
@@ -170,7 +176,9 @@ class _FlickrPageState extends State<FlickrPage> {
           ),
         ),
       );
-    return CircularProgressIndicator();
+    return CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(widget.theme.keys.toList().first),
+    );
   }
 
   @override

@@ -4,45 +4,55 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_images.dart';
 import 'package:flutter_internship_v2/presentation/pages/current_task.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_internship_v2/presentation/views/all_tasks_page/animated_backgound.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TaskList extends StatelessWidget {
 
+  final bool isFiltred;
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
   final Map<String, Task> taskList;
   final String branchID;
 
-  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme});
+  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred});
 
   @override
   Widget build(BuildContext context) {
     return taskList.isEmpty ?
-        _displayImages()
-        : ListView.builder(
-      padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
-      itemCount: taskList.length,
-      itemBuilder: (context, index) {
-        return _displayTask(context, taskList.keys.elementAt(index));
-      },
+        AnimatedBackground(
+          isFiltred: isFiltred,
+        )
+        : Stack (children: [
+          _displayLines(context),
+          ListView.builder(
+        padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
+        itemCount: taskList.length,
+        itemBuilder: (context, index) {
+          return _displayTask(context, taskList.keys.elementAt(index));
+        },
+      )
+    ],
     );
   }
 
-  Widget _displayImages(){
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SvgPicture.asset(home_image),
-          Container(
-            height: 3,
-          ),
-          SvgPicture.asset(home_text),
-        ],
+  Widget _displayLines(BuildContext context){
+    return ListView(
+      children: <Widget>[
+        for (int i = 0; i<(MediaQuery.of(context).size.height/80).ceil(); i++)
+          _oneLine(),
+      ],
+    );
+  }
+
+  Widget _oneLine(){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 78, 16, 0),
+      child: Container(
+        height: 2,
+        color: Colors.black12,
       ),
     );
   }
@@ -114,7 +124,8 @@ class TaskList extends StatelessWidget {
                               child: Text(
                                 taskList[taskID].title,
                                 style: TextStyle(
-                                  fontSize: 18
+                                  fontSize: 18,
+                                  color: Color(0xff424242),
                                 ),
                               ),
                             ),

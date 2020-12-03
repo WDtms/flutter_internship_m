@@ -26,11 +26,15 @@ class _FormDialogState extends State<FormDialog> {
       child: SimpleDialog(
         contentPadding: EdgeInsets.all(12),
         children: <Widget>[
-          Text(
-            'Создать задачу',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.values[4]
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              'Создать задачу',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.values[4],
+                color: Color(0xff424242),
+              ),
             ),
           ),
           TextFormField(
@@ -88,7 +92,11 @@ class _FormDialogState extends State<FormDialog> {
                               builder: (context) {
                                 if (notificationTimeChosen){
                                   return Text(
-                                    '${notificationTime.year}.${notificationTime.month}.${notificationTime.day} в ${notificationTime.hour}:${_displayMinutes(notificationTime.minute)}',
+                                    '${notificationTime.year}.'
+                                        '${_decideHowToDisplay(notificationTime.month)}'
+                                        '.${_decideHowToDisplay(notificationTime.day)}'
+                                        ' в ${_decideHowToDisplay(notificationTime.hour)}'
+                                        ':${_decideHowToDisplay(notificationTime.minute)}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
@@ -150,7 +158,9 @@ class _FormDialogState extends State<FormDialog> {
                             builder: (context) {
                               if (completeDateChosen){
                                 return Text(
-                                  '${dateTimeToComplete.year}.${dateTimeToComplete.month}.${dateTimeToComplete.day}',
+                                  '${dateTimeToComplete.year}.'
+                                      '${_decideHowToDisplay(dateTimeToComplete.month)}.'
+                                      '${_decideHowToDisplay(dateTimeToComplete.day)}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -176,49 +186,52 @@ class _FormDialogState extends State<FormDialog> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SimpleDialogOption(
-                child: Text(
-                  'Отмена',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                    fontSize: 16
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              SimpleDialogOption(
-                child: Text(
-                  'Создать',
-                  style: TextStyle(
+          Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                SimpleDialogOption(
+                  child: Text(
+                    'ОТМЕНА',
+                    style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                        color: Color(0xff424242),
                       fontSize: 16
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState.validate()){
-                    _formKey.currentState.save();
+                  onPressed: () {
                     Navigator.of(context).pop();
-                  }
-                },
-              )
-            ],
+                  },
+                ),
+                SimpleDialogOption(
+                  child: Text(
+                    'СОЗДАТЬ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff424242),
+                        fontSize: 16
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState.validate()){
+                      _formKey.currentState.save();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              ],
+            ),
           )
         ],
       ),
     );
   }
 
-  String _displayMinutes(int minutes){
-    if (minutes < 10)
-      return "0$minutes";
-    return "$minutes";
+  String _decideHowToDisplay(int val){
+    if (val < 10)
+      return "0$val";
+    return "$val";
   }
 }
 

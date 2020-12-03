@@ -41,7 +41,8 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
             'Создать список',
             style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.w500
+              fontWeight: FontWeight.w500,
+              color: Color(0xff424242),
             ),
           ),
           Padding(
@@ -88,8 +89,9 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
                   child: Text(
                     'ОТМЕНА',
                     style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff424242),
                     ),
                   ),
                   onPressed: () {
@@ -100,8 +102,9 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
                   child: Text(
                     'СОЗДАТЬ',
                     style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff424242),
                     ),
                   ),
                   onPressed: () {

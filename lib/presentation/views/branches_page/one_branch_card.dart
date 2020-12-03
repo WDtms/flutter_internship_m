@@ -34,6 +34,7 @@ class OneBranchCard extends StatelessWidget {
                     "Вы точно хотите удалить эту ветвь задач?",
                     style: TextStyle(
                       fontSize: 18,
+                      color: Color(0xff424242),
                     ),
                   ),
                 ),
@@ -42,9 +43,10 @@ class OneBranchCard extends StatelessWidget {
                   children: <Widget>[
                     SimpleDialogOption(
                       child: Text(
-                        "Удалить",
+                        "УДАЛИТЬ",
                         style: TextStyle(
                           fontSize: 18,
+                          color: Color(0xff424242),
                         ),
                       ),
                       onPressed: () async {
@@ -54,9 +56,10 @@ class OneBranchCard extends StatelessWidget {
                     ),
                     SimpleDialogOption(
                       child: Text(
-                        "Отмена",
+                        "ОТМЕНА",
                         style: TextStyle(
                           fontSize: 18,
+                          color: Color(0xff424242),
                         ),
                       ),
                       onPressed: () {

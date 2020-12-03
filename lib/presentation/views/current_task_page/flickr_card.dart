@@ -61,7 +61,7 @@ class MyFlickrCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -108,11 +108,12 @@ class MyFlickrCard extends StatelessWidget {
                       "Удалить эту картинку?",
                       style: TextStyle(
                         fontSize: 18,
+                        color: Color(0xff424242),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -121,12 +122,14 @@ class MyFlickrCard extends StatelessWidget {
                             'УДАЛИТЬ',
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                              color: Color(0xff424242),
                             ),
                           ),
                           onPressed: () {
                             List<String> allImages = task.imagesPath;
                             allImages.remove(filePath);
+                            File(filePath).delete();
                             if (task.selectedImage == filePath)
                               context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
                                 imagesPath: allImages,
@@ -144,7 +147,8 @@ class MyFlickrCard extends StatelessWidget {
                             'ОТМЕНА',
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                              color: Color(0xff424242),
                             ),
                           ),
                           onPressed: () => Navigator.of(context).pop(),

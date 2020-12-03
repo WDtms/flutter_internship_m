@@ -94,6 +94,7 @@ class _TaskPageState extends State<TaskPage> {
                       }
                       else if (state is TaskInUsageState) {
                         return TaskList(
+                          isFiltred: state.isHidden,
                           theme: theme,
                           updateBranchesInfo: widget.updateBranchesInfo,
                           branchID: widget.branchID,

@@ -59,7 +59,7 @@ class TaskDBStorage implements DBStorage{
     );
   }
 
-  Future<void> deleteAllCompletedTasks(String branchID) async {
+  Future<void> deleteAllCompletedTasks(String branchID, List<String> taskIDList) async {
     Database db = await DB.instance.database;
 
     await db.delete(
@@ -67,6 +67,13 @@ class TaskDBStorage implements DBStorage{
       where: "${DBConstants.branchId} = ? AND ${DBConstants.taskIsDone} = ?",
       whereArgs: [branchID, 1],
     );
+
+    for (String taskID in taskIDList)
+      await db.delete(
+        DBConstants.innerTaskTable,
+        where: "${DBConstants.taskId} = ?",
+        whereArgs: [taskID]
+      );
   }
 
 }

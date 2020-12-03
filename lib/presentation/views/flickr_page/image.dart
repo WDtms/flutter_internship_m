@@ -15,7 +15,7 @@ class ImageDisplay extends StatelessWidget {
     return CachedNetworkImage(
       placeholder: (context, url) {
         return Icon(
-          Icons.file_download,
+          Icons.image_outlined,
           size: MediaQuery.of(context).size.height/8,
           color: iconColor.withOpacity(0.5),
         );

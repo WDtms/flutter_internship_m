@@ -30,7 +30,11 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
                 )
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day, 17, 59, 59));
+              widget.selectDateToComplete(
+                  DateTime(DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
+                      DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
+                      DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day,
+                      17, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -46,7 +50,11 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
               ),
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day + 1, 9, 59, 59));
+              widget.selectDateToComplete(DateTime(
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day
+                      + 1, 9, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -62,7 +70,11 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
               ),
             ),
             onTap: () {
-              widget.selectDateToComplete(DateTime(widget.task.dateOfCreation.year, widget.task.dateOfCreation.month, widget.task.dateOfCreation.day + 7, 9, 59, 59));
+              widget.selectDateToComplete(DateTime(
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
+                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day
+                      + 7, 9, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -80,8 +92,8 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             onTap: () {
               showDatePicker(
                 context: context,
-                initialDate: widget.task.dateToComplete == null ? DateTime.now()
-                    : widget.task.dateToComplete,
+                initialDate: widget.task.dateToComplete == 0 ? DateTime.now()
+                    : DateTime.fromMillisecondsSinceEpoch(widget.task.dateToComplete),
                 firstDate: DateTime.now(),
                 lastDate: DateTime(2100),
               ).then((dateTimeToComplete) {

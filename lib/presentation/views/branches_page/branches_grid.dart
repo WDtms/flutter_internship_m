@@ -34,7 +34,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
             cubit.getBranchesInfo();
             return Center(
                 child: CircularProgressIndicator(
-                  backgroundColor: Color(0xff6200EE),
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6200EE)),
                 )
             );
           } else if (state is BranchInUsageState){
@@ -78,7 +78,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
           }
           return Center(
               child: CircularProgressIndicator(
-                backgroundColor: Color(0xff6200EE),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6200EE)),
               )
           );
         }

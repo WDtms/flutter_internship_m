@@ -17,21 +17,22 @@ class NotificationDisplay extends StatelessWidget {
         onTap: () async {
           final DateTime date = await showDatePicker(
             context: context,
-            initialDate: task.notificationTime == null ? DateTime.now()
-                : task.notificationTime,
+            initialDate: task.notificationTime == 0 ? DateTime.now()
+                : DateTime.fromMillisecondsSinceEpoch(task.notificationTime),
             firstDate: DateTime.now(),
             lastDate: DateTime(2100),
           );
           final TimeOfDay time = await showTimePicker(
             context: context,
-            initialTime: task.notificationTime == null? TimeOfDay.now()
-                : TimeOfDay.fromDateTime(task.notificationTime),
+            initialTime: task.notificationTime == 0? TimeOfDay.now()
+                : TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(task.notificationTime)),
           );
           if (date != null && time != null) {
             context.bloc<CurrentTaskCubit>().editTask(
                 task.copyWith(
                     notificationTime: DateTime(
                         date.year, date.month, date.day, time.hour, time.minute)
+                        .millisecondsSinceEpoch
                 ));
           }
         },
@@ -39,10 +40,10 @@ class NotificationDisplay extends StatelessWidget {
           children: <Widget>[
             Builder(
               builder: (context) {
-                if (task.notificationTime != null)
+                if (task.notificationTime != 0)
                   return Icon(
                     Icons.notifications_active_outlined,
-                    color: isExpired(task.notificationTime),
+                    color: _isExpired(task.notificationTime),
                   );
                 return Icon(
                   Icons.notifications_active_outlined,
@@ -50,32 +51,46 @@ class NotificationDisplay extends StatelessWidget {
                 );
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Builder(
-                builder: (context) {
-                  if (task.notificationTime == null)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Builder(
+                  builder: (context) {
+                    if (task.notificationTime == 0)
+                      return Text(
+                        'Напомнить',
+                        style: TextStyle(
+                            color: Color(0xff616161),
+                            fontSize: 15
+                        ),
+                      );
                     return Text(
-                      'Напомнить',
+                      '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).day)}.'
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).month)}.'
+                          '${DateTime.fromMillisecondsSinceEpoch(task.notificationTime).year} в '
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).hour)}:'
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).minute)}',
                       style: TextStyle(
-                          color: Color(0xff616161),
-                          fontSize: 15
+                        color: _isExpired(task.notificationTime),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
                       ),
                     );
-                  return Text(
-                    '${task.notificationTime.year}.'
-                        '${task.notificationTime.month}.'
-                        '${task.notificationTime.day} в '
-                        '${task.notificationTime.hour}:'
-                        '${_displayMinutes(task.notificationTime.minute)}',
-                    style: TextStyle(
-                      color: isExpired(task.notificationTime),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
+            ),
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xff616161),
+                ),
+              ),
+              onTap: () {
+                context.bloc<CurrentTaskCubit>().editTask(task.copyWith(notificationTime: 0));
+              },
             ),
           ],
         ),
@@ -83,15 +98,16 @@ class NotificationDisplay extends StatelessWidget {
     );
   }
 
-  Color isExpired(DateTime date){
+  Color _isExpired(int dateInt){
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(dateInt);
     if (DateTime.now().isAfter(date))
       return Color(0xffF64444);
     return Color(0xff1A9FFF);
   }
 
-  String _displayMinutes(int minutes){
-    if (minutes<10)
-      return "0$minutes";
-    return "$minutes";
+  _decideHowToDisplay(int val) {
+    if (val<10)
+      return "0$val";
+    return "$val";
   }
 }

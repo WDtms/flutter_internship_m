@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
@@ -95,11 +96,14 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
           currentExtent: max(minExtent, maxExtent - shrinkOffset - 30),
           child: FlexibleSpaceBar(
             centerTitle: true,
-            title: Text(
-              task.title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
+            title: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 0.2, sigmaY: 0.2),
+              child: Text(
+                task.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
             ),
           ),
