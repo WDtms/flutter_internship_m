@@ -1,8 +1,8 @@
-
 part of 'flickr_cubit.dart';
 
-@immutable
-abstract class FlickrState{}
+abstract class FlickrState{
+  PhotoDataToDisplay netDataToDisplay;
+}
 
 class FlickrInitialState extends FlickrState{
 
@@ -12,10 +12,14 @@ class FlickrLoadingState extends FlickrState{
 
 }
 
-class FlickrUsageState extends FlickrState{
-  final String tag;
-  final List<Photo> photos;
-  final int totalCount;
+class FlickrErrorState extends FlickrState{
+  final PhotoDataToDisplay netDataToDisplay;
 
-  FlickrUsageState({this.photos, this.totalCount, this.tag});
+  FlickrErrorState({this.netDataToDisplay});
+}
+
+class FlickrUsageState extends FlickrState{
+  final PhotoDataToDisplay netDataToDisplay;
+
+  FlickrUsageState({this.netDataToDisplay});
 }

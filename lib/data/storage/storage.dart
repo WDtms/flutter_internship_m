@@ -2,13 +2,13 @@
 
 import 'package:flutter_internship_v2/data/models/branch.dart';
 
-class LocalStorage{
+class Storage{
 
-  static LocalStorage _instance;
+  static Storage _instance;
 
-  static LocalStorage getInstance() {
+  static Storage getInstance() {
     if(_instance == null) {
-      _instance = LocalStorage();
+      _instance = Storage();
       return _instance;
     }
     return _instance;

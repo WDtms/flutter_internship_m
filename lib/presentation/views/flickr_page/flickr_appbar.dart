@@ -42,8 +42,9 @@ class _FlickrAppBarState extends State<FlickrAppBar> {
       ) : AppBar(
         backgroundColor: widget.appBarColor,
         automaticallyImplyLeading: false,
-        title: Container(
-          margin: EdgeInsets.symmetric(vertical: 4),
+        titleSpacing: 8.0,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 4),
           child: TextField(
             onSubmitted: (String tag) {
               widget.searchPhotos(tag);
@@ -65,9 +66,13 @@ class _FlickrAppBarState extends State<FlickrAppBar> {
                     size: 30,
                   ),
                   onPressed: () {
+                    FocusScope.of(context).canRequestFocus = false;
                     setState(() {
                       _controller.text = "";
                       _isSearching = false;
+                    });
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      FocusScope.of(context).canRequestFocus = true;
                     });
                   },
                 ),

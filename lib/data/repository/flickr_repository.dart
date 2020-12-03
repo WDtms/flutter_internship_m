@@ -1,26 +1,32 @@
-import 'package:flutter_internship_v2/data/models/image.dart';
-import 'package:flutter_internship_v2/data/photo_net_storage.dart';
+import 'package:flutter_internship_v2/data/network/photo_net_storage.dart';
 import 'package:flutter_internship_v2/presentation/models/net_parameters.dart';
 
-class FlickrRepository{
+class FlickrRepository {
 
-  final PhotoNetStorage networkStorage;
-
-  FlickrRepository({this.networkStorage});
+  PhotoNetStorage photoNetStorage = PhotoNetStorage();
 
   Future<void> fetchPhotos(NetParameters parameters) async {
-    await networkStorage.fetchPhotos(parameters);
+    await photoNetStorage.fetchPhotos(parameters);
   }
 
-  Future<void> initFetchPhotos(NetParameters parameters) async {
-    await networkStorage.initFetchPhotos(parameters);
+  getStatusCode() {
+    return photoNetStorage.statusNotOkMessage;
   }
 
-  Future<List<Photo>> getPhotosList() async {
-    return await networkStorage.allPhotos;
+  getAllPhotos() {
+    return photoNetStorage.allPhotos;
   }
 
-  Future<int> getTotalCount() async {
-    return await networkStorage.totalCount;
+  getErrorMessage() {
+    return photoNetStorage.errorMessage;
   }
+
+  getPagesCount() {
+    return photoNetStorage.totalPages;
+  }
+
+  resetErrors() {
+    photoNetStorage.resetErrors();
+  }
+
 }

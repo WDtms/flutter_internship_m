@@ -33,10 +33,55 @@ class ImageDisplay extends StatelessWidget {
           image: imageProvider,
           fit: BoxFit.cover,
         ),
-        onTap: () async {
-          final file = await DefaultCacheManager().getSingleFile(photoURL);
-          String filePath = file.path;
-          addImage(filePath);
+        onTap: (){
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 8, 28),
+                    child: Text(
+                      "Добавить эту картинку в галлерею?",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      SimpleDialogOption(
+                        child: Text(
+                          "ДОБАВИТЬ",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        onPressed: () async {
+                          final file = await DefaultCacheManager().getSingleFile(photoURL);
+                          String filePath = file.path;
+                          addImage(filePath);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SimpleDialogOption(
+                        child: Text(
+                          "ОТМЕНА",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }
+          );
         },
       ),
     );

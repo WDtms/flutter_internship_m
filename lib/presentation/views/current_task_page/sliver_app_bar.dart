@@ -65,7 +65,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black12,
+                  color: Colors.black26,
                   spreadRadius: 0,
                   blurRadius: 0,
                 )
