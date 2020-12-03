@@ -1,14 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
-import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
+import 'package:flutter_internship_v2/cubit/current_task/current_task_cubit.dart';
 
 class MyCard1 extends StatefulWidget {
 
+  final Function() updateTaskList;
+  final Map<Color, Color> theme;
   final int index;
+  final String id;
 
-  MyCard1({this.index});
+  MyCard1({this.id, this.index, this.updateTaskList, this.theme});
 
   @override
   _MyCardState1 createState() => _MyCardState1();
@@ -35,16 +37,16 @@ class _MyCardState1 extends State<MyCard1> {
                 )
               ]
           ),
-          child: BlocBuilder<TaskCubit, TaskState>(
+          child: BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
             builder: (context, state) {
-              if (state is TaskInUsageState) {
+              if (state is CurrentTaskInUsageState) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     _displayDateOfCreation(state),
-                    for (int i = 0; i <state.taskList[widget.index].innerTasks.length; i++)
-                      _displayTask(widget.index, i, state),
-                    _decideWhatToDisplay(widget.index),
+                    for (int i = 0; i <state.task.innerTasks.length; i++)
+                      _displayTask(widget.id, widget.index, i, state),
+                    _decideWhatToDisplay(widget.id, widget.index),
                   ],
                 );
               }
@@ -55,9 +57,9 @@ class _MyCardState1 extends State<MyCard1> {
     );
   }
 
-  Widget _displayDateOfCreation(TaskState state){
-    if (state is TaskInUsageState){
-      DateTime date = state.taskList[widget.index].dateOfCreation;
+  Widget _displayDateOfCreation(CurrentTaskState state){
+    if (state is CurrentTaskInUsageState){
+      DateTime date = state.task.dateOfCreation;
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,31 +73,26 @@ class _MyCardState1 extends State<MyCard1> {
     return const SizedBox.shrink();
   }
 
-  _checkTheme(ThemeState state){
-    if (state is ThemeChangedState)
-      return state.theme.keys.toList().first;
-    return Color(0xff6200EE);
-  }
-
-  _displayTask(int index, int innerIndex, TaskState state) {
-    if (state is TaskInUsageState) {
+  _displayTask(String id, int index, int innerIndex, CurrentTaskState state) {
+    if (state is CurrentTaskInUsageState) {
       return Padding(
         padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
         child: Container(
           child: Row(
             children: [
               Checkbox(
-                value: state.taskList[index].innerTasks[innerIndex].isDone,
-                activeColor: _checkTheme(context.bloc<ThemeCubit>().state),
-                onChanged: (bool value) {
-                  context.bloc<TaskCubit>().toggleInnerTaskComplete(index, innerIndex);
+                value: state.task.innerTasks[innerIndex].isDone,
+                activeColor: widget.theme.keys.toList().first,
+                onChanged: (bool value) async {
+                  await context.bloc<CurrentTaskCubit>().toggleInnerTaskComplete(id, index, innerIndex);
+                  widget.updateTaskList();
                 },
               ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 4),
                   child: Text(
-                      state.taskList[index].innerTasks[innerIndex].title,
+                      state.task.innerTasks[innerIndex].title,
                       style: TextStyle(
                         fontSize: 14,
                       )),
@@ -103,8 +100,9 @@ class _MyCardState1 extends State<MyCard1> {
               ),
               IconButton(
                 icon: Icon(Icons.close),
-                onPressed: () {
-                  context.bloc<TaskCubit>().deleteInnerTask(index, innerIndex);
+                onPressed: () async {
+                  await context.bloc<CurrentTaskCubit>().deleteInnerTask(id, index, innerIndex);
+                  widget.updateTaskList();
                 },
               )
             ],
@@ -115,11 +113,11 @@ class _MyCardState1 extends State<MyCard1> {
   }
 
 
-  _decideWhatToDisplay(int index){
+  _decideWhatToDisplay(String id, int index){
     if (isCreating){
       return Column(
         children: <Widget>[
-          _displayTextField(index),
+          _displayTextField(id, index),
           _displayAddTask()
         ],
       );
@@ -129,13 +127,14 @@ class _MyCardState1 extends State<MyCard1> {
     }
   }
 
-  _displayTextField(int index){
+  _displayTextField(String id, int index){
     return Container(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: TextField(
         controller: _controller,
-        onEditingComplete: () {
-          context.bloc<TaskCubit>().createNewInnerTask(index, _controller.text);
+        onEditingComplete: () async {
+          await context.bloc<CurrentTaskCubit>().createNewInnerTask(id, index, _controller.text);
+          widget.updateTaskList();
           setState(() {
             _controller.text = "";
             isCreating = false;

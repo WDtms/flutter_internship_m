@@ -1,13 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
 
 class FormDialogCurrentTask extends StatefulWidget {
 
   final int index;
+  final Function(String value) editTaskName;
 
-  FormDialogCurrentTask({this.index});
+  FormDialogCurrentTask({this.index, this.editTaskName});
 
   @override
   _FormDialogState createState() => _FormDialogState();
@@ -25,20 +24,16 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
         contentPadding: EdgeInsets.all(12),
         children: <Widget>[
           Text('Редактирование'),
-          BlocBuilder<TaskCubit, TaskState> (
-            builder: (context, state) {
-              return TextFormField(
-                  onSaved: (String value) {
-                    context.bloc<TaskCubit>().editTaskName(widget.index, value);
-                  },
-                  validator: (value){
-                    if(value.length > 40){
-                      return 'Превышена допустимая длина задачи';
-                    }
-                    return null;
-                  }
-              );
-            },
+          TextFormField(
+              onSaved: (String value) {
+                widget.editTaskName(value);
+                },
+              validator: (value){
+                if(value.length > 40){
+                  return 'Превышена допустимая длина задачи';
+                }
+                return null;
+              }
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

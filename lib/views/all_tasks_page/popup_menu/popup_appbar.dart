@@ -1,18 +1,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/cubit/task/task_cubit.dart';
+import 'package:flutter_internship_v2/cubit/theme/theme_cubit.dart';
 import 'package:flutter_internship_v2/services/popup_constans.dart';
 import 'package:flutter_internship_v2/views/all_tasks_page/bottom_dialog/bottom_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PopupMenu1 extends StatelessWidget {
 
+  final Function() updateBranchesInfo;
+  final String id;
+
+  PopupMenu1({this.id, this.updateBranchesInfo});
+
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      onSelected: (String choice) {
-        if (choice == Constants.delete){
-          context.bloc<TaskCubit>().deleteAllCompletedTasks();
+      onSelected: (String choice) async {
+        if (choice == Constants.delete) {
+          await context.bloc<TaskCubit>().deleteAllCompletedTasks(id);
+          updateBranchesInfo();
         }
         if (choice == Constants.hide){
 
@@ -20,8 +27,13 @@ class PopupMenu1 extends StatelessWidget {
         if (choice == Constants.changeTheme){
           showModalBottomSheet(
             context: context,
-            builder: (context) {
-              return BottomDialog();
+            builder: (context1) {
+              return BottomDialog(
+                setBranchTheme: (Map<Color, Color> theme) async {
+                  await context.bloc<ThemeCubit>().setThemeBranch(id, theme);
+                  updateBranchesInfo();
+                },
+              );
             }
           );
         }

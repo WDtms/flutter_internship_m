@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/styles/my_themes_colors.dart';
 
 class ThemeList{
@@ -18,7 +19,7 @@ class ThemeList{
     return themes[currentTheme];
   }
 
-  final List<Map> themes = [
+  final List<Map<Color, Color>> themes = [
     firstTheme,
     secondTheme,
     thirdTheme,
