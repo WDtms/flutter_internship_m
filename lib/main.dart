@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'presentation/pages/main_page.dart';
+import 'presentation/pages/branches_page.dart';
 
 void main() {
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'test_app',
-      home: MainPage(),
+      home: BranchesPage(),
     );
   }
 }

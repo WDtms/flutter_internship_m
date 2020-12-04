@@ -11,18 +11,19 @@ import 'package:flutter_internship_v2/presentation/views/all_tasks_page/popup_ap
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/task_list.dart';
 
 
-class TaskPage extends StatefulWidget {
+class AllTasksPage extends StatefulWidget {
 
   final Function() updateBranchesInfo;
   final String branchID;
+  final String branchTitle;
 
-  TaskPage({this.branchID, this.updateBranchesInfo});
+  AllTasksPage({this.branchID, this.updateBranchesInfo, this.branchTitle});
   
   @override
-  _TaskPageState createState() => _TaskPageState();
+  _AllTasksPageState createState() => _AllTasksPageState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _AllTasksPageState extends State<AllTasksPage> {
 
   TaskCubit taskCubit;
   ThemeCubit themeCubit;
@@ -30,7 +31,7 @@ class _TaskPageState extends State<TaskPage> {
   @override
   void initState() {
     themeCubit = ThemeCubit(ThemeRepository(), currentBranchID: widget.branchID);
-    taskCubit = TaskCubit(TaskInteractor(taskRepository: TaskRepository()), currentBranchID: widget.branchID);
+    taskCubit = TaskCubit(TaskInteractor(), currentBranchID: widget.branchID);
     super.initState();
   }
   
@@ -52,7 +53,7 @@ class _TaskPageState extends State<TaskPage> {
                   backgroundColor: theme.values.toList().first,
                   appBar: AppBar(
                     backgroundColor: theme.keys.toList().first,
-                    title: Text('Задачи'),
+                    title: Text('Задачи ветки ${widget.branchTitle}'),
                     actions: [
                       BlocBuilder<TaskCubit, TaskState>(
                         builder: (context, state) {

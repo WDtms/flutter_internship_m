@@ -6,6 +6,7 @@ import 'package:flutter_internship_v2/presentation/bloc/flickr/flickr_cubit.dart
 import 'package:flutter_internship_v2/presentation/models/photo_display_data.dart';
 import 'package:flutter_internship_v2/presentation/views/flickr_page/flickr_appbar.dart';
 import 'package:flutter_internship_v2/presentation/views/flickr_page/image.dart';
+import 'package:flutter_internship_v2/presentation/views/flickr_page/try_again_button.dart';
 
 class FlickrPage extends StatefulWidget {
 
@@ -21,18 +22,18 @@ class FlickrPage extends StatefulWidget {
 class _FlickrPageState extends State<FlickrPage> {
 
   ScrollController _scrollController;
-  FlickrCubit fliCu;
+  FlickrCubit flickrCubit;
   VoidCallback listener;
 
   @override
   void initState() {
-    fliCu = FlickrCubit(flickInt: FlickrInteractor());
+    flickrCubit = FlickrCubit(flickInt: FlickrInteractor());
     super.initState();
     _scrollController = ScrollController();
     listener = () {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        fliCu.fetchMorePhotos();
+        flickrCubit.fetchMorePhotos();
       }
     };
   }
@@ -40,7 +41,7 @@ class _FlickrPageState extends State<FlickrPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => fliCu,
+      create: (context) => flickrCubit,
       child: Scaffold(
         backgroundColor: widget.theme.values.toList().first,
         appBar: PreferredSize(
@@ -49,8 +50,8 @@ class _FlickrPageState extends State<FlickrPage> {
             appBarColor: widget.theme.keys.toList().first,
             searchPhotos: (String searchTag) {
               if (searchTag != "") {
-                fliCu.setTag(searchTag);
-                fliCu.initiate();
+                flickrCubit.setTag(searchTag);
+                flickrCubit.initiate();
               }
             },
           ),
@@ -105,7 +106,7 @@ class _FlickrPageState extends State<FlickrPage> {
                   ],
                 );
               } else if (state is FlickrInitialState) {
-                fliCu.initiate();
+                flickrCubit.initiate();
                 return Center(child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(widget.theme.keys.toList().first,),
                 ));
@@ -149,18 +150,9 @@ class _FlickrPageState extends State<FlickrPage> {
                 ),
               ),
             ),
-            RaisedButton(
-              child: Text(
-                'Попробовать еще',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18
-                ),
-              ),
-              onPressed: () {
-                fliCu.fetchMorePhotos();
-              },
-              color: widget.theme.keys.toList().first,
+            TryAgainButton(
+              theme: widget.theme,
+              fetchMorePhotos: () => flickrCubit.fetchMorePhotos(),
             ),
           ],
         ),

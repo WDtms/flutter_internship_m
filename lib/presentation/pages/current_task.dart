@@ -30,8 +30,7 @@ class _CurrentTaskState extends State<CurrentTask> {
 
   @override
   void initState() {
-    cubit = CurrentTaskCubit(InnerTaskInteractor(innerTaskRepository: InnerTaskRepository()));
-    cubit.setCurrentIDs(widget.branchID, widget.taskID);
+    cubit = CurrentTaskCubit(InnerTaskInteractor(innerTaskRepository: InnerTaskRepository()), widget.branchID, widget.taskID);
     super.initState();
   }
 

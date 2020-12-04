@@ -65,13 +65,20 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun getNotification(content: String, time: Long): Notification {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        
         val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("Напоминание о задаче")
                 .setContentText(content)
-                .setAutoCancel(true)
                 .setSmallIcon(R.drawable.icon)
                 .setWhen(time)
+                .setAutoCancel(true)
                 .setShowWhen(true)
+                .setContentIntent(pendingIntent)
         return notification.build()
     }
 }

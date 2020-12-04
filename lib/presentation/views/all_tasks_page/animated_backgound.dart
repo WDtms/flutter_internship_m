@@ -63,7 +63,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 60),
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/6),
           child: Align(
             alignment: Alignment(0, 0.3),
             child: Opacity(

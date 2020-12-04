@@ -15,11 +15,13 @@ class OneBranchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context1) => TaskPage(
-            updateBranchesInfo: () {
-              context.bloc<BranchCubit>().updateBranchesInfo();
+        Navigator.push(context, MaterialPageRoute(builder: (context1) => AllTasksPage(
+          updateBranchesInfo: () {
+            context.bloc<BranchCubit>().updateBranchesInfo();
             },
-            branchID: branchInfo.id)
+          branchID: branchInfo.id,
+          branchTitle: branchInfo.title,
+        )
         ));
       },
       onLongPress: () {

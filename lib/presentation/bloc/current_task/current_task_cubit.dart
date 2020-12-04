@@ -8,48 +8,54 @@ import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.da
 part 'current_task_state.dart';
 
 class CurrentTaskCubit extends Cubit<CurrentTaskState>{
+
   final InnerTaskInteractor _innerTaskInteractor;
 
-  CurrentTaskCubit(this._innerTaskInteractor) : super(CurrentTaskInitialState());
+  //Поле, содержащее ID выбранной ветки
+  final String currentBranchID;
+  //
+  //Поле, содержащее ID выбранной задачи
+  final String currentTaskID;
 
-  String currentBranchID;
-  String currentTaskID;
+  CurrentTaskCubit(this._innerTaskInteractor, this.currentBranchID, this.currentTaskID) : super(CurrentTaskInitialState());
 
-  setCurrentIDs(String branchID, String taskID){
-    currentBranchID = branchID;
-    currentTaskID = taskID;
-  }
 
-  Future<void> getTask() async {
+  //Получение задачи
+  void getTask() {
     emit(CurrentTaskLoadingState());
-    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Редактирование внутренней задачи
   Future<void> editInnerTask(String innerTaskID, InnerTask innerTask) async {
     await _innerTaskInteractor.editInnerTask(currentBranchID, currentTaskID, innerTaskID, innerTask);
-    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Редактирование задачи
   Future<void> editTask(Task changedTask) async {
     await _innerTaskInteractor.editTask(currentBranchID, changedTask);
-    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Создание внутренней задачи
   Future<void> createNewInnerTask(String innerTaskName) async {
     await _innerTaskInteractor.createNewInnerTask(currentBranchID, currentTaskID, innerTaskName);
-    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Удаление внутренней задачи
   Future<void> deleteInnerTask(String innerTaskID) async {
     await _innerTaskInteractor.deleteInnerTask(currentBranchID, currentTaskID, innerTaskID);
-    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Удаление задачи
   Future<void> deleteTask() async {
     await _innerTaskInteractor.deleteTask(currentBranchID, currentTaskID);
   }

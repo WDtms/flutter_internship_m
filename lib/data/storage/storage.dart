@@ -14,6 +14,7 @@ class Storage{
     return _instance;
   }
 
+  //Массив со всей кэшированной информацией
   Map<String, Branch> branches = Map<String, Branch>();
 
 }

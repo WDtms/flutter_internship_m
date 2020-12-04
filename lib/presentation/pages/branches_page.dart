@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/presentation/views/branches_page/branches_grid.dart';
 
 
-class MainPage extends StatelessWidget {
+class BranchesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

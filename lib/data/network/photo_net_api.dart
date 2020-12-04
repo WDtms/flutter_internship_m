@@ -7,11 +7,16 @@ import 'package:http/http.dart' as http;
 
 class PhotoNetApi {
 
+  //Поля для отправки url запроса
   final String web = "https://www.flickr.com";
   final String service = "services/rest/";
   final String searchPhoto = "flickr.photos.search";
   final String apiKey = "18353747255e0f7e362243baf563348e";
 
+  /*
+  Преобразование информации, полученной из фликра, в объект. Обрабатывает
+  как удачный, так и неудачный запрос.
+   */
   static FlickrNetData parsePhotos(String responseBody) {
     if (json.decode(responseBody)['stat'] != "ok"){
       return FlickrNetData.fromFailedJson(json.decode(responseBody));
@@ -19,6 +24,10 @@ class PhotoNetApi {
     return FlickrNetData.fromSuccessJson(json.decode(responseBody));
   }
 
+  /*
+  Отправка запроса и получение ответа. Обрабатывает как удачный запрос,
+  так и возникновение любой ошибки.
+   */
   Future<FlickrNetData> fetchPhotos(NetParameters parameters) async {
     try {
       final response =

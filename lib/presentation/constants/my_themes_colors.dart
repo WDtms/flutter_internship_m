@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+//Все темы
+
 final firstTheme = {
   Color(0xff6202EE) : Color.fromRGBO(181, 201, 253, 1)
 };
@@ -25,6 +27,8 @@ final sixthTheme = {
   Color(0xff9e9d24) : Color(0xfff0f4c3)
 };
 
+
+//Список тем
 final themes = [
   firstTheme,
   secondTheme,

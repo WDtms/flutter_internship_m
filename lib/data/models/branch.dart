@@ -6,13 +6,27 @@ import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.da
 
 class Branch{
 
-  String id;
-  String title;
+  //Обязательные поля
+  //
+  //ID ветки
+  final String id;
+  //
+  //Название ветки
+  final String title;
+  //
+  //Массив задач
+  final Map<String, Task> taskList;
+  //
+  //Цветовая тема ветки
   Map<Color, Color> theme;
-  Map<String, Task> taskList;
 
-  Branch({this.id, this.title, this.taskList, this.theme});
+  //Конструктор
+  Branch(this.id, this.title, this.taskList, this.theme);
 
+  /*
+  Преобразование объекта в Map для последующей
+  отправки в базу данных
+   */
   Map<String, dynamic> toMap() {
     return {
       DBConstants.branchId : id,
@@ -21,26 +35,16 @@ class Branch{
     };
   }
 
-  Branch fromMap(Map<String, dynamic> row){
+  /*
+  Преобразование строки таблицы, полученной из базы
+  данных в объект
+   */
+  factory Branch.fromMap(Map<String, dynamic> row){
     return Branch(
-        id: row[DBConstants.branchId],
-        title: row[DBConstants.branchTitle],
-        theme: themes[row[DBConstants.branchTheme]],
-        taskList: {},
-    );
-  }
-
-  Branch copyWith({
-    String id,
-    String title,
-    Map<Color, Color> theme,
-    List<Task> taskList
-  }) {
-    return Branch(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      theme: theme ?? this.theme,
-      taskList: taskList ?? this.taskList
+        row[DBConstants.branchId],
+        row[DBConstants.branchTitle],
+        {},
+        themes[row[DBConstants.branchTheme]],
     );
   }
 }

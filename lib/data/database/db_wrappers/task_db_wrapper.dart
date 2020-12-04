@@ -6,6 +6,7 @@ import '../db.dart';
 
 class TaskDBStorage implements DBStorage{
 
+  //Создание таблицы
   @override
   String get createTable => "CREATE TABLE ${DBConstants.taskTable} ("
       "${DBConstants.taskId} TEXT PRIMARY KEY,"
@@ -20,6 +21,7 @@ class TaskDBStorage implements DBStorage{
       "${DBConstants.branchId} TEXT"
       ")";
 
+  //Внесение нового объекта в таблицу
   @override
   Future<void> insertObject(Map<String, dynamic> task) async {
     Database db = await DB.instance.database;
@@ -31,6 +33,7 @@ class TaskDBStorage implements DBStorage{
     );
   }
 
+  //Обновление объекта в таблице
   @override
   Future<void> updateObject(Map<String, dynamic> task) async {
     Database db = await DB.instance.database;
@@ -43,6 +46,7 @@ class TaskDBStorage implements DBStorage{
     );
   }
 
+  //Удаление объекта из таблицы
   @override
   Future<void> deleteObject(String taskID) async {
     Database db = await DB.instance.database;
@@ -59,6 +63,7 @@ class TaskDBStorage implements DBStorage{
     );
   }
 
+  //Удаление всех задач с флагом "Завершена"
   Future<void> deleteAllCompletedTasks(String branchID, List<String> taskIDList) async {
     Database db = await DB.instance.database;
 

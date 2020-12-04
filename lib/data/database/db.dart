@@ -22,6 +22,10 @@ class DB{
     return _database;
   }
 
+  /*
+  Инициализация база данных. Создание при ее отсутствии и получение при ее
+  наличии
+   */
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "TestDB.db");

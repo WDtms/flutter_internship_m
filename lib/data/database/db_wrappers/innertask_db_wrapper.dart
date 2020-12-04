@@ -5,6 +5,7 @@ import '../db.dart';
 
 class InnerTaskDBStorage implements DBStorage{
 
+  //Создание таблицы
   @override
   String get createTable => "CREATE TABLE ${DBConstants.innerTaskTable} ("
       "${DBConstants.innerTaskId} TEXT PRIMARY KEY,"
@@ -14,6 +15,7 @@ class InnerTaskDBStorage implements DBStorage{
       "${DBConstants.branchId} TEXT"
       ")";
 
+  //Внесение нового объекта в таблицу
   @override
   Future<void> insertObject(Map<String, dynamic> innerTask) async {
     Database db = await DB.instance.database;
@@ -25,6 +27,7 @@ class InnerTaskDBStorage implements DBStorage{
     );
   }
 
+  //Обновление объекта в таблице
   @override
   Future<void> updateObject(Map<String, dynamic> innerTask) async {
     Database db = await DB.instance.database;
@@ -37,6 +40,7 @@ class InnerTaskDBStorage implements DBStorage{
     );
   }
 
+  //Удаление объекта из таблицы
   @override
   Future<void> deleteObject(String innerTaskID) async {
     Database db = await DB.instance.database;

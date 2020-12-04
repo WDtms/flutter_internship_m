@@ -13,14 +13,19 @@ class FlickrCubit extends Cubit<FlickrState>{
 
   FlickrCubit({this.flickInt}) : super(FlickrInitialState());
 
+  //Поле тэга поиска. По умолчанию waterfall
   String tag = "waterfall";
+  //
+  //Поле текущей страницы поиска
   int pageNumber = 1;
 
+  //Выбор нового тэга. Так же идет сбрасывание текущей страницы
   setTag(String tag){
     this.tag = tag;
     this.pageNumber = 1;
   }
 
+  //Либо смена тэга, либо первый запуск.
   Future<void> initiate() async {
     emit(FlickrLoadingState());
     await flickInt.fetchPhotos(NetParameters(
@@ -35,6 +40,7 @@ class FlickrCubit extends Cubit<FlickrState>{
     emit(FlickrUsageState(netDataToDisplay: netData));
   }
 
+  //Подкачка дополнительных картинок
   Future<void> fetchMorePhotos() async {
     await flickInt.fetchPhotos(NetParameters(
       tag: this.tag,

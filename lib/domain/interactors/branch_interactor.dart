@@ -13,25 +13,32 @@ class BranchInteractor {
 
   BranchInteractor({this.branchRepository});
 
+  //Инициализация всей информации, при наличии ее в базе данных
   Future<void> initiateBranches() async {
     await branchRepository.initializeBranches();
   }
 
+  //Создание новой ветки
   Future<void> createNewBranch(String branchName, Map<Color, Color> theme) async{
     await branchRepository.createNewBranch(
         Branch(
-          id: Uuid().v4(),
-          title: branchName,
-          taskList: {},
-          theme: theme,
+          Uuid().v4(),
+          branchName,
+          {},
+          theme,
         )
     );
   }
 
+  //Удаление ветки
   Future<void> removeBranch(String branchID) async {
     await branchRepository.deleteBranch(branchID);
   }
 
+  /*
+  Получение всей нужной информации и преобразование ее в модель
+  для ее отображения на главной странице в карточке информации по всем веткам
+   */
   Future<AllBranchesInfo> getAllBranchesTasksInfo() async {
     Map<String, Branch> branches = await branchRepository.getAllBranches();
     int countAllCompleted = 0;
@@ -44,10 +51,13 @@ class BranchInteractor {
     return AllBranchesInfo(
       countAllCompleted: countAllCompleted,
       countAllUncompleted: countAllUnCompleted,
-      progress: _calculateProgressDouble({countAllCompleted : countAllUnCompleted}),
     );
   }
 
+  /*
+  Получение всей нужной информации и преобразование ее в список моделей
+  для последующего отображения в карточке одной ветки
+   */
   Future<List<OneBranchInfo>> getAllBranchesInfo() async {
     Map<String, Branch> branches = await branchRepository.getAllBranches();
     List<OneBranchInfo> branchesInfo = List<OneBranchInfo>();
@@ -62,21 +72,14 @@ class BranchInteractor {
             countUnCompletedTasks: tasksInfo.values.toList().first,
             completedColor: branch.theme.keys.toList().first,
             backGroundColor: branch.theme.values.toList().first,
-            progress: _calculateProgressDouble(tasksInfo),
           )
       );
     }
     return branchesInfo;
   }
 
-  double _calculateProgressDouble(Map<int, int> info){
-    if (info.values.toList().first+info.keys.toList().first == 0)
-      return 0;
-    else
-      return info.keys.toList().first/
-          (info.values.toList().first+info.keys.toList().first);
-  }
 
+  //Высчитывание информации по всем веткам
   Map<int, int> _calculateTaskInfo(Map<String, Task> taskList){
     int countCompleted = 0;
     int countUncompleted = 0;

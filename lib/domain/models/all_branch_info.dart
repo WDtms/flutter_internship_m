@@ -1,9 +1,16 @@
 class AllBranchesInfo {
 
-  final int countAllCompleted;
-  final int countAllUncompleted;
-  final double progress;
+  //Модель для отображения всей информации на главной странице в карточке инфы по всем задачам
 
-  AllBranchesInfo({this.progress, this.countAllCompleted, this.countAllUncompleted});
+  //Все завершенные задачи
+  final int countAllCompleted;
+  //
+  //Все незавершенные задачи
+  final int countAllUncompleted;
+
+  AllBranchesInfo({this.countAllCompleted, this.countAllUncompleted});
+
+  //Высчитывание прогресса для анимации прогрессбара
+  double get progress => (countAllCompleted+countAllUncompleted) == 0? 0 : countAllCompleted/(countAllCompleted+ countAllUncompleted);
 
 }
