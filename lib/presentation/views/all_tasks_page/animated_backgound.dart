@@ -14,18 +14,15 @@ class AnimatedBackground extends StatefulWidget {
 
 class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTickerProviderStateMixin {
 
-  AnimationController progressController;
-  Animation<double> animation;
+  AnimationController _progressController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 220));
-    animation = Tween<double>(begin: 0.01, end: 1).animate(progressController)..addListener((){
-      setState(() {
-      });
-    });
-    progressController.forward();
+    _progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 220));
+    _animation = Tween<double>(begin: 0.01, end: 1).animate(_progressController);
+    _progressController.forward();
   }
 
   @override
@@ -34,40 +31,55 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
       children: <Widget>[
         Align(
           alignment: Alignment(0, -0.2),
-          child: Opacity(
-            opacity: animation.value,
-            child: SvgPicture.asset(
-              task_big_circle,
-              height: 200*animation.value,
-              width: 200*animation.value,
+          child: FadeTransition(
+            opacity: _animation,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (_, child) {
+                return SvgPicture.asset(
+                  task_big_circle,
+                  height: 200*_animation.value,
+                  width: 200*_animation.value,
+                );
+              },
             ),
           ),
         ),
         Align(
           alignment: Alignment(0, -0.2),
-          child: Opacity(
-            opacity: animation.value,
-            child: SvgPicture.asset(
-              task_small_circle,
-              height: 180*animation.value,
-              width: 180*animation.value,
+          child: FadeTransition(
+            opacity: _animation,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (_, child) {
+                return SvgPicture.asset(
+                  task_small_circle,
+                  height: 180*_animation.value,
+                  width: 180*_animation.value,
+                );
+              },
             ),
           ),
         ),
-        Align(
-          alignment: Alignment(0, (-0.7 + 0.5*animation.value)),
-          child: SvgPicture.asset(
-            task_empty_table,
-            height: 200,
-            width: 200,
-          ),
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (_, child) {
+            return Align(
+              alignment: Alignment(0, (-0.7 + 0.5*_animation.value)),
+              child: SvgPicture.asset(
+                task_empty_table,
+                height: 200,
+                width: 200,
+              ),
+            );
+          },
         ),
         Padding(
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/6),
           child: Align(
             alignment: Alignment(0, 0.3),
-            child: Opacity(
-              opacity: animation.value,
+            child: FadeTransition(
+              opacity: _animation,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 100),
                 child: Builder(
@@ -78,7 +90,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
-                            color: Color(0xff545454).withOpacity(animation.value),
+                            color: Color(0xff545454),
                           )
                       );
                     }
@@ -87,7 +99,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 20,
-                        color: Color(0xff545454).withOpacity(animation.value)
+                        color: Color(0xff545454).withOpacity(_animation.value)
                     ),
                     );
                   },

@@ -105,7 +105,7 @@ class NotificationDisplay extends StatelessWidget {
     return Color(0xff1A9FFF);
   }
 
-  _decideHowToDisplay(int val) {
+  String _decideHowToDisplay(int val) {
     if (val<10)
       return "0$val";
     return "$val";

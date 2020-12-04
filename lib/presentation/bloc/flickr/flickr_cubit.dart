@@ -20,7 +20,7 @@ class FlickrCubit extends Cubit<FlickrState>{
   int pageNumber = 1;
 
   //Выбор нового тэга. Так же идет сбрасывание текущей страницы
-  setTag(String tag){
+  void setTag(String tag){
     this.tag = tag;
     this.pageNumber = 1;
   }

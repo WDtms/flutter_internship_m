@@ -14,13 +14,13 @@ class TaskCubit extends Cubit<TaskState>{
   bool _isHidden = false;
 
   //Смена флага на обратное ему значению
-  toggleIsHidden() async {
+  void toggleIsHidden() async {
     _isHidden = !_isHidden;
     await updateTaskList();
   }
 
   //Метод для проверки, включен ли фильтр
-  _checkIfIsHidden(Map<String, Task> taskList){
+  Map<String, Task> _checkIfIsHidden(Map<String, Task> taskList){
     if (_isHidden){
       taskList.removeWhere((taskID, task) => task.isDone);
       return taskList;

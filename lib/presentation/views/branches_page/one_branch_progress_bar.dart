@@ -21,23 +21,18 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
-      setState(() {
-
-      });
-    });
+    _progressController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1500));
+    _animation = Tween<double>(begin: 0, end: widget.progress * 100).animate(
+        _progressController);
     _progressController.forward();
   }
 
   @override
   void didUpdateWidget(CircleProgressBar oldWidget) {
-    if (oldWidget.progress != widget.progress){
-      _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
-        setState(() {
-
-        });
-      });
+    if (oldWidget.progress != widget.progress) {
+      _animation = Tween<double>(begin: 0, end: widget.progress * 100).animate(
+          _progressController);
       _progressController
         ..reset()
         ..forward();
@@ -47,21 +42,36 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-     return CustomPaint(
-       foregroundPainter: CircleProgress(_animation.value, widget.completedColor), // this will add custom painter after child
-       child: Container(
-         width: MediaQuery.of(context).size.width/5,
-         height: MediaQuery.of(context).size.width/5,
-         child: Center(child: Text("${_animation.value.toInt()} %",
-               style: TextStyle(
-                   fontSize: MediaQuery.of(context).size.height/44,
-                   fontWeight: FontWeight.bold,
-                   color: widget.completedColor
-               ),
-             )
-          )
-        )
-     );
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (_, child) {
+        return CustomPaint(
+            foregroundPainter: CircleProgress(
+                _animation.value, widget.completedColor),
+            child: Container(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 5,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 5,
+                child: Center(child: Text("${_animation.value.toInt()} %",
+                  style: TextStyle(
+                      fontSize: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 44,
+                      fontWeight: FontWeight.bold,
+                      color: widget.completedColor
+                  ),
+                )
+                )
+            )
+        );
+      },
+    );
   }
 }
 

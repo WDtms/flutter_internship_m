@@ -8,10 +8,10 @@ import 'package:http/http.dart' as http;
 class PhotoNetApi {
 
   //Поля для отправки url запроса
-  final String web = "https://www.flickr.com";
-  final String service = "services/rest/";
-  final String searchPhoto = "flickr.photos.search";
-  final String apiKey = "18353747255e0f7e362243baf563348e";
+  final String _web = "https://www.flickr.com";
+  final String _service = "services/rest/";
+  final String _searchPhoto = "flickr.photos.search";
+  final String _apiKey = "18353747255e0f7e362243baf563348e";
 
   /*
   Преобразование информации, полученной из фликра, в объект. Обрабатывает
@@ -31,8 +31,8 @@ class PhotoNetApi {
   Future<FlickrNetData> fetchPhotos(NetParameters parameters) async {
     try {
       final response =
-      await http.Client().get('$web/$service?method=$searchPhoto'
-          '&api_key=$apiKey&tags=${parameters.tag}&per_page=20&page=${parameters
+      await http.Client().get('$_web/$_service?method=$_searchPhoto'
+          '&api_key=$_apiKey&tags=${parameters.tag}&per_page=20&page=${parameters
           .page}&format=json&nojsoncallback=1');
       return compute(parsePhotos, response.body);
     } catch (e) {
