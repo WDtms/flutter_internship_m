@@ -13,6 +13,15 @@ class SelectTimeDialog extends StatefulWidget {
 }
 
 class _SelectTimeDialogState extends State<SelectTimeDialog> {
+
+  DateTime _dateOfCreation;
+
+  @override
+  void initState() {
+    _dateOfCreation = DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
@@ -30,11 +39,11 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
                 )
             ),
             onTap: () {
-              widget.selectDateToComplete(
-                  DateTime(DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
-                      DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
-                      DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day,
-                      17, 59, 59));
+              widget.selectDateToComplete(DateTime(
+                  _dateOfCreation.year,
+                  _dateOfCreation.month,
+                  _dateOfCreation.day,
+                  17, 59, 59));
               Navigator.pop(context);
             },
           ),
@@ -51,9 +60,9 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             ),
             onTap: () {
               widget.selectDateToComplete(DateTime(
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day
+                  _dateOfCreation.year,
+                  _dateOfCreation.month,
+                  _dateOfCreation.day
                       + 1, 9, 59, 59));
               Navigator.pop(context);
             },
@@ -71,9 +80,9 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             ),
             onTap: () {
               widget.selectDateToComplete(DateTime(
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).year,
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).month,
-                  DateTime.fromMillisecondsSinceEpoch(widget.task.dateOfCreation).day
+                  _dateOfCreation.year,
+                  _dateOfCreation.month,
+                  _dateOfCreation.day
                       + 7, 9, 59, 59));
               Navigator.pop(context);
             },

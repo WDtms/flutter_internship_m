@@ -17,6 +17,6 @@ class PhotoDataToDisplay{
   //Поле текущей страницы. Настраивается в кубите фликра
   int currentPage;
 
-  PhotoDataToDisplay({this.photos, this.errorMessage, this.statusNotOkMessage, this.totalPages, this.currentPage});
+  PhotoDataToDisplay(this.photos, this.errorMessage, this.statusNotOkMessage, this.totalPages, {this.currentPage});
 
 }

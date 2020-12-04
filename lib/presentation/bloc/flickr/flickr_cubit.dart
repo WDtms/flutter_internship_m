@@ -29,8 +29,8 @@ class FlickrCubit extends Cubit<FlickrState>{
   Future<void> initiate() async {
     emit(FlickrLoadingState());
     await flickInt.fetchPhotos(NetParameters(
-      tag: this.tag,
-      page: this.pageNumber,
+      this.pageNumber,
+      this.tag,
     ));
     final netData = flickInt.getAllInfo();
     netData.currentPage = pageNumber;
@@ -43,8 +43,8 @@ class FlickrCubit extends Cubit<FlickrState>{
   //Подкачка дополнительных картинок
   Future<void> fetchMorePhotos() async {
     await flickInt.fetchPhotos(NetParameters(
-      tag: this.tag,
-      page: ++this.pageNumber,
+      ++this.pageNumber,
+      this.tag,
     ));
     final netData = flickInt.getAllInfo();
     netData.currentPage = pageNumber;

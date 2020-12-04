@@ -12,30 +12,30 @@ class HorizontalProgressBar extends StatefulWidget {
 
 class _HorizontalProgressBarState extends State<HorizontalProgressBar> with SingleTickerProviderStateMixin {
 
-  AnimationController progressController;
-  Animation<double> animation;
+  AnimationController _progressController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    animation = Tween<double>(begin: 0, end: widget.progress*100).animate(progressController)..addListener((){
+    _progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
+    _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
       setState(() {
 
       });
     });
-    progressController.forward();
+    _progressController.forward();
   }
 
   @override
   void didUpdateWidget(HorizontalProgressBar oldWidget) {
     if (oldWidget.progress != widget.progress){
-      animation = Tween<double>(begin: 0, end: widget.progress*100).animate(progressController)..addListener((){
+      _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
         setState(() {
 
         });
       });
-      progressController
+      _progressController
         ..reset()
         ..forward();
     }
@@ -45,7 +45,7 @@ class _HorizontalProgressBarState extends State<HorizontalProgressBar> with Sing
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      foregroundPainter: MyHorizontalProgressBar(progress: animation.value),
+      foregroundPainter: MyHorizontalProgressBar(progress: _animation.value),
       child: Container(
         height: 20,
         width: MediaQuery.of(context).size.width/2,

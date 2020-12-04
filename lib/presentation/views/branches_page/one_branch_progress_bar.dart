@@ -15,30 +15,30 @@ class CircleProgressBar extends StatefulWidget {
 
 class _CircleProgressBarState extends State<CircleProgressBar> with SingleTickerProviderStateMixin {
 
-  AnimationController progressController;
-  Animation<double> animation;
+  AnimationController _progressController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    animation = Tween<double>(begin: 0, end: widget.progress*100).animate(progressController)..addListener((){
+    _progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
+    _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
       setState(() {
 
       });
     });
-    progressController.forward();
+    _progressController.forward();
   }
 
   @override
   void didUpdateWidget(CircleProgressBar oldWidget) {
     if (oldWidget.progress != widget.progress){
-      animation = Tween<double>(begin: 0, end: widget.progress*100).animate(progressController)..addListener((){
+      _animation = Tween<double>(begin: 0, end: widget.progress*100).animate(_progressController)..addListener((){
         setState(() {
 
         });
       });
-      progressController
+      _progressController
         ..reset()
         ..forward();
     }
@@ -48,11 +48,11 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
   @override
   Widget build(BuildContext context) {
      return CustomPaint(
-       foregroundPainter: CircleProgress(animation.value, widget.completedColor), // this will add custom painter after child
+       foregroundPainter: CircleProgress(_animation.value, widget.completedColor), // this will add custom painter after child
        child: Container(
          width: MediaQuery.of(context).size.width/5,
          height: MediaQuery.of(context).size.width/5,
-         child: Center(child: Text("${animation.value.toInt()} %",
+         child: Center(child: Text("${_animation.value.toInt()} %",
                style: TextStyle(
                    fontSize: MediaQuery.of(context).size.height/44,
                    fontWeight: FontWeight.bold,

@@ -26,13 +26,13 @@ class OneBranchInfo{
   double get progress => (countCompletedTasks+countUnCompletedTasks) == 0? 0 :
   countCompletedTasks/(countUnCompletedTasks+countCompletedTasks);
 
-  OneBranchInfo({
+  OneBranchInfo(
     this.id,
     this.title,
     this.countCompletedTasks,
     this.countUnCompletedTasks,
     this.completedColor,
     this.backGroundColor,
-  });
+  );
 
 }

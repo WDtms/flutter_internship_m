@@ -16,17 +16,17 @@ class CreateBranchForm extends StatefulWidget {
 class _CreateBranchFormState extends State<CreateBranchForm> {
 
   final _key = GlobalKey<FormState>();
-  int selectedTheme;
+  int _selectedTheme;
 
   @override
   void initState() {
-    selectedTheme = 0;
+    _selectedTheme = 0;
     super.initState();
   }
 
-  setSelectedTheme(int value) {
+  _setSelectedTheme(int value) {
     setState(() {
-      selectedTheme = value;
+      _selectedTheme = value;
     });
   }
 
@@ -49,7 +49,7 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
             padding: const EdgeInsets.only(top: 8),
             child: TextFormField(
               onSaved: (String value) {
-                widget.createBranch(value, themes[selectedTheme]);
+                widget.createBranch(value, themes[_selectedTheme]);
               },
               validator: (value) {
                 if(value.length > 10){
@@ -140,11 +140,11 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
             ),
             child: InkWell(
               onTap: () {
-                setSelectedTheme(index);
+                _setSelectedTheme(index);
               },
               child: Builder(
                 builder: (context) {
-                  if (selectedTheme == index){
+                  if (_selectedTheme == index){
                     return SelectedCircle(
                       radius: 30/4,
                     );

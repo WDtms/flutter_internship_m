@@ -39,8 +39,8 @@ class BranchInteractor {
   Получение всей нужной информации и преобразование ее в модель
   для ее отображения на главной странице в карточке информации по всем веткам
    */
-  Future<AllBranchesInfo> getAllBranchesTasksInfo() async {
-    Map<String, Branch> branches = await branchRepository.getAllBranches();
+  AllBranchesInfo getAllBranchesTasksInfo() {
+    Map<String, Branch> branches = branchRepository.getAllBranches();
     int countAllCompleted = 0;
     int countAllUnCompleted = 0;
     for (int i = 0; i<branches.length; i++){
@@ -49,8 +49,8 @@ class BranchInteractor {
       countAllUnCompleted += tasksInfo.values.toList().first;
     }
     return AllBranchesInfo(
-      countAllCompleted: countAllCompleted,
-      countAllUncompleted: countAllUnCompleted,
+      countAllCompleted,
+      countAllUnCompleted,
     );
   }
 
@@ -58,20 +58,20 @@ class BranchInteractor {
   Получение всей нужной информации и преобразование ее в список моделей
   для последующего отображения в карточке одной ветки
    */
-  Future<List<OneBranchInfo>> getAllBranchesInfo() async {
-    Map<String, Branch> branches = await branchRepository.getAllBranches();
+  List<OneBranchInfo> getAllBranchesInfo() {
+    Map<String, Branch> branches = branchRepository.getAllBranches();
     List<OneBranchInfo> branchesInfo = List<OneBranchInfo>();
     for (int i = 0; i<branches.length; i++){
       Branch branch = branches.values.toList().elementAt(i);
       Map<int, int> tasksInfo = _calculateTaskInfo(branch.taskList);
       branchesInfo.add(
           OneBranchInfo(
-            id: branch.id,
-            title: branch.title,
-            countCompletedTasks: tasksInfo.keys.toList().first,
-            countUnCompletedTasks: tasksInfo.values.toList().first,
-            completedColor: branch.theme.keys.toList().first,
-            backGroundColor: branch.theme.values.toList().first,
+            branch.id,
+            branch.title,
+            tasksInfo.keys.toList().first,
+            tasksInfo.values.toList().first,
+            branch.theme.keys.toList().first,
+            branch.theme.values.toList().first,
           )
       );
     }

@@ -18,10 +18,10 @@ class FlickrInteractor {
     if (errorMessage != null || statusNotOkMessage != null)
       flickRep.resetErrors();
     return PhotoDataToDisplay(
-      statusNotOkMessage: statusNotOkMessage,
-      errorMessage: errorMessage,
-      totalPages: flickRep.getPagesCount(),
-      photos: flickRep.getAllPhotos(),
+      flickRep.getAllPhotos(),
+      errorMessage,
+      statusNotOkMessage,
+      flickRep.getPagesCount(),
     );
   }
   

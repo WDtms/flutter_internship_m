@@ -8,7 +8,7 @@ class AllBranchesInfo {
   //Все незавершенные задачи
   final int countAllUncompleted;
 
-  AllBranchesInfo({this.countAllCompleted, this.countAllUncompleted});
+  AllBranchesInfo(this.countAllCompleted, this.countAllUncompleted);
 
   //Высчитывание прогресса для анимации прогрессбара
   double get progress => (countAllCompleted+countAllUncompleted) == 0? 0 : countAllCompleted/(countAllCompleted+ countAllUncompleted);

@@ -16,22 +16,22 @@ class BranchesInfoDisplay extends StatefulWidget {
 
 class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
 
-  BranchCubit cubit;
+  BranchCubit _cubit;
 
   @override
   void initState() {
-    cubit = BranchCubit(BranchInteractor(branchRepository: BranchRepository()));
+    _cubit = BranchCubit(BranchInteractor(branchRepository: BranchRepository()));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => cubit,
+      create: (context) => _cubit,
       child: BlocBuilder<BranchCubit, BranchState>(
         builder: (context, state) {
           if (state is BranchInitialState){
-            cubit.getBranchesInfo();
+            _cubit.getBranchesInfo();
             return Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6200EE)),
@@ -94,7 +94,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
           builder: (context0) {
             return CreateBranchForm(
               createBranch: (String branchName, Map<Color, Color> theme) {
-                cubit.createNewBranch(branchName, theme);
+                _cubit.createNewBranch(branchName, theme);
               },
             );
           }
@@ -124,7 +124,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
 
   @override
   void dispose() {
-    cubit.close();
+    _cubit.close();
     super.dispose();
   }
 }

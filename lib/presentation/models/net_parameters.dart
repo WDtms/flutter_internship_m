@@ -8,6 +8,6 @@ class NetParameters{
   //Тэг
   final String tag;
 
-  NetParameters({this.page, this.tag = ""});
+  NetParameters(this.page, this.tag);
 
 }
