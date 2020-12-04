@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/views/current_task_page/inner_task_title.dart';
 
 class InnerTaskCard extends StatelessWidget {
 
@@ -34,12 +35,12 @@ class InnerTaskCard extends StatelessWidget {
               },
             ),
             Expanded(
-              child: Text(
-                  task.innerTasks[innerTaskID].title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff616161),
-                  )
+              child: InnerTaskTitle(
+                title: task.innerTasks[innerTaskID].title,
+                onInnerTaskEdit: (String newValue) {
+                  context.bloc<CurrentTaskCubit>().editInnerTask(
+                    innerTaskID, task.innerTasks[innerTaskID].copyWith(title: newValue));
+                },
               ),
             ),
             IconButton(

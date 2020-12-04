@@ -121,7 +121,7 @@ class Task{
     int dateOfCreation,
     int dateToComplete,
     int notificationTime,
-    List<InnerTask> innerTasks,
+    Map<String, InnerTask> innerTasks,
     String description,
     List<String> imagesPath,
     String selectedImage,

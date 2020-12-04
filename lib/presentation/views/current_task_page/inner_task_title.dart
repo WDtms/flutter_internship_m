@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Description extends StatefulWidget {
+class InnerTaskTitle extends StatefulWidget {
 
-  final Function(String value) onSubmitDescription;
-  final String description;
+  final String title;
+  final Function(String newValue) onInnerTaskEdit;
 
-  Description({this.description, this.onSubmitDescription});
+  InnerTaskTitle({this.title, this.onInnerTaskEdit});
 
   @override
-  _DescriptionState createState() => _DescriptionState();
+  _InnerTaskTitleState createState() => _InnerTaskTitleState();
 }
 
-class _DescriptionState extends State<Description> {
+class _InnerTaskTitleState extends State<InnerTaskTitle> {
 
   final _key = GlobalKey<FormState>();
 
@@ -26,14 +26,13 @@ class _DescriptionState extends State<Description> {
             color: Color(0xff424242),
           ),
           textInputAction: TextInputAction.done,
-          initialValue: widget.description,
+          initialValue: widget.title,
           maxLines: null,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Заметки по задаче...",
           ),
           onFieldSubmitted: (String value) {
-            widget.onSubmitDescription(value);
+            widget.onInnerTaskEdit(value);
           },
         ),
       ),
