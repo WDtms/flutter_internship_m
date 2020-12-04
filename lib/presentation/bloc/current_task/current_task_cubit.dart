@@ -21,37 +21,37 @@ class CurrentTaskCubit extends Cubit<CurrentTaskState>{
 
 
   //Получение задачи
-  void getTask() {
+  Future<void> getTask() async {
     emit(CurrentTaskLoadingState());
-    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
   //Редактирование внутренней задачи
   Future<void> editInnerTask(String innerTaskID, InnerTask innerTask) async {
     await _innerTaskInteractor.editInnerTask(currentBranchID, currentTaskID, innerTaskID, innerTask);
-    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
   //Редактирование задачи
   Future<void> editTask(Task changedTask) async {
     await _innerTaskInteractor.editTask(currentBranchID, changedTask);
-    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
   //Создание внутренней задачи
   Future<void> createNewInnerTask(String innerTaskName) async {
     await _innerTaskInteractor.createNewInnerTask(currentBranchID, currentTaskID, innerTaskName);
-    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 
   //Удаление внутренней задачи
   Future<void> deleteInnerTask(String innerTaskID) async {
     await _innerTaskInteractor.deleteInnerTask(currentBranchID, currentTaskID, innerTaskID);
-    final task = _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
   }
 

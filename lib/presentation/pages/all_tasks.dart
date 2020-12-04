@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/repository/task_repository.dart';
 import 'package:flutter_internship_v2/data/repository/theme_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/task_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
