@@ -27,61 +27,39 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment(0, -0.2),
-          child: FadeTransition(
-            opacity: _animation,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (_, child) {
-                return SvgPicture.asset(
-                  task_big_circle,
-                  height: 200*_animation.value,
-                  width: 200*_animation.value,
-                );
-              },
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (_, child) {
+        return Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment(0, -0.2),
+              child: SvgPicture.asset(
+                task_big_circle,
+                height: 200*_animation.value,
+                width: 200*_animation.value,
+              )
             ),
-          ),
-        ),
-        Align(
-          alignment: Alignment(0, -0.2),
-          child: FadeTransition(
-            opacity: _animation,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (_, child) {
-                return SvgPicture.asset(
-                  task_small_circle,
-                  height: 180*_animation.value,
-                  width: 180*_animation.value,
-                );
-              },
+            Align(
+              alignment: Alignment(0, -0.2),
+              child: SvgPicture.asset(
+                task_small_circle,
+                height: 180*_animation.value,
+                width: 180*_animation.value,
+              ),
             ),
-          ),
-        ),
-        AnimatedBuilder(
-          animation: _animation,
-          builder: (_, child) {
-            return Align(
+            Align(
               alignment: Alignment(0, (-0.7 + 0.5*_animation.value)),
               child: SvgPicture.asset(
                 task_empty_table,
                 height: 200,
                 width: 200,
               ),
-            );
-          },
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/6),
-          child: Align(
-            alignment: Alignment(0, 0.3),
-            child: FadeTransition(
-              opacity: _animation,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(90, MediaQuery.of(context).size.height/6, 90, 0),
+              child: Align(
+                alignment: Alignment(0, 0.3),
                 child: Builder(
                   builder: (context) {
                     if (widget.isFiltred == true){
@@ -90,25 +68,25 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
-                            color: Color(0xff545454),
+                            color: Color(0xff545454).withOpacity(_animation.value),
                           )
                       );
                     }
                     return Text(
-                    'На данный момент в этой ветке нет задач',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xff545454).withOpacity(_animation.value)
-                    ),
+                      'На данный момент в этой ветке нет задач',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xff545454).withOpacity(_animation.value)
+                      ),
                     );
                   },
-                ),
+                )
               ),
-            ),
-          ),
-        )
-      ],
+            )
+          ],
+        );
+      },
     );
   }
 }
