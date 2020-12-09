@@ -1,4 +1,4 @@
-import 'package:flutter_internship_v2/data/models/image.dart';
+import 'package:flutter_internship_v2/data/models/photo.dart';
 
 class PhotoDataToDisplay{
 

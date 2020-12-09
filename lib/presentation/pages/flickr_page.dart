@@ -77,6 +77,11 @@ class _FlickrPageState extends State<FlickrPage> {
           child: BlocBuilder<FlickrCubit, FlickrState>(
             builder: (context, state) {
               if (state is FlickrUsageState || state is FlickrErrorState){
+                if (state.netDataToDisplay.photos.isEmpty){
+                  return Center(
+                    child: _decideWhatToDisplay(state, state.netDataToDisplay),
+                  );
+                }
                 return CustomScrollView(
                   controller: _scrollController,
                   slivers: <Widget>[
@@ -89,7 +94,11 @@ class _FlickrPageState extends State<FlickrPage> {
                           crossAxisSpacing: 16,
                         ),
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          return ImageDisplay(photoURL: state.netDataToDisplay.photos[index].photoURL, addImage: widget.addImage, iconColor: widget.theme.keys.toList().first);
+                          return ImageDisplay(
+                              photoURL: state.netDataToDisplay.photos[index].photoURL,
+                              addImage: widget.addImage,
+                              iconColor: widget.theme.keys.toList().first
+                          );
                           },
                           childCount: state.netDataToDisplay.photos.length,
                         ),
@@ -128,6 +137,7 @@ class _FlickrPageState extends State<FlickrPage> {
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
                 child: Text(

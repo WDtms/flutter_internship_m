@@ -1,3 +1,4 @@
+import 'package:flutter_internship_v2/data/models/photo.dart';
 import 'package:flutter_internship_v2/data/network/photo_net_storage.dart';
 import 'package:flutter_internship_v2/presentation/models/net_parameters.dart';
 
@@ -12,22 +13,22 @@ class FlickrRepository {
   }
 
   //Получение сообщения об ошибке фликра
-  getStatusCode() {
+  String getStatusCode() {
     return _photoNetStorage.statusNotOkMessage;
   }
 
   //Получение всех картинок
-  getAllPhotos() {
+  List<Photo> getAllPhotos() {
     return _photoNetStorage.allPhotos;
   }
 
   //Получение сообщения об ошибке http запроса
-  getErrorMessage() {
+  String getErrorMessage() {
     return _photoNetStorage.errorMessage;
   }
 
   //Получение количества всех доступных во фликре страниц по запросу
-  getPagesCount() {
+  int getPagesCount() {
     return _photoNetStorage.totalPages;
   }
 

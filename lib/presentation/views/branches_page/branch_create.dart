@@ -48,6 +48,7 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TextFormField(
+              key: ValueKey('create branch TextField'),
               onSaved: (String value) {
                 widget.createBranch(value, themes[_selectedTheme]);
               },
@@ -124,6 +125,7 @@ class _CreateBranchFormState extends State<CreateBranchForm> {
 
   Widget themeButton(int index) {
     return SizedBox(
+      key: ValueKey('Index: $index'),
       child: Padding(
         padding: const EdgeInsets.only(right: 12),
         child: Container(

@@ -1,17 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/database/db_wrappers/branch_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/models/branch.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
+import 'package:flutter_internship_v2/data/storage/branch_wrapper.dart';
 import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
 import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
 import 'package:uuid/uuid.dart';
 
 class BranchInteractor {
 
-  final BranchRepository branchRepository;
-
-  BranchInteractor({this.branchRepository});
+  BranchRepository branchRepository = BranchRepository(branchDBStorage: BranchDBStorage(), branchWrapper: LocalStorageBranchWrapper());
 
   //Инициализация всей информации, при наличии ее в базе данных
   Future<void> initiateBranches() async {

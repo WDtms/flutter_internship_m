@@ -1,7 +1,8 @@
 import 'package:flutter_internship_v2/data/models/flickr_net_data.dart';
-import 'package:flutter_internship_v2/data/models/image.dart';
+import 'package:flutter_internship_v2/data/models/photo.dart';
 import 'package:flutter_internship_v2/data/network/photo_net_api.dart';
 import 'package:flutter_internship_v2/presentation/models/net_parameters.dart';
+import 'package:http/http.dart' as http;
 
 class PhotoNetStorage {
 
@@ -29,7 +30,7 @@ class PhotoNetStorage {
   //Инициализация или обновление списка
   void initData() {
     _allData = List<Photo>();
-    _apiRequest = PhotoNetApi();
+    _apiRequest = PhotoNetApi(http.Client());
   }
 
   //Подтягивание информации по запросу

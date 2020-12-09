@@ -59,7 +59,7 @@ class TaskList extends StatelessWidget {
 
   Widget _displayTask(BuildContext context, String taskID) {
     return Dismissible(
-      key: UniqueKey(),
+      key: ValueKey('Удалить задачу'),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
         await context.bloc<TaskCubit>().deleteTask(taskID);
@@ -94,7 +94,7 @@ class TaskList extends StatelessWidget {
                   activeColor: theme.keys.toList().first,
                   onChanged: (bool value) async {
                     bool isCompleted = taskList[taskID].isDone;
-                    context.bloc<TaskCubit>().editTask(
+                    await context.bloc<TaskCubit>().editTask(
                       taskID,
                       taskList[taskID].copyWith(isDone: !isCompleted),
                     );

@@ -34,6 +34,7 @@ class PopupMenu extends StatelessWidget {
                 theme: theme,
                 setBranchTheme: (Map<Color, Color> theme) {
                   context.bloc<ThemeCubit>().changeTheme(theme);
+                  updateBranchesInfo();
                 },
               );
             }

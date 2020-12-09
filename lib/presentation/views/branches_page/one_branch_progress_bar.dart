@@ -49,20 +49,11 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
             foregroundPainter: CircleProgress(
                 _animation.value, widget.completedColor),
             child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width / 5,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .width / 5,
+                width: 80,
+                height: 80,
                 child: Center(child: Text("${_animation.value.toInt()} %",
                   style: TextStyle(
-                      fontSize: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 44,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: widget.completedColor
                   ),
@@ -72,6 +63,12 @@ class _CircleProgressBarState extends State<CircleProgressBar> with SingleTicker
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _progressController.dispose();
+    super.dispose();
   }
 }
 
