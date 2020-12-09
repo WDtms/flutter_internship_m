@@ -68,10 +68,13 @@ class _FormDialogState extends State<FormDialog> {
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
-                notificationTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-                setState(() {
-                  notificationTimeChosen = true;
-                });
+                if (date != null && time != null) {
+                  notificationTime = DateTime(
+                      date.year, date.month, date.day, time.hour, time.minute);
+                  setState(() {
+                    notificationTimeChosen = true;
+                  });
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -133,10 +136,13 @@ class _FormDialogState extends State<FormDialog> {
                   firstDate: DateTime.now(),
                   lastDate: DateTime(2022),
                 ).then((date) {
-                  dateTimeToComplete = DateTime(date.year, date.month, date.day, 23, 59, 59);
-                  setState(() {
-                    completeDateChosen = true;
-                  });
+                  if (date != null) {
+                    dateTimeToComplete =
+                        DateTime(date.year, date.month, date.day, 23, 59, 59);
+                    setState(() {
+                      completeDateChosen = true;
+                    });
+                  }
                 });
               },
               child: Container(
