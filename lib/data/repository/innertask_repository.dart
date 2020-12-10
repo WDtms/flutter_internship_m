@@ -8,47 +8,49 @@ import 'package:flutter_internship_v2/data/storage/innertask_wrapper.dart';
 class InnerTaskRepository{
 
   //Объект для работы с таблицой внутренних задач базы данных
-  InnerTaskDBStorage _innerTaskDBStorage = InnerTaskDBStorage();
+  final InnerTaskDBStorage innerTaskDBStorage;
   //
   //Объект для работы с таблицей задач базы данных
-  TaskDBStorage _taskDBStorage = TaskDBStorage();
+  final TaskDBStorage taskDBStorage;
   //
   //Объект для работы с кэшем
-  LocalStorageInnerTaskWrapper _innerTaskWrapper = LocalStorageInnerTaskWrapper();
+  final LocalStorageInnerTaskWrapper innerTaskWrapper;
+
+  InnerTaskRepository({this.innerTaskDBStorage, this.taskDBStorage, this.innerTaskWrapper});
 
   //Получение задачи из кэша
   Task getTask(String branchID, String taskID){
-    return _innerTaskWrapper.getTask(branchID, taskID);
+    return innerTaskWrapper.getTask(branchID, taskID);
   }
 
   //Создание новой внутренней задачи
   Future<void> createNewInnerTask(String branchID, String taskID, InnerTask innerTask) async {
-    _innerTaskWrapper.createNewInnerTask(branchID, taskID, innerTask);
-    await _innerTaskDBStorage.insertObject(innerTask.toMap(branchID, _innerTaskWrapper.getTask(branchID, taskID).id));
+    innerTaskWrapper.createNewInnerTask(branchID, taskID, innerTask);
+    await innerTaskDBStorage.insertObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, taskID).id));
   }
 
   //Редактирование внутренней задачи
   Future<void> editInnerTask(String branchID, String taskID, String innerTaskID, InnerTask innerTask) async {
-    _innerTaskWrapper.editInnerTask(branchID, taskID, innerTaskID, innerTask);
-    await _innerTaskDBStorage.updateObject(innerTask.toMap(branchID, _innerTaskWrapper.getTask(branchID, taskID).id));
+    innerTaskWrapper.editInnerTask(branchID, taskID, innerTaskID, innerTask);
+    await innerTaskDBStorage.updateObject(innerTask.toMap(branchID, innerTaskWrapper.getTask(branchID, taskID).id));
   }
 
   //Удаление внутренней задачи
   Future<void> deleteInnerTask(String branchID, String taskID, String innerTaskID) async {
-    await _innerTaskDBStorage.deleteObject(_innerTaskWrapper.getTask(branchID, taskID).innerTasks[innerTaskID].id);
-    _innerTaskWrapper.deleteInnerTask(branchID, taskID, innerTaskID);
+    await innerTaskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, taskID).innerTasks[innerTaskID].id);
+    innerTaskWrapper.deleteInnerTask(branchID, taskID, innerTaskID);
   }
 
   //Редактирование задачи
   Future<void> editTask(String branchID, Task task) async {
-    _innerTaskWrapper.editTask(branchID, task);
-    await _taskDBStorage.updateObject(task.toMap(branchID));
+    innerTaskWrapper.editTask(branchID, task);
+    await taskDBStorage.updateObject(task.toMap(branchID));
   }
 
   //Удаление задачи
   Future<void> deleteTask(String branchID, String taskID) async {
-    await _taskDBStorage.deleteObject(_innerTaskWrapper.getTask(branchID, taskID).id);
-    _innerTaskWrapper.deleteTask(branchID, taskID);
+    await taskDBStorage.deleteObject(innerTaskWrapper.getTask(branchID, taskID).id);
+    innerTaskWrapper.deleteTask(branchID, taskID);
   }
 
 }

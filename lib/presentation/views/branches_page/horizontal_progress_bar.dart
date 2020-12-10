@@ -46,9 +46,15 @@ class _HorizontalProgressBarState extends State<HorizontalProgressBar> with Sing
       },
       child: Container(
         height: 20,
-        width: MediaQuery.of(context).size.width/2,
+        width: 180,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _progressController.dispose();
+    super.dispose();
   }
 }
 

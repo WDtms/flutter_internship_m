@@ -30,43 +30,49 @@ class AllBranchCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
-                child: Text(
-                  'Все задания',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width/16,
-                    fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
+                  child: Text(
+                    'Все задания',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Text(
-                  'Завершено ${allBranchesProgressInfo.countAllCompleted} задач из ${allBranchesProgressInfo.countAllUncompleted
-                      +allBranchesProgressInfo.countAllCompleted}',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width/24,
-                    fontWeight: FontWeight.bold,
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    'Завершено ${allBranchesProgressInfo.countAllCompleted} задач из ${allBranchesProgressInfo.countAllUncompleted
+                        +allBranchesProgressInfo.countAllCompleted}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 15, 0, 0),
-                child: HorizontalProgressBar(progress: allBranchesProgressInfo.progress),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 15, 0, 0),
+                  child: HorizontalProgressBar(progress: allBranchesProgressInfo.progress),
+                ),
+              ],
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset(branches_info_image),
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(branches_info_image),
+            ),
           ),
         ],
       ),

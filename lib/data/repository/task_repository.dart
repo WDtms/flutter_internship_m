@@ -7,43 +7,45 @@ import 'package:flutter_internship_v2/data/storage/task_wrapper.dart';
 class TaskRepository{
 
   //Объект для работы с базой данных
-  TaskDBStorage _taskDBStorage = TaskDBStorage();
+  final TaskDBStorage taskDBStorage;
   //
   //Объект для работы с кэшем
-  LocalStorageTaskWrapper _taskWrapper = LocalStorageTaskWrapper();
+  final LocalStorageTaskWrapper taskWrapper;
+
+  TaskRepository({this.taskDBStorage, this.taskWrapper});
 
   //Получение списка задач из кэша
   Map<String, Task> getTaskList(String branchID){
-    return  _taskWrapper.getTaskList(branchID);
+    return taskWrapper.getTaskList(branchID);
   }
 
   //Создание новой задачи
   Future<void> createNewTask(String branchID, Task task) async {
-    _taskWrapper.createNewTask(branchID, task);
-    await _taskDBStorage.insertObject(task.toMap(branchID));
+    taskWrapper.createNewTask(branchID, task);
+    await taskDBStorage.insertObject(task.toMap(branchID));
   }
 
   //Редактирование задачи
   Future<void> editTask(String branchID, Task task) async {
-    _taskWrapper.editTask(branchID, task);
-    await _taskDBStorage.updateObject(task.toMap(branchID));
+    taskWrapper.editTask(branchID, task);
+    await taskDBStorage.updateObject(task.toMap(branchID));
   }
 
   //Удаление задачи
   Future<void> deleteTask(String branchID, String taskID) async {
-    await _taskDBStorage.deleteObject(_taskWrapper.getTaskList(branchID)[taskID].id);
-    _taskWrapper.deleteTask(branchID, taskID);
+    await taskDBStorage.deleteObject(taskWrapper.getTaskList(branchID)[taskID].id);
+    taskWrapper.deleteTask(branchID, taskID);
   }
 
   //Удаление всех завершенных задач
   Future<void> deleteAllCompletedTasks(String branchID, List<String> taskIDList) async {
-    await _taskDBStorage.deleteAllCompletedTasks(branchID, taskIDList);
-    _taskWrapper.deleteAllCompletedTasks(branchID);
+    await taskDBStorage.deleteAllCompletedTasks(branchID, taskIDList);
+    taskWrapper.deleteAllCompletedTasks(branchID);
   }
 
   //Получение задачи из кэша
   Task getTask(String branchID, String taskID){
-    return _taskWrapper.getTask(branchID, taskID);
+    return taskWrapper.getTask(branchID, taskID);
   }
 
 }

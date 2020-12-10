@@ -1,16 +1,20 @@
 
+import 'package:flutter_internship_v2/data/database/db_wrappers/innertask_db_wrapper.dart';
+import 'package:flutter_internship_v2/data/database/db_wrappers/task_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/data/repository/innertask_repository.dart';
+import 'package:flutter_internship_v2/data/storage/innertask_wrapper.dart';
 import 'package:flutter_internship_v2/domain/notification/notification_helper.dart';
 import 'package:uuid/uuid.dart';
 
 class InnerTaskInteractor {
 
-  final InnerTaskRepository innerTaskRepository;
-
-  InnerTaskInteractor({this.innerTaskRepository});
-
+  InnerTaskRepository innerTaskRepository = InnerTaskRepository(
+    innerTaskDBStorage: InnerTaskDBStorage(),
+    taskDBStorage: TaskDBStorage(),
+    innerTaskWrapper: LocalStorageInnerTaskWrapper(),
+  );
 
   //Получение задачи из кэша
   Task getTask(String branchID, String taskID) {
@@ -54,8 +58,8 @@ class InnerTaskInteractor {
 
   //Удаление задачи
   Future<void> deleteTask(String branchID, String taskID) async {
-    await innerTaskRepository.deleteTask(branchID, taskID);
     await NotificationHelper.cancelNotification(innerTaskRepository.getTask(branchID, taskID));
+    await innerTaskRepository.deleteTask(branchID, taskID);
   }
 
 }

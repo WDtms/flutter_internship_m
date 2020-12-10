@@ -35,16 +35,17 @@ class MyFlickrCard extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          for (String image in task.imagesPath)
-            _displayImages(context, image),
+          for (int i = 0; i<task.imagesPath.length; i++)
+            _displayImages(context, task.imagesPath[i], i),
           _displayAddButton(context),
         ],
       ),
     );
   }
 
-  _displayImages(BuildContext context, String filePath){
+  _displayImages(BuildContext context, String filePath, int index){
     return InkWell(
+      key: ValueKey('$index'),
       onTap: () {
         showDialog(
           context: context,
@@ -96,80 +97,101 @@ class MyFlickrCard extends StatelessWidget {
           }
         );
       },
-      onLongPress: () {
-        showDialog(
-            context: context,
-            builder: (context1){
-              return SimpleDialog(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Удалить эту картинку?",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xff424242),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SimpleDialogOption(
-                          child: Text(
-                            'УДАЛИТЬ',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              color: Color(0xff424242),
-                            ),
-                          ),
-                          onPressed: () {
-                            List<String> allImages = task.imagesPath;
-                            allImages.remove(filePath);
-                            File(filePath).delete();
-                            if (task.selectedImage == filePath)
-                              context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
-                                imagesPath: allImages,
-                                selectedImage: "",
-                              ));
-                            else
-                              context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
-                                imagesPath: allImages,
-                              ));
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        SimpleDialogOption(
-                          child: Text(
-                            'ОТМЕНА',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              color: Color(0xff424242),
-                            ),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            }
-        );
-      },
       child: Container(
-        width: 120,
+        width: 140,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
         ),
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        child: Image.file(
-          File(filePath),
-          fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            Image.file(
+              File(filePath),
+              height: 140,
+              width: 140,
+              fit: BoxFit.cover,
+            ),
+            Align(
+              alignment: Alignment(0.9, -0.9),
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context1){
+                        return SimpleDialog(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                "Удалить эту картинку?",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xff424242),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  SimpleDialogOption(
+                                    child: Text(
+                                      'УДАЛИТЬ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff424242),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      List<String> allImages = task.imagesPath;
+                                      allImages.remove(filePath);
+                                      File(filePath).delete();
+                                      if (task.selectedImage == filePath)
+                                        context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
+                                          imagesPath: allImages,
+                                          selectedImage: "",
+                                        ));
+                                      else
+                                        context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
+                                          imagesPath: allImages,
+                                        ));
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  SimpleDialogOption(
+                                    child: Text(
+                                      'ОТМЕНА',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff424242),
+                                      ),
+                                    ),
+                                    onPressed: () => Navigator.of(context).pop(),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xff01A39D),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -177,6 +199,7 @@ class MyFlickrCard extends StatelessWidget {
 
   _displayAddButton(BuildContext context){
     return InkWell(
+      key: ValueKey('Добавить картинку'),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context1) => FlickrPage(
           theme: theme,

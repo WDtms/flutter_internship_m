@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 
 class PhotoNetApi {
 
+  final http.Client client;
+
+  PhotoNetApi(this.client);
+
   //Поля для отправки url запроса
   final String _web = "https://www.flickr.com";
   final String _service = "services/rest/";
@@ -29,16 +33,18 @@ class PhotoNetApi {
   так и возникновение любой ошибки.
    */
   Future<FlickrNetData> fetchPhotos(NetParameters parameters) async {
+    http.Response response;
     try {
-      final response =
-      await http.Client().get('$_web/$_service?method=$_searchPhoto'
-          '&api_key=$_apiKey&tags=${parameters.tag}&per_page=20&page=${parameters
+      response =
+      await client.get('$_web/$_service?method=$_searchPhoto'
+          '&api_key=$_apiKey&tags=${parameters
+          .tag}&per_page=20&page=${parameters
           .page}&format=json&nojsoncallback=1');
-      return compute(parsePhotos, response.body);
     } catch (e) {
       return FlickrNetData(
         errorMessage: 'Проблемы с подключением',
       );
     }
+      return compute(parsePhotos, response.body);
   }
 }

@@ -120,6 +120,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
+              key: ValueKey('back'),
               icon: Container(
                 decoration: BoxDecoration(
                   color: Color(0xff01A39D).withOpacity(task.selectedImage != ""
@@ -165,8 +166,14 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
           child: Builder(
             builder: (context) {
               if (task.isDone)
-                return Icon(Icons.close);
-              return Icon(Icons.check);
+                return Icon(
+                  Icons.close,
+                  key: ValueKey('Задача выполнена'),
+                );
+              return Icon(
+                Icons.check,
+                key: ValueKey('Задача не выполнена'),
+              );
             },
           ),
         ),

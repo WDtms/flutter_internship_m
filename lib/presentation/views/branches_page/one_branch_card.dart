@@ -14,6 +14,7 @@ class OneBranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      key: ValueKey('select branch'),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context1) => AllTasksPage(
           updateBranchesInfo: () {
@@ -92,36 +93,36 @@ class OneBranchCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.height/200, MediaQuery.of(context).size.height/100, 0, 0),
+              padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
               child: CircleProgressBar(
                 completedColor: branchInfo.completedColor,
                 progress: branchInfo.progress,
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(left: 12),
               child: Text(
                 '${branchInfo.title}',
                 style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height/31,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(left: 12),
               child: Text(
                 '${branchInfo.countCompletedTasks + branchInfo.countUnCompletedTasks} задач(и)',
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height/39,
+                  fontSize: 20,
                   color: Color(0xff979797),
                 ),
               ),
             ),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.height/70,
-                vertical: MediaQuery.of(context).size.height/100
+                horizontal: 10,
+                vertical: 8
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,14 +134,14 @@ class OneBranchCard extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width/40,
-                          vertical: MediaQuery.of(context).size.height/600,
+                          horizontal: 8,
+                          vertical: 2,
                         ),
                         child: Text(
                           '${branchInfo.countCompletedTasks} сделано',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: MediaQuery.of(context).size.width/36,
+                            fontSize: 11,
                             color: branchInfo.completedColor,
                           ),
                         ),
@@ -153,15 +154,15 @@ class OneBranchCard extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width/40,
-                        vertical: MediaQuery.of(context).size.height/600,
+                        horizontal: 8,
+                        vertical: 2,
                       ),
                       child: Text(
                         '${branchInfo.countUnCompletedTasks} осталось',
                         style: TextStyle(
                           color: Color(0xffFD3535),
                           fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width/36,
+                          fontSize: 11,
                         ),
                       ),
                     ),

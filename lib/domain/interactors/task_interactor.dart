@@ -1,12 +1,14 @@
 
+import 'package:flutter_internship_v2/data/database/db_wrappers/task_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/data/repository/task_repository.dart';
+import 'package:flutter_internship_v2/data/storage/task_wrapper.dart';
 import 'package:flutter_internship_v2/domain/notification/notification_helper.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskInteractor {
 
-  final TaskRepository taskRepository = TaskRepository();
+  final TaskRepository taskRepository = TaskRepository(taskDBStorage: TaskDBStorage(), taskWrapper: LocalStorageTaskWrapper());
 
   //Получение списка задач из кэша
   Map<String, Task> getTaskList(String branchID) {

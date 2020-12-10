@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/branch_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/branch/branch_cubit.dart';
 import 'all_branch_card.dart';
@@ -20,7 +19,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
 
   @override
   void initState() {
-    _cubit = BranchCubit(BranchInteractor(branchRepository: BranchRepository()));
+    _cubit = BranchCubit(BranchInteractor());
     super.initState();
   }
 
@@ -39,6 +38,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
             );
           } else if (state is BranchInUsageState){
             return CustomScrollView(
+              key: ValueKey('Список веток'),
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Padding(
@@ -88,6 +88,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
 
   Widget displayAddButton(BuildContext context){
     return InkWell(
+      key: ValueKey('create branch'),
       onTap: () {
         showDialog(
           context: context,

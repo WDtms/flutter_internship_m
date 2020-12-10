@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/data/database/db_wrappers/branch_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/repository/theme_repository.dart';
+import 'package:flutter_internship_v2/data/storage/theme_wrapper.dart';
 import 'package:flutter_internship_v2/domain/interactors/task_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/bloc/theme/theme_cubit.dart';
@@ -29,8 +31,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
   
   @override
   void initState() {
-    themeCubit = ThemeCubit(ThemeRepository(), currentBranchID: widget.branchID);
-    taskCubit = TaskCubit(TaskInteractor(), currentBranchID: widget.branchID);
+    themeCubit = ThemeCubit(ThemeRepository(branchDBStorage: BranchDBStorage(), themeWrapper: ThemeWrapper()), currentBranchID: widget.branchID);
+    taskCubit = TaskCubit(taskInteractor: TaskInteractor(), currentBranchID: widget.branchID);
     super.initState();
   }
   

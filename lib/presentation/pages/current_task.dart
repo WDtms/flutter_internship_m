@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/repository/innertask_repository.dart';
 import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/flickr_card.dart';
@@ -30,7 +29,7 @@ class _CurrentTaskState extends State<CurrentTask> {
 
   @override
   void initState() {
-    cubit = CurrentTaskCubit(InnerTaskInteractor(innerTaskRepository: InnerTaskRepository()), widget.branchID, widget.taskID);
+    cubit = CurrentTaskCubit(InnerTaskInteractor(), widget.branchID, widget.taskID);
     super.initState();
   }
 
