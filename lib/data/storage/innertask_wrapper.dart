@@ -12,6 +12,11 @@ class LocalStorageInnerTaskWrapper{
     return Storage.getInstance().branches[branchID].taskList[taskID];
   }
 
+  //Получение внутренней задачи
+  InnerTask getInnerTask(String branchID, String taskID, String innerTaskID){
+    return Storage.getInstance().branches[branchID].taskList[taskID].innerTasks[innerTaskID];
+  }
+
   //Создание новой внутренней задачи
   void createNewInnerTask(String branchID, String taskID, InnerTask innerTask) {
     Storage.getInstance().branches[branchID].taskList[taskID].innerTasks[innerTask.id] = innerTask;

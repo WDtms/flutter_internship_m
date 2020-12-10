@@ -20,7 +20,7 @@ void main() {
     setUpAll(() {
       _taskDBStorage = TaskDBMock();
       _taskWrapper = LocalStorageTaskMock();
-      _taskRepository = TaskRepository(taskDBStorage: _taskDBStorage, taskWrapper: _taskWrapper);
+      _taskRepository = TaskRepository(_taskDBStorage, _taskWrapper);
     });
 
     final _branchID = 'branchID';

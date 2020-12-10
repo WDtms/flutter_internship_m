@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
@@ -36,40 +35,6 @@ void main() {
         verify: (_) {
           verify(_innerTaskInteractor.getTask(any, any));
         },
-    );
-
-    blocTest(
-      'Редактирование внутренней задачи',
-      build: () {
-        when(_innerTaskInteractor.editInnerTask(any, any, any, any)).thenReturn(null);
-        when(_innerTaskInteractor.getTask(any, any)).thenReturn(_task);
-        return CurrentTaskCubit(_innerTaskInteractor, _currentBranchID, _currentTaskID);
-      },
-      act: (CurrentTaskCubit cubit) => cubit.editInnerTask('id', InnerTask('id', 'title')),
-      expect: [
-        isA<CurrentTaskInUsageState>(),
-      ],
-      verify: (_) {
-        verify(_innerTaskInteractor.editInnerTask(any, any, any, any));
-        verify(_innerTaskInteractor.getTask(any, any));
-      },
-    );
-
-    blocTest(
-      'Редактирование задачи',
-      build: () {
-        when(_innerTaskInteractor.editTask(any, any)).thenReturn(null);
-        when(_innerTaskInteractor.getTask(any, any)).thenReturn(_task);
-        return CurrentTaskCubit(_innerTaskInteractor, _currentBranchID, _currentTaskID);
-      },
-      act: (CurrentTaskCubit cubit) => cubit.editTask(_task),
-      expect: [
-        isA<CurrentTaskInUsageState>(),
-      ],
-      verify: (_) {
-        verify(_innerTaskInteractor.editTask(any, any));
-        verify(_innerTaskInteractor.getTask(any, any));
-      },
     );
 
     blocTest(

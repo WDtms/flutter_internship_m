@@ -21,7 +21,7 @@ void main() {
       'Получение цветовой темы',
       build: () {
         when(_themeRepository.getBranchTheme(any)).thenReturn(themes[0]);
-        return ThemeCubit(_themeRepository, currentBranchID: 'id');
+        return ThemeCubit(_themeRepository, 'id');
         },
       act: (ThemeCubit cubit) => cubit.getThemeBranch(),
       expect: [
@@ -38,7 +38,7 @@ void main() {
       build: () {
         when(_themeRepository.getBranchTheme(any)).thenReturn(themes[0]);
         when(_themeRepository.changeTheme(any, any)).thenReturn(null);
-        return ThemeCubit(_themeRepository, currentBranchID: 'id');
+        return ThemeCubit(_themeRepository, 'id');
       },
       act: (ThemeCubit cubit) => cubit.changeTheme(themes[0]),
       expect: [

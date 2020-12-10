@@ -23,13 +23,12 @@ class DisplayDateToComplete extends StatelessWidget {
                   task: task,
                   selectDateToComplete: (DateTime dateTime) {
                     if (dateTime != null) {
-                      context.bloc<CurrentTaskCubit>().editTask(
-                          task.copyWith(
-                              dateToComplete: DateTime(
-                                  dateTime.year, dateTime.month, dateTime.day,
-                                  dateTime.hour < 1 ? 23 : dateTime.hour, 59, 59)
-                                  .millisecondsSinceEpoch
-                          ));
+                      context.bloc<CurrentTaskCubit>().editDateToComplete(
+                          DateTime(
+                              dateTime.year, dateTime.month, dateTime.day,
+                              dateTime.hour < 1 ? 23 : dateTime.hour, 59, 59)
+                              .millisecondsSinceEpoch
+                          );
                     }
                   },
                 );
@@ -87,7 +86,7 @@ class DisplayDateToComplete extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                context.bloc<CurrentTaskCubit>().editTask(task.copyWith(dateToComplete: 0));
+                context.bloc<CurrentTaskCubit>().editDateToComplete(0);
               },
             ),
           ],

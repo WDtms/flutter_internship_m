@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class BranchInteractor {
 
-  BranchRepository branchRepository = BranchRepository(branchDBStorage: BranchDBStorage(), branchWrapper: LocalStorageBranchWrapper());
+  BranchRepository branchRepository = BranchRepository(BranchDBStorage(), LocalStorageBranchWrapper());
 
   //Инициализация всей информации, при наличии ее в базе данных
   Future<void> initiateBranches() async {
@@ -79,7 +79,7 @@ class BranchInteractor {
   }
 
 
-  //Высчитывание информации по всем веткам
+  //Высчитывание информации по одной ветке
   Map<int, int> _calculateTaskInfo(Map<String, Task> taskList){
     int countCompleted = 0;
     int countUncompleted = 0;

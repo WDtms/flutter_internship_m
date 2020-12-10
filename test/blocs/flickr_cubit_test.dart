@@ -28,7 +28,7 @@ void main() {
         build: () {
           when(_flickrInteractor.fetchPhotos(any)).thenReturn(null);
           when(_flickrInteractor.getAllInfo()).thenReturn(_photoDataToDisplaySuccess);
-          return FlickrCubit(flickInt: _flickrInteractor);
+          return FlickrCubit(_flickrInteractor);
         },
       act: (FlickrCubit cubit) => cubit.initiate(),
       expect: [
@@ -46,7 +46,7 @@ void main() {
       build: () {
         when(_flickrInteractor.fetchPhotos(any)).thenReturn(null);
         when(_flickrInteractor.getAllInfo()).thenReturn(_photoDataToDisplayFailed);
-        return FlickrCubit(flickInt: _flickrInteractor);
+        return FlickrCubit(_flickrInteractor);
       },
       act: (FlickrCubit cubit) => cubit.initiate(),
       expect: [
@@ -64,7 +64,7 @@ void main() {
       build: () {
         when(_flickrInteractor.fetchPhotos(any)).thenReturn(null);
         when(_flickrInteractor.getAllInfo()).thenReturn(_photoDataToDisplaySuccess);
-        return FlickrCubit(flickInt: _flickrInteractor);
+        return FlickrCubit(_flickrInteractor);
       },
       act: (FlickrCubit cubit) => cubit.fetchMorePhotos(),
       expect: [
@@ -81,7 +81,7 @@ void main() {
       build: () {
         when(_flickrInteractor.fetchPhotos(any)).thenReturn(null);
         when(_flickrInteractor.getAllInfo()).thenReturn(_photoDataToDisplayFailed);
-        return FlickrCubit(flickInt: _flickrInteractor);
+        return FlickrCubit( _flickrInteractor);
       },
       act: (FlickrCubit cubit) => cubit.fetchMorePhotos(),
       expect: [

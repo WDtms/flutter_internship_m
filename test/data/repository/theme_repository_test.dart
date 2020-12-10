@@ -21,7 +21,7 @@ void main() {
     setUpAll(() {
       _branchDBStorage = BranchDBMock();
       _themeWrapper = ThemeMock();
-      _themeRepository = ThemeRepository(branchDBStorage: _branchDBStorage, themeWrapper: _themeWrapper);
+      _themeRepository = ThemeRepository(_branchDBStorage, _themeWrapper);
     });
 
     final _branchID = 'branchID';

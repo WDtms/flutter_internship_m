@@ -4,7 +4,6 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 void main() {
 
-  final createTaskTextField = find.byValueKey('Создание задачи');
   final createBranchButton = find.byValueKey('create branch');
   final taskName = 'test det';
   final branchName = 'Det test';
@@ -25,7 +24,7 @@ void main() {
     driver = await FlutterDriver.connect();
     await driver.waitUntilFirstFrameRasterized();
     await driver.scrollUntilVisible(
-      find.byValueKey('Список веток'),
+      find.byValueKey('Branch list'),
       createBranchButton,
       dyScroll: -300.0,
     );
@@ -35,7 +34,7 @@ void main() {
     await driver.tap(find.text('СОЗДАТЬ'));
     await driver.tap(find.text(branchName));
     await driver.tap(find.byType('FloatingActionButton'));
-    await driver.tap(createTaskTextField);
+    await driver.tap(find.byValueKey('Task creation'));
     await driver.enterText(taskName);
     await driver.tap(find.text('СОЗДАТЬ'));
     await driver.tap(find.text(taskName));
@@ -43,12 +42,12 @@ void main() {
 
   test('Изменение состояния чекбокса изнутри', () async {
     //Проверка на то, отображается ли иконка состояния "Не выполнена"
-    driver.waitFor(find.byValueKey('Задача не выполнена'));
+    driver.waitFor(find.byValueKey('Task uncompleted'));
 
     await driver.tap(find.byType('FloatingActionButton'));
 
     //Проверка на то, отображается ли иконка состояния "Выполнена"
-    driver.waitFor(find.byValueKey('Задача выполнена'));
+    driver.waitFor(find.byValueKey('Task completed'));
   });
   
   test('Установка дэдлайна и создание уведомления', () async {

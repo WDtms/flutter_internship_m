@@ -6,7 +6,6 @@ void main() {
 
   group('Экран списка задач', () {
 
-    final createTaskTextField = find.byValueKey('Создание задачи');
     final createBranchButton = find.byValueKey('create branch');
     final taskName = 'test task';
     final branchName = 'Task tests';
@@ -27,7 +26,7 @@ void main() {
       driver = await FlutterDriver.connect();
       await driver.waitUntilFirstFrameRasterized();
       await driver.scrollUntilVisible(
-        find.byValueKey('Список веток'),
+        find.byValueKey('Branch list'),
         createBranchButton,
         dyScroll: -300.0,
       );
@@ -40,7 +39,7 @@ void main() {
 
     test('Создание и настройка задачи', () async {
       await driver.tap(find.byType('FloatingActionButton'));
-      await driver.tap(createTaskTextField);
+      await driver.tap(find.byValueKey('Task creation'));
       await driver.enterText(taskName);
       await driver.tap(find.text('Напомнить'));
       await driver.tap(find.text('OK'));
@@ -62,6 +61,11 @@ void main() {
 
     tearDownAll(() async {
       await driver.tap(find.pageBack());
+      await driver.scrollUntilVisible(
+        find.byValueKey('Branch list'),
+        find.text(branchName),
+        dyScroll: -300.0,
+      );
       await driver.scroll(find.text(branchName), 0, 0, Duration(milliseconds: 600));
       await Future.delayed(const Duration(seconds: 1));
       await driver.tap(find.text('УДАЛИТЬ'));

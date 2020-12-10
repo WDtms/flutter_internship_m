@@ -38,7 +38,7 @@ class _BranchesInfoDisplayState extends State<BranchesInfoDisplay> {
             );
           } else if (state is BranchInUsageState){
             return CustomScrollView(
-              key: ValueKey('Список веток'),
+              key: ValueKey('Branch list'),
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Padding(

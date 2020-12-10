@@ -22,8 +22,8 @@ void main() {
       _branchDBStorage = BranchDBMock();
       _branchWrapper = LocalStorageBranchMock();
       _branchRepository = BranchRepository(
-          branchDBStorage: _branchDBStorage,
-          branchWrapper: _branchWrapper
+          _branchDBStorage,
+          _branchWrapper
       );
     });
 

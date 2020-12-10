@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/description.dart';
 
@@ -9,12 +10,11 @@ import 'inner_task_card.dart';
 
 class MyCard extends StatefulWidget {
 
-  final String description;
   final Function() updateTaskList;
-  final Function(String value) onSubmitDescription;
   final Map<Color, Color> theme;
+  final Task task;
 
-  MyCard({this.updateTaskList, this.theme, this.description, this.onSubmitDescription});
+  MyCard({this.updateTaskList, this.theme, this.task});
 
   @override
   _MyCardState createState() => _MyCardState();
@@ -40,39 +40,31 @@ class _MyCardState extends State<MyCard> {
                 )
               ]
           ),
-          child: BlocBuilder<CurrentTaskCubit, CurrentTaskState>(
-            builder: (context, state) {
-              if (state is CurrentTaskInUsageState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    _displayDateOfCreation(state.task.dateOfCreation),
-                    for (int i = 0; i <state.task.innerTasks.length; i++)
-                      InnerTaskCard(
-                        activeColor: widget.theme.keys.toList().first,
-                        innerTaskID: state.task.innerTasks.values.toList().elementAt(i).id,
-                        updateTaskList: widget.updateTaskList,
-                        task: state.task,
-                      ),
-                    CreateInnerTask(
-                      createInnerTask: (String value) async {
-                        await context.bloc<CurrentTaskCubit>().createNewInnerTask(value);
-                        widget.updateTaskList();
-                      },
-                    ),
-                    Description(
-                      description: widget.description,
-                      onSubmitDescription: (String value) {
-                        widget.onSubmitDescription(value);
-                      },
-                    ),
-                  ],
-                );
-              }
-              return CircularProgressIndicator();
-            },
-          )
-      ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _displayDateOfCreation(widget.task.dateOfCreation),
+              for (int i = 0; i <widget.task.innerTasks.length; i++)
+                InnerTaskCard(
+                  activeColor: widget.theme.keys.toList().first,
+                  updateTaskList: widget.updateTaskList,
+                  innerTask: widget.task.innerTasks[widget.task.innerTasks.values.elementAt(i).id],
+                ),
+              CreateInnerTask(
+                createInnerTask: (String value) async {
+                  await context.bloc<CurrentTaskCubit>().createNewInnerTask(value);
+                  widget.updateTaskList();
+                  },
+              ),
+              Description(
+                description: widget.task.description,
+                onSubmitDescription: (String value) async {
+                  await context.bloc<CurrentTaskCubit>().editDescription(value);
+                  },
+              ),
+            ],
+          ),
+      )
     );
   }
 
@@ -94,7 +86,7 @@ class _MyCardState extends State<MyCard> {
       );
   }
 
-  _decideHowToDisplay(int val) {
+  String _decideHowToDisplay(int val) {
     if (val<10)
       return "0$val";
     return "$val";

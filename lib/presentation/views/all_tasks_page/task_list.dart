@@ -2,7 +2,7 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
+import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/pages/current_task.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/animated_backgound.dart';
@@ -14,7 +14,7 @@ class TaskList extends StatelessWidget {
   final bool isFiltred;
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
-  final Map<String, Task> taskList;
+  final Map<String, TaskCardInfo> taskList;
   final String branchID;
 
   TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred});
@@ -41,7 +41,7 @@ class TaskList extends StatelessWidget {
   Widget _displayLines(BuildContext context){
     return ListView(
       children: <Widget>[
-        for (int i = 0; i<(MediaQuery.of(context).size.height/80).ceil(); i++)
+        for (int i = 0; i<(MediaQuery.of(context).size.height/70).ceil(); i++)
           _oneLine(),
       ],
     );
@@ -49,9 +49,9 @@ class TaskList extends StatelessWidget {
 
   Widget _oneLine(){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 78, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 68, 16, 0),
       child: Container(
-        height: 2,
+        height: 1,
         color: Colors.black12,
       ),
     );
@@ -59,7 +59,7 @@ class TaskList extends StatelessWidget {
 
   Widget _displayTask(BuildContext context, String taskID) {
     return Dismissible(
-      key: ValueKey('Удалить задачу'),
+      key: ValueKey('$taskID'),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
         await context.bloc<TaskCubit>().deleteTask(taskID);
@@ -93,11 +93,7 @@ class TaskList extends StatelessWidget {
                   value: taskList[taskID].isDone,
                   activeColor: theme.keys.toList().first,
                   onChanged: (bool value) async {
-                    bool isCompleted = taskList[taskID].isDone;
-                    await context.bloc<TaskCubit>().editTask(
-                      taskID,
-                      taskList[taskID].copyWith(isDone: !isCompleted),
-                    );
+                    await context.bloc<TaskCubit>().toggleTaskComplete(taskID);
                     updateBranchesInfo();
                   }
                 ),
@@ -116,7 +112,7 @@ class TaskList extends StatelessWidget {
                     },
                     child: Builder(
                       builder: (BuildContext context) {
-                        if (taskList[taskID].innerTasks.isEmpty) {
+                        if (taskList[taskID].countAll == 0) {
                           return Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Container(
@@ -149,7 +145,7 @@ class TaskList extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    '${_countCompletedInnerTasks(taskID)} из ${taskList[taskID].innerTasks.length}',
+                                    '${taskList[taskID].countCompleted} из ${taskList[taskID].countAll}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black54,
@@ -170,14 +166,5 @@ class TaskList extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  int _countCompletedInnerTasks(String taskID){
-    int count = 0;
-    for (int i = 0; i<taskList[taskID].innerTasks.length; i++){
-      if (taskList[taskID].innerTasks.values.elementAt(i).isDone)
-        count++;
-    }
-    return count;
   }
 }
