@@ -140,7 +140,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
             PopupMenuCurrentTask(
               updateBranchesInfo: updateBranchesInfo,
               updateTaskList: updateTaskList,
-              task: task,
+              taskName: task.title,
               opacity: task.selectedImage != "" ? _calculateFabScale(shrinkOffset)
               : 0,
             ),
@@ -160,7 +160,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
         child: FloatingActionButton(
           backgroundColor: Color(0xff01A39D),
           onPressed: () async {
-            await context.bloc<CurrentTaskCubit>().editTask(task.copyWith(isDone: !task.isDone));
+            await context.bloc<CurrentTaskCubit>().toggleTaskComplete();
             updateTaskList();
           },
           child: Builder(
@@ -168,11 +168,11 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
               if (task.isDone)
                 return Icon(
                   Icons.close,
-                  key: ValueKey('Задача выполнена'),
+                  key: ValueKey('Task completed'),
                 );
               return Icon(
                 Icons.check,
-                key: ValueKey('Задача не выполнена'),
+                key: ValueKey('Task uncompleted'),
               );
             },
           ),

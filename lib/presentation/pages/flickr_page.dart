@@ -27,7 +27,7 @@ class _FlickrPageState extends State<FlickrPage> {
 
   @override
   void initState() {
-    flickrCubit = FlickrCubit(flickInt: FlickrInteractor());
+    flickrCubit = FlickrCubit(FlickrInteractor());
     super.initState();
     _scrollController = ScrollController();
     listener = () {

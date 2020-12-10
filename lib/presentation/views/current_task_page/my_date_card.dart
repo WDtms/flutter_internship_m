@@ -35,7 +35,7 @@ class MyDateCard extends StatelessWidget {
                 if (state is CurrentTaskInUsageState){
                   return Column(
                     children: [
-                      NotificationDisplay(task: state.task),
+                      NotificationDisplay(notificationTime: task.notificationTime),
                       Divider(
                         thickness: 1,
                         indent: 56,

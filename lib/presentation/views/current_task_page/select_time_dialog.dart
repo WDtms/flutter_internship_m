@@ -92,7 +92,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: InkWell(
             child: Text(
-              'Выбрать дату и время',
+              'Выбрать дату',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black54,

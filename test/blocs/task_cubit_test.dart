@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/domain/interactors/task_interactor.dart';
+import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -15,7 +15,7 @@ void main() {
 
     final _branchID = 'branchID';
     final _taskID = 'id1';
-    final _task = Task(_taskID, 'title1', {}, [], 1);
+    final _task = TaskCardInfo(_taskID, 'title', 1, 2, false);
     final _taskList = {
       _taskID : _task
     };
@@ -28,7 +28,7 @@ void main() {
       'Получение списка задач по айди',
       build: () {
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-        return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+        return TaskCubit(_taskInteractor, _branchID);
         },
       act: (TaskCubit cubit) => cubit.getTasks(),
       expect: [
@@ -39,28 +39,11 @@ void main() {
     );
 
     blocTest<TaskCubit, TaskState>(
-        'Редактирование задачи',
-        build: () {
-          when(_taskInteractor.editTask(any, any)).thenReturn(null);
-          when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-          return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
-        },
-        act: (TaskCubit cubit) => cubit.editTask(_taskID, _task),
-        expect: [
-          isA<TaskInUsageState>(),
-        ],
-        verify: (_) {
-          verify(_taskInteractor.getTaskList(any));
-          verify(_taskInteractor.editTask(any, any));
-        },
-    );
-
-    blocTest<TaskCubit, TaskState>(
       'Создание новой задачи',
       build: () {
         when(_taskInteractor.createNewTask(any, any, any, any)).thenReturn(null);
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-        return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+        return TaskCubit(_taskInteractor, _branchID);
       },
       act: (TaskCubit cubit) => cubit.createNewTask(DateTime.now(), DateTime.now(), 'taskName'),
       expect: [
@@ -77,7 +60,7 @@ void main() {
       build: () {
         when(_taskInteractor.deleteTask(any, any)).thenReturn(null);
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-        return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+        return TaskCubit(_taskInteractor, _branchID);
       },
       act: (TaskCubit cubit) => cubit.deleteTask(_taskID),
       expect: [
@@ -94,7 +77,7 @@ void main() {
       build: () {
         when(_taskInteractor.deleteTask(any, any)).thenReturn(null);
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-        return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+        return TaskCubit(_taskInteractor, _branchID);
       },
       act: (TaskCubit cubit) => cubit.deleteTask(_taskID),
       expect: [
@@ -111,7 +94,7 @@ void main() {
       build: () {
         when(_taskInteractor.deleteAllCompletedTasks(any)).thenReturn(null);
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-        return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+        return TaskCubit(_taskInteractor, _branchID);
       },
       act: (TaskCubit cubit) => cubit.deleteAllCompletedTasks(),
       expect: [
@@ -127,7 +110,7 @@ void main() {
         'Обновление информации на страницы с колбэка другой страницы',
         build: () {
           when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
-          return TaskCubit(taskInteractor: _taskInteractor, currentBranchID: _branchID);
+          return TaskCubit(_taskInteractor, _branchID);
         },
         act: (TaskCubit cubit) => cubit.updateTaskList(),
         expect: [

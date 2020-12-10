@@ -9,9 +9,9 @@ part 'flickr_state.dart';
 
 class FlickrCubit extends Cubit<FlickrState>{
 
-  final FlickrInteractor flickInt;
+  final FlickrInteractor _flickerInteractor;
 
-  FlickrCubit({this.flickInt}) : super(FlickrInitialState());
+  FlickrCubit(this._flickerInteractor) : super(FlickrInitialState());
 
   //Поле тэга поиска. По умолчанию waterfall
   String tag = "waterfall";
@@ -28,11 +28,11 @@ class FlickrCubit extends Cubit<FlickrState>{
   //Либо смена тэга, либо первый запуск.
   Future<void> initiate() async {
     emit(FlickrLoadingState());
-    await flickInt.fetchPhotos(NetParameters(
+    await _flickerInteractor.fetchPhotos(NetParameters(
       this.pageNumber,
       this.tag,
     ));
-    final netData = flickInt.getAllInfo();
+    final netData = _flickerInteractor.getAllInfo();
     netData.currentPage = pageNumber;
     if (netData.errorMessage != null || netData.statusNotOkMessage != null)
     emit(FlickrErrorState(netDataToDisplay: netData));
@@ -42,11 +42,11 @@ class FlickrCubit extends Cubit<FlickrState>{
 
   //Подкачка дополнительных картинок
   Future<void> fetchMorePhotos() async {
-    await flickInt.fetchPhotos(NetParameters(
+    await _flickerInteractor.fetchPhotos(NetParameters(
       ++this.pageNumber,
       this.tag,
     ));
-    final netData = flickInt.getAllInfo();
+    final netData = _flickerInteractor.getAllInfo();
     netData.currentPage = pageNumber;
     if (netData.errorMessage != null || netData.statusNotOkMessage != null)
       emit(FlickrErrorState(netDataToDisplay: netData));

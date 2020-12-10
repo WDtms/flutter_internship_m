@@ -27,9 +27,9 @@ void main(){
       _innerTaskDBStorage = InnerTaskDBMock();
       _innerTaskWrapper = LocalStorageInnerTaskMock();
       _innerTaskRepository = InnerTaskRepository(
-          taskDBStorage: _taskDBStorage,
-          innerTaskWrapper: _innerTaskWrapper,
-          innerTaskDBStorage: _innerTaskDBStorage
+        _innerTaskDBStorage,
+        _taskDBStorage,
+        _innerTaskWrapper,
       );
     });
 

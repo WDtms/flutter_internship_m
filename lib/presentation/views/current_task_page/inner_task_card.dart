@@ -1,19 +1,17 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
+import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/inner_task_title.dart';
 
 class InnerTaskCard extends StatelessWidget {
 
-  final Task task;
-  final String innerTaskID;
+  final InnerTask innerTask;
   final Color activeColor;
   final Function() updateTaskList;
 
-
-  InnerTaskCard({this.task, this.activeColor, this.innerTaskID, this.updateTaskList});
+  InnerTaskCard({this.innerTask, this.activeColor, this.updateTaskList});
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +21,18 @@ class InnerTaskCard extends StatelessWidget {
         child: Row(
           children: [
             CircularCheckBox(
-              value: task.innerTasks[innerTaskID].isDone,
+              value: innerTask.isDone,
               activeColor: activeColor,
               onChanged: (bool value) async {
-                bool isCompleted = task.innerTasks[innerTaskID].isDone;
-                await context.bloc<CurrentTaskCubit>().editInnerTask(
-                    innerTaskID,
-                    task.innerTasks[innerTaskID].copyWith(isDone: !isCompleted)
-                );
+                await context.bloc<CurrentTaskCubit>().toggleInnerTask(innerTask.id);
                 updateTaskList();
               },
             ),
             Expanded(
               child: InnerTaskTitle(
-                title: task.innerTasks[innerTaskID].title,
-                onInnerTaskEdit: (String newValue) {
-                  context.bloc<CurrentTaskCubit>().editInnerTask(
-                    innerTaskID, task.innerTasks[innerTaskID].copyWith(title: newValue));
+                title: innerTask.title,
+                onInnerTaskEdit: (String newName) {
+                  context.bloc<CurrentTaskCubit>().editInnerTaskName(innerTask.id, newName);
                 },
               ),
             ),
@@ -49,7 +42,7 @@ class InnerTaskCard extends StatelessWidget {
                 color: Color(0xff616161),
               ),
               onPressed: () async {
-                await context.bloc<CurrentTaskCubit>().deleteInnerTask(innerTaskID);
+                await context.bloc<CurrentTaskCubit>().deleteInnerTask(innerTask.id);
                 updateTaskList();
               },
             )

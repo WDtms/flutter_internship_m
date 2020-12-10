@@ -14,6 +14,21 @@ class InnerTaskTitle extends StatefulWidget {
 class _InnerTaskTitleState extends State<InnerTaskTitle> {
 
   final _key = GlobalKey<FormState>();
+  final controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller.text = widget.title;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant InnerTaskTitle oldWidget) {
+    if (oldWidget.title != widget.title){
+      controller.text = widget.title;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +37,11 @@ class _InnerTaskTitleState extends State<InnerTaskTitle> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: TextFormField(
+          controller: controller,
           style: TextStyle(
             color: Color(0xff424242),
           ),
           textInputAction: TextInputAction.done,
-          initialValue: widget.title,
           maxLines: null,
           decoration: InputDecoration(
             border: InputBorder.none,

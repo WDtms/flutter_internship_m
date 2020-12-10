@@ -1,7 +1,6 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/data/models/inner_task.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
+import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
 import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/task_list.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,20 +13,11 @@ void main() {
     final taskID2 = 'id2';
     final branchID = 'brId1';
 
-    final innerTaskList1 = {
-      'innerId1' : InnerTask('innerId1', 'title1'),
-      'innerId2' : InnerTask('innerId2', 'title2'),
-    };
     final stepTextTask1 = '0 из 2';
-
-    final innerTaskList2 = {
-      'innerId3' : InnerTask('innerId3', 'title3', isDone: false),
-      'innerId4': InnerTask('innerId4', 'title4', isDone: true),
-    };
     final stepTextTask2 = '1 из 2';
 
-    final task1 = Task(taskID1, 'title1', innerTaskList1, [], 1);
-    final task2 = Task(taskID2, 'title2', innerTaskList2, [], 1, isDone: true);
+    final task1 = TaskCardInfo(taskID1, 'title1', 0, 2, false);
+    final task2 = TaskCardInfo(taskID2, 'title2', 1, 2, true);
 
 
     final taskList = {

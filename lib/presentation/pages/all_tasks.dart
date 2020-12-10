@@ -31,8 +31,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
   
   @override
   void initState() {
-    themeCubit = ThemeCubit(ThemeRepository(branchDBStorage: BranchDBStorage(), themeWrapper: ThemeWrapper()), currentBranchID: widget.branchID);
-    taskCubit = TaskCubit(taskInteractor: TaskInteractor(), currentBranchID: widget.branchID);
+    themeCubit = ThemeCubit(ThemeRepository(BranchDBStorage(), ThemeWrapper()), widget.branchID);
+    taskCubit = TaskCubit(TaskInteractor(), widget.branchID);
     super.initState();
   }
   

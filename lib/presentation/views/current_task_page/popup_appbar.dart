@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'form_dialog.dart';
 
@@ -11,10 +10,10 @@ class PopupMenuCurrentTask extends StatelessWidget {
 
   final Function() updateBranchesInfo;
   final Function() updateTaskList;
-  final Task task;
+  final String taskName;
   final double opacity;
 
-  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.task, this.opacity});
+  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.taskName, this.opacity});
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +37,9 @@ class PopupMenuCurrentTask extends StatelessWidget {
             context: context,
             builder: (context1) {
               return FormDialogCurrentTask(
-                taskName: task.title,
+                taskName: taskName,
                 editTaskName: (String newTitle) async {
-                  await context.bloc<CurrentTaskCubit>().editTask(task.copyWith(title: newTitle));
+                  await context.bloc<CurrentTaskCubit>().editTaskName(newTitle);
                   updateTaskList();
                 },
               );

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 
 class NotificationDisplay extends StatelessWidget {
 
-  final Task task;
+  final int notificationTime;
 
-  NotificationDisplay({this.task});
+  NotificationDisplay({this.notificationTime});
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +16,32 @@ class NotificationDisplay extends StatelessWidget {
         onTap: () async {
           final DateTime date = await showDatePicker(
             context: context,
-            initialDate: task.notificationTime == 0 ? DateTime.now()
-                : DateTime.fromMillisecondsSinceEpoch(task.notificationTime),
+            initialDate: notificationTime == 0 ? DateTime.now()
+                : DateTime.fromMillisecondsSinceEpoch(notificationTime),
             firstDate: DateTime.now(),
             lastDate: DateTime(2100),
           );
           final TimeOfDay time = await showTimePicker(
             context: context,
-            initialTime: task.notificationTime == 0? TimeOfDay.now()
-                : TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(task.notificationTime)),
+            initialTime: notificationTime == 0? TimeOfDay.now()
+                : TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(notificationTime)),
           );
           if (date != null && time != null) {
-            context.bloc<CurrentTaskCubit>().editTask(
-                task.copyWith(
-                    notificationTime: DateTime(
-                        date.year, date.month, date.day, time.hour, time.minute)
-                        .millisecondsSinceEpoch
-                ));
+            context.bloc<CurrentTaskCubit>().editNotificationTime(
+                DateTime(
+                    date.year, date.month, date.day, time.hour, time.minute)
+                    .millisecondsSinceEpoch
+            );
           }
         },
         child: Row(
           children: <Widget>[
             Builder(
               builder: (context) {
-                if (task.notificationTime != 0)
+                if (notificationTime != 0)
                   return Icon(
                     Icons.notifications_active_outlined,
-                    color: _isExpired(task.notificationTime),
+                    color: _isExpired(notificationTime),
                   );
                 return Icon(
                   Icons.notifications_active_outlined,
@@ -56,7 +54,7 @@ class NotificationDisplay extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Builder(
                   builder: (context) {
-                    if (task.notificationTime == 0)
+                    if (notificationTime == 0)
                       return Text(
                         'Напомнить',
                         style: TextStyle(
@@ -65,13 +63,13 @@ class NotificationDisplay extends StatelessWidget {
                         ),
                       );
                     return Text(
-                      '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).day)}.'
-                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).month)}.'
-                          '${DateTime.fromMillisecondsSinceEpoch(task.notificationTime).year} в '
-                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).hour)}:'
-                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(task.notificationTime).minute)}',
+                      '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(notificationTime).day)}.'
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(notificationTime).month)}.'
+                          '${DateTime.fromMillisecondsSinceEpoch(notificationTime).year} в '
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(notificationTime).hour)}:'
+                          '${_decideHowToDisplay(DateTime.fromMillisecondsSinceEpoch(notificationTime).minute)}',
                       style: TextStyle(
-                        color: _isExpired(task.notificationTime),
+                        color: _isExpired(notificationTime),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -89,7 +87,7 @@ class NotificationDisplay extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                context.bloc<CurrentTaskCubit>().editTask(task.copyWith(notificationTime: 0));
+                context.bloc<CurrentTaskCubit>().editNotificationTime(0);
               },
             ),
           ],

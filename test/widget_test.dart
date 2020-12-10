@@ -5,18 +5,6 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter_internship_v2/data/models/branch.dart';
-import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-
 void main() {
-  group('branchRep', () {
 
-    test('Должен возвращать Map<String, Branch>', () {
-      expect(BranchRepository().getAllBranches(), isA<Map<String, Branch>>());
-    });
-
-
-  });
 }

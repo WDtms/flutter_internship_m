@@ -11,9 +11,8 @@ class MyFlickrCard extends StatelessWidget {
   final String branchID;
   final String taskID;
   final Task task;
-  final Function(String path) addImage;
 
-  MyFlickrCard({this.theme, this.branchID, this.taskID, this.task, this.addImage});
+  MyFlickrCard({this.theme, this.branchID, this.taskID, this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +74,7 @@ class MyFlickrCard extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          context.bloc<CurrentTaskCubit>().editTask(task.copyWith(selectedImage: filePath));
+                          context.bloc<CurrentTaskCubit>().selectImage(filePath);
                           Navigator.of(context).pop();
                         },
                       ),
@@ -144,19 +143,9 @@ class MyFlickrCard extends StatelessWidget {
                                         color: Color(0xff424242),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      List<String> allImages = task.imagesPath;
-                                      allImages.remove(filePath);
-                                      File(filePath).delete();
-                                      if (task.selectedImage == filePath)
-                                        context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
-                                          imagesPath: allImages,
-                                          selectedImage: "",
-                                        ));
-                                      else
-                                        context.bloc<CurrentTaskCubit>().editTask(task.copyWith(
-                                          imagesPath: allImages,
-                                        ));
+                                    onPressed: () async {
+                                      await context.bloc<CurrentTaskCubit>()
+                                          .deleteImage(filePath);
                                       Navigator.of(context).pop();
                                     },
                                   ),
@@ -203,7 +192,9 @@ class MyFlickrCard extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context1) => FlickrPage(
           theme: theme,
-          addImage: addImage,
+          addImage: (String value) {
+            context.bloc<CurrentTaskCubit>().addImage(value);
+          },
         )));
       },
       child: Container(

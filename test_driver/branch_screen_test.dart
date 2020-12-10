@@ -34,7 +34,7 @@ void main() {
 
     test('Создание и настройка ветки', () async {
       await driver.scrollUntilVisible(
-        find.byValueKey('Список веток'),
+        find.byValueKey('Branch list'),
         createBranchButton,
         dyScroll: -300.0,
       );

@@ -62,18 +62,10 @@ class _CurrentTaskState extends State<CurrentTask> {
                           MyCard(
                             theme: widget.theme,
                             updateTaskList: widget.updateTaskList,
-                            description: state.task.description,
-                            onSubmitDescription: (String value) async {
-                              await context.bloc<CurrentTaskCubit>().editTask(state.task.copyWith(description: value));
-                              widget.updateTaskList();
-                            },
+                            task: state.task,
                           ),
                           MyDateCard(task: state.task),
-                          MyFlickrCard(theme: widget.theme, task: state.task, taskID: widget.taskID, branchID: widget.branchID, addImage: (String v) async {
-                            List<String> imagesList = state.task.imagesPath;
-                            imagesList.add(v);
-                            context.bloc<CurrentTaskCubit>().editTask(state.task.copyWith(imagesPath: imagesList));
-                          },),
+                          MyFlickrCard(theme: widget.theme, task: state.task, taskID: widget.taskID, branchID: widget.branchID),
                         ]
                     ),
                   )
