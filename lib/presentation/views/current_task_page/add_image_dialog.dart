@@ -12,7 +12,7 @@ class AddImageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Добавить картинку'),
+      title: Center(child: Text('Добавить картинку')),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
@@ -21,8 +21,7 @@ class AddImageDialog extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context1) => FlickrPage(
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context1) => FlickrPage(
                     theme: theme,
                     addImage: addImage,
                   )));
@@ -108,7 +107,7 @@ class AddImageDialog extends StatelessWidget {
     );
   }
 
-  _openGallery(BuildContext context) async {
+  void _openGallery(BuildContext context) async {
     Navigator.pop(context);
     PickedFile picture = await ImagePicker().getImage(source: ImageSource.gallery);
     if (picture != null) {
@@ -116,7 +115,7 @@ class AddImageDialog extends StatelessWidget {
     }
   }
 
-  _openCamera(BuildContext context) async {
+  void _openCamera(BuildContext context) async {
     Navigator.pop(context);
     PickedFile picture = await ImagePicker().getImage(source: ImageSource.camera);
     if (picture != null) {

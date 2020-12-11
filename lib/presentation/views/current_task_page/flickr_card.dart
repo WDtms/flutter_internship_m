@@ -210,8 +210,8 @@ class MyFlickrCard extends StatelessWidget {
     );
   }
 
-  Future<void> _showImagePickerDialog(BuildContext context) {
-    return showDialog(
+  void _showImagePickerDialog(BuildContext context) {
+    showDialog(
       context: context,
       builder: (BuildContext zeroContext){
         return AddImageDialog(

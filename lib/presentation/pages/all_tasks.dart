@@ -63,7 +63,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                               theme: theme,
                               isHidden: state.isHidden,
                               isNewest: state.isNewest,
-                              isImportance: state.isImportance,
+                              isImportance: state.isImportant,
                               updateBranchesInfo: widget.updateBranchesInfo,
                             );
                           }
@@ -103,7 +103,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                           updateBranchesInfo: widget.updateBranchesInfo,
                           branchID: widget.branchID,
                           taskList: state.taskList,
-                          isImportance: state.isImportance,
+                          isImportance: state.isImportant,
                         );
                       }
                       taskCubit.getTasks();

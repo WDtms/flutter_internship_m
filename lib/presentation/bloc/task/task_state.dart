@@ -18,7 +18,7 @@ class TaskInUsageState extends TaskState{
   final List<TaskCardInfo> taskList;
   final bool isHidden;
   final bool isNewest;
-  final bool isImportance;
+  final bool isImportant;
 
-  TaskInUsageState({this.taskList, this.isHidden, this.isNewest, this.isImportance});
+  TaskInUsageState({this.taskList, this.isHidden, this.isNewest, this.isImportant});
 }

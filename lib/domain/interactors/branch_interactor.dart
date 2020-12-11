@@ -33,7 +33,8 @@ class BranchInteractor {
 
   //Удаление ветки
   Future<void> removeBranch(String branchID) async {
-    final branch = (await branchRepository.getAllBranches())[branchID];
+    final branches = await branchRepository.getAllBranches();
+    final branch = branches[branchID];
     for (int i = 0; i<branch.taskList.length; i++){
       if (branch.taskList.values.elementAt(i).notificationTime != null)
         NotificationHelper.cancelNotification(branch.taskList.values.elementAt(i));
