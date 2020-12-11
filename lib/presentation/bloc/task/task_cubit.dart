@@ -13,17 +13,29 @@ class TaskCubit extends Cubit<TaskState>{
   //Флаг, сигнализирующий о том, запущена ли фильтрация завершенных задач
   bool _isHidden = false;
 
+  //Флаг, сигнализирующий о том, запущена ли фильтрация "сначала новые"
+  bool _isNewest = false;
+
+  //Смена флага на обратное ему значение
+  void toggleIsNewest() async {
+    _isNewest = !_isNewest;
+    await updateTaskList();
+  }
+
   //Смена флага на обратное ему значению
   void toggleIsHidden() async {
     _isHidden = !_isHidden;
     await updateTaskList();
   }
 
-  //Метод для проверки, включен ли фильтр
-  Map<String, TaskCardInfo> _checkIfIsHidden(Map<String, TaskCardInfo> taskList){
+  //Метод для проверки, включен ли какой-либо фильтр
+  List <TaskCardInfo> _checkIfIsHidden(List<TaskCardInfo> taskList){
     if (_isHidden){
-      taskList.removeWhere((id, taskCard) => taskCard.isDone);
-      return taskList;
+      taskList.removeWhere((taskCard) => taskCard.isDone);
+    }
+    if (_isNewest){
+      taskList.sort((TaskCardInfo a, TaskCardInfo b) => a.dateOfCreation.compareTo(b.dateOfCreation));
+      taskList = List.from(taskList.reversed);
     }
     return taskList;
   }
@@ -35,6 +47,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 
@@ -45,6 +58,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 
@@ -55,6 +69,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 
@@ -65,6 +80,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 
@@ -74,6 +90,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 
@@ -84,6 +101,7 @@ class TaskCubit extends Cubit<TaskState>{
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
       isHidden: _isHidden,
+      isNewest: _isNewest,
     ));
   }
 }

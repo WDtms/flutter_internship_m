@@ -16,14 +16,14 @@ void main() {
     final stepTextTask1 = '0 из 2';
     final stepTextTask2 = '1 из 2';
 
-    final task1 = TaskCardInfo(taskID1, 'title1', 0, 2, false);
-    final task2 = TaskCardInfo(taskID2, 'title2', 1, 2, true);
+    final task1 = TaskCardInfo(taskID1, 'title1', 0, 2, false, 1);
+    final task2 = TaskCardInfo(taskID2, 'title2', 1, 2, true, 1);
 
 
-    final taskList = {
-      taskID1 : task1,
-      taskID2 : task2,
-    };
+    final taskList = [
+      task1,
+      task2,
+    ];
 
     testWidgets('Разные состояния чекбокса при разных входных данных', (WidgetTester tester) async {
       await tester.pumpWidget(

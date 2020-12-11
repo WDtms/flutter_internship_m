@@ -12,8 +12,9 @@ class PopupMenu extends StatelessWidget {
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
   final bool isHidden;
+  final bool isNewest;
 
-  PopupMenu({this.updateBranchesInfo, this.isHidden, this.theme});
+  PopupMenu({this.updateBranchesInfo, this.isHidden, this.theme, this.isNewest});
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +41,16 @@ class PopupMenu extends StatelessWidget {
             }
           );
         }
+        if (value == 4){
+          context.bloc<TaskCubit>().toggleIsNewest();
+        }
       },
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
           value: 1,
           child: PopupItem(
             icon: Icons.check_circle,
-            logic: isHidden,
+            hiddenLogic: isHidden,
             title: 'Скрыть завершенные',
           ),
         ),
@@ -63,6 +67,14 @@ class PopupMenu extends StatelessWidget {
             icon: Icons.auto_fix_high,
             title: 'Изменить тему',
           )
+        ),
+        PopupMenuItem(
+          value: 4,
+          child: PopupItem(
+            icon: Icons.sort,
+            title: 'Сначала новые',
+            newestLogic: isNewest,
+          ),
         ),
       ],
     );

@@ -4,15 +4,16 @@ class PopupItem extends StatelessWidget {
 
   final String title;
   final IconData icon;
-  final bool logic;
+  final bool hiddenLogic;
+  final bool newestLogic;
 
-  PopupItem({this.icon, this.logic, this.title});
+  PopupItem({this.icon, this.title, this.hiddenLogic, this.newestLogic});
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context1) {
-        if (logic != null && logic){
+        if (hiddenLogic != null && hiddenLogic){
           return Row(
             children: <Widget>[
               Padding(
@@ -25,6 +26,26 @@ class PopupItem extends StatelessWidget {
               ),
               Text(
                 'Показать завершенные',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          );
+        } else if (newestLogic != null && newestLogic){
+          return Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  icon,
+                  size: 28,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Сначала старые',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black54,

@@ -40,13 +40,43 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                 width: 200*_animation.value,
               )
             ),
-            Align(
-              alignment: Alignment(0, -0.2),
-              child: SvgPicture.asset(
-                task_small_circle,
-                height: 180*_animation.value,
-                width: 180*_animation.value,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment(0, -0.2),
+                  child: SvgPicture.asset(
+                    task_small_circle,
+                    height: 180*_animation.value,
+                    width: 180*_animation.value,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(60, 40, 60, 0),
+                  child: Builder(
+                    builder: (context) {
+                      if (widget.isFiltred == true){
+                        return Text(
+                            'На данный момент в этой ветке нет невыполненных задач',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xff545454).withOpacity(_animation.value),
+                            )
+                        );
+                      }
+                      return Text(
+                        'На данный момент в этой ветке нет задач',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color(0xff545454).withOpacity(_animation.value)
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
             ),
             Align(
               alignment: Alignment(0, (-0.7 + 0.5*_animation.value)),
@@ -56,34 +86,6 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
                 width: 200,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(90, MediaQuery.of(context).size.height/6, 90, 0),
-              child: Align(
-                alignment: Alignment(0, 0.3),
-                child: Builder(
-                  builder: (context) {
-                    if (widget.isFiltred == true){
-                      return Text(
-                          'На данный момент в этой ветке нет невыполненных задач',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Color(0xff545454).withOpacity(_animation.value),
-                          )
-                      );
-                    }
-                    return Text(
-                      'На данный момент в этой ветке нет задач',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Color(0xff545454).withOpacity(_animation.value)
-                      ),
-                    );
-                  },
-                )
-              ),
-            )
           ],
         );
       },

@@ -15,10 +15,10 @@ void main() {
 
     final _branchID = 'branchID';
     final _taskID = 'id1';
-    final _task = TaskCardInfo(_taskID, 'title', 1, 2, false);
-    final _taskList = {
-      _taskID : _task
-    };
+    final _task = TaskCardInfo(_taskID, 'title', 1, 2, false, 1);
+    final _taskList = [
+      _task
+    ];
 
     setUpAll(() {
       _taskInteractor = MockTaskInteractor();

@@ -62,6 +62,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                             return PopupMenu(
                               theme: theme,
                               isHidden: state.isHidden,
+                              isNewest: state.isNewest,
                               updateBranchesInfo: widget.updateBranchesInfo,
                             );
                           }
