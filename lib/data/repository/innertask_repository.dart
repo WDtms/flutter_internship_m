@@ -37,7 +37,7 @@ class InnerTaskRepository{
 
   //Удаление внутренней задачи
   Future<void> deleteInnerTask(String branchID, String taskID, String innerTaskID) async {
-    await _innerTaskDBStorage.deleteObject(_innerTaskWrapper.getTask(branchID, taskID).innerTasks[innerTaskID].id);
+    await _innerTaskDBStorage.deleteObject(_innerTaskWrapper.getInnerTask(branchID, taskID, innerTaskID).id);
     _innerTaskWrapper.deleteInnerTask(branchID, taskID, innerTaskID);
   }
 

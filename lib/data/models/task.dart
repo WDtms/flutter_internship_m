@@ -17,6 +17,9 @@ class Task{
   //Список путей к картинкам
   final List<String> imagesPath;
   //
+  //Важность задачи
+  final int importance;
+  //
   //Текст задачи
   String title;
 
@@ -40,7 +43,7 @@ class Task{
 
 
   //Конструктор
-  Task(this.id, this.title, this.innerTasks, this.imagesPath, this.dateOfCreation,
+  Task(this.id, this.title, this.innerTasks, this.imagesPath, this.dateOfCreation, this.importance,
       {this.isDone = false, this.dateToComplete, this.notificationTime, this.description = "", this.selectedImage = ""});
 
 
@@ -55,6 +58,7 @@ class Task{
       DBConstants.taskIsDone: isDone ? 1 : 0,
       DBConstants.taskDescription: description,
       DBConstants.branchId: branchID,
+      DBConstants.taskImportance: importance,
       DBConstants.taskDateOfCreation: dateOfCreation,
       DBConstants.taskDateToComplete: dateToComplete,
       DBConstants.taskNotificationTime: notificationTime,
@@ -91,6 +95,7 @@ class Task{
       {},
       _decodeImagesFromDB(row[DBConstants.taskImages]),
       row[DBConstants.taskDateOfCreation],
+      row[DBConstants.taskImportance],
       isDone: row[DBConstants.taskIsDone] == 1 ? true : false,
       dateToComplete: row[DBConstants.taskDateToComplete],
       notificationTime: row[DBConstants.taskNotificationTime],
@@ -121,6 +126,7 @@ class Task{
     int dateOfCreation,
     int dateToComplete,
     int notificationTime,
+    int importance,
     Map<String, InnerTask> innerTasks,
     String description,
     List<String> imagesPath,
@@ -132,6 +138,7 @@ class Task{
       innerTasks ?? this.innerTasks,
       imagesPath ?? this.imagesPath,
       dateOfCreation ?? this.dateOfCreation,
+      importance ?? this.importance,
       isDone: isDone ?? this.isDone,
       dateToComplete: dateToComplete ?? this.dateToComplete,
       notificationTime: notificationTime ?? this.notificationTime,

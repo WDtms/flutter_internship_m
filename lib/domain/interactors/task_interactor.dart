@@ -12,18 +12,19 @@ class TaskInteractor {
   final TaskRepository _taskRepository = TaskRepository(TaskDBStorage(), LocalStorageTaskWrapper());
 
   //Получение списка задач из кэша
-  Map<String, TaskCardInfo> getTaskList(String branchID) {
+  List<TaskCardInfo> getTaskList(String branchID) {
     return _getAllTasksInfo(branchID);
   }
 
   //Создание новой задачи и, при необходимости, создание уведомления
-  Future<void> createNewTask(String branchID, String taskName, DateTime dateToComplete, DateTime notificationTime) async {
+  Future<void> createNewTask(String branchID, String taskName, DateTime dateToComplete, DateTime notificationTime, int importance) async {
     Task task = Task(
       Uuid().v4(),
       taskName,
       {},
       [],
       DateTime.now().millisecondsSinceEpoch,
+      importance,
       dateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
       notificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
     );
@@ -62,22 +63,26 @@ class TaskInteractor {
     await _taskRepository.editTask(branchID, task.copyWith(isDone: !task.isDone));
   }
 
-  Map<String, TaskCardInfo> _getAllTasksInfo(String branchID) {
-    Map<String, TaskCardInfo> allInfo = Map<String, TaskCardInfo>();
+  //Сбор всей необходимой для отображения информации на странице списка задач
+  List<TaskCardInfo> _getAllTasksInfo(String branchID) {
+    List<TaskCardInfo> allInfo = List<TaskCardInfo>();
     final taskList = _taskRepository.getTaskList(branchID);
     for (int i = 0; i<taskList.length; i++){
       final oneTaskInfo = _countCompletedInnerTasks(taskList.values.elementAt(i));
-      allInfo[taskList.keys.elementAt(i)] = TaskCardInfo(
+      allInfo.add(TaskCardInfo(
         taskList.values.elementAt(i).id,
         taskList.values.elementAt(i).title,
         oneTaskInfo.keys.first,
         oneTaskInfo.values.first,
         taskList.values.elementAt(i).isDone,
-      );
+        taskList.values.elementAt(i).dateOfCreation,
+        taskList.values.elementAt(i).importance,
+      ));
     }
     return allInfo;
   }
 
+  //Высчитывание количества завершенных внутренних задач
   Map<int, int> _countCompletedInnerTasks(Task task) {
     int countCompleted = 0;
     int countAll = 0;

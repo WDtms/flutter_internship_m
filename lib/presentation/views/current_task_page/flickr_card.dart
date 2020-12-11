@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
-import 'package:flutter_internship_v2/presentation/pages/flickr_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/presentation/views/current_task_page/add_image_dialog.dart';
 
 class MyFlickrCard extends StatelessWidget {
 
@@ -190,12 +190,7 @@ class MyFlickrCard extends StatelessWidget {
     return InkWell(
       key: ValueKey('Добавить картинку'),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context1) => FlickrPage(
-          theme: theme,
-          addImage: (String value) {
-            context.bloc<CurrentTaskCubit>().addImage(value);
-          },
-        )));
+        _showImagePickerDialog(context);
       },
       child: Container(
         width: 80,
@@ -212,6 +207,20 @@ class MyFlickrCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showImagePickerDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext zeroContext){
+        return AddImageDialog(
+          addImage: (String value) {
+            context.bloc<CurrentTaskCubit>().addImage(value);
+          },
+          theme: theme,
+        );
+      }
     );
   }
 }

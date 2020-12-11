@@ -62,6 +62,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
                             return PopupMenu(
                               theme: theme,
                               isHidden: state.isHidden,
+                              isNewest: state.isNewest,
+                              isImportance: state.isImportant,
                               updateBranchesInfo: widget.updateBranchesInfo,
                             );
                           }
@@ -77,8 +79,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
                           context: context,
                           builder: (BuildContext context0) {
                             return FormDialog(
-                              createTask: (String taskName, DateTime dateToComplete, DateTime notificationTime) async {
-                                await taskCubit.createNewTask(dateToComplete, notificationTime, taskName);
+                              createTask: (String taskName, DateTime dateToComplete, DateTime notificationTime, int importance) async {
+                                await taskCubit.createNewTask(dateToComplete, notificationTime, taskName, importance);
                                 widget.updateBranchesInfo();
                               },
                             );
@@ -101,6 +103,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                           updateBranchesInfo: widget.updateBranchesInfo,
                           branchID: widget.branchID,
                           taskList: state.taskList,
+                          isImportance: state.isImportant,
                         );
                       }
                       taskCubit.getTasks();

@@ -14,10 +14,11 @@ class TaskList extends StatelessWidget {
   final bool isFiltred;
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
-  final Map<String, TaskCardInfo> taskList;
+  final List<TaskCardInfo> taskList;
   final String branchID;
+  final bool isImportance;
 
-  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred});
+  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred, this.isImportance});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class TaskList extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
         itemCount: taskList.length,
         itemBuilder: (context, index) {
-          return _displayTask(context, taskList.keys.elementAt(index));
+          return _displayTask(context, index);
         },
       )
     ],
@@ -57,12 +58,12 @@ class TaskList extends StatelessWidget {
     );
   }
 
-  Widget _displayTask(BuildContext context, String taskID) {
+  Widget _displayTask(BuildContext context, int index) {
     return Dismissible(
-      key: ValueKey('$taskID'),
+      key: ValueKey('${taskList[index].taskID}'),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) async {
-        await context.bloc<TaskCubit>().deleteTask(taskID);
+        await context.bloc<TaskCubit>().deleteTask(taskList[index].taskID);
         updateBranchesInfo();
       },
       background: Container(
@@ -90,10 +91,10 @@ class TaskList extends StatelessWidget {
             child: Row(
               children: [
                 CircularCheckBox(
-                  value: taskList[taskID].isDone,
+                  value: taskList[index].isDone,
                   activeColor: theme.keys.toList().first,
                   onChanged: (bool value) async {
-                    await context.bloc<TaskCubit>().toggleTaskComplete(taskID);
+                    await context.bloc<TaskCubit>().toggleTaskComplete(taskList[index].taskID);
                     updateBranchesInfo();
                   }
                 ),
@@ -107,18 +108,18 @@ class TaskList extends StatelessWidget {
                           context.bloc<TaskCubit>().updateTaskList();
                         },
                         branchID: branchID,
-                        taskID: taskID,
+                        taskID: taskList[index].taskID,
                       )));
                     },
                     child: Builder(
                       builder: (BuildContext context) {
-                        if (taskList[taskID].countAll == 0) {
+                        if (taskList[index].countAll == 0) {
                           return Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Container(
                               margin: EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                taskList[taskID].title,
+                                taskList[index].title,
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Color(0xff424242),
@@ -138,14 +139,14 @@ class TaskList extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 4),
                                     child: Text(
-                                      taskList[taskID].title,
+                                      taskList[index].title,
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),
                                     ),
                                   ),
                                   Text(
-                                    '${taskList[taskID].countCompleted} из ${taskList[taskID].countAll}',
+                                    '${taskList[index].countCompleted} из ${taskList[index].countAll}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black54,
@@ -160,11 +161,36 @@ class TaskList extends StatelessWidget {
                     ),
                   ),
                 ),
+                Builder(
+                  builder: (_){
+                    if (isImportance)
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Container(
+                          height: 16,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _importanceColor(taskList[index].importance),
+                          ),
+                        ),
+                      );
+                    return SizedBox.shrink();
+                  }
+                )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Color _importanceColor(int importance) {
+    if(importance == 0)
+      return Colors.green;
+    if(importance == 1)
+      return Colors.orange;
+    return Colors.red;
   }
 }

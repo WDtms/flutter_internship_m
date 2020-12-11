@@ -7,6 +7,7 @@ import 'package:flutter_internship_v2/data/repository/branch_repository.dart';
 import 'package:flutter_internship_v2/data/storage/branch_wrapper.dart';
 import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
 import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
+import 'package:flutter_internship_v2/domain/notification/notification_helper.dart';
 import 'package:uuid/uuid.dart';
 
 class BranchInteractor {
@@ -32,6 +33,12 @@ class BranchInteractor {
 
   //Удаление ветки
   Future<void> removeBranch(String branchID) async {
+    final branches = await branchRepository.getAllBranches();
+    final branch = branches[branchID];
+    for (int i = 0; i<branch.taskList.length; i++){
+      if (branch.taskList.values.elementAt(i).notificationTime != null)
+        NotificationHelper.cancelNotification(branch.taskList.values.elementAt(i));
+    }
     await branchRepository.deleteBranch(branchID);
   }
 

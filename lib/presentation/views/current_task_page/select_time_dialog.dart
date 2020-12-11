@@ -48,6 +48,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             },
           ),
         ),
+        Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: InkWell(
@@ -68,6 +69,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             },
           ),
         ),
+        Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: InkWell(
@@ -88,6 +90,7 @@ class _SelectTimeDialogState extends State<SelectTimeDialog> {
             },
           ),
         ),
+        Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: InkWell(
