@@ -38,7 +38,7 @@ void main(){
     final _innerTaskID = 'innerTaskID';
 
     final _innerTask = InnerTask('innerTaskID', 'title1', isDone: true);
-    final _task = Task('taskID', 'title1', {_innerTaskID : _innerTask}, [], DateTime.now().millisecondsSinceEpoch);
+    final _task = Task('taskID', 'title1', {_innerTaskID : _innerTask}, [], DateTime.now().millisecondsSinceEpoch, 1, false);
 
     test('Получение задачи', () {
       _innerTaskRepository.getTask(_branchID, _taskID);

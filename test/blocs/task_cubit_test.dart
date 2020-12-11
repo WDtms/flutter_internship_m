@@ -15,7 +15,7 @@ void main() {
 
     final _branchID = 'branchID';
     final _taskID = 'id1';
-    final _task = TaskCardInfo(_taskID, 'title', 1, 2, false, 1);
+    final _task = TaskCardInfo(_taskID, 'title', 1, 2, false, 1, 1, false);
     final _taskList = [
       _task
     ];
@@ -41,17 +41,17 @@ void main() {
     blocTest<TaskCubit, TaskState>(
       'Создание новой задачи',
       build: () {
-        when(_taskInteractor.createNewTask(any, any, any, any)).thenReturn(null);
+        when(_taskInteractor.createNewTask(any, any, any, any, any, any)).thenReturn(null);
         when(_taskInteractor.getTaskList(any)).thenReturn(_taskList);
         return TaskCubit(_taskInteractor, _branchID);
       },
-      act: (TaskCubit cubit) => cubit.createNewTask(DateTime.now(), DateTime.now(), 'taskName'),
+      act: (TaskCubit cubit) => cubit.createNewTask(DateTime.now(), DateTime.now(), 'taskName', 1, false),
       expect: [
         isA<TaskInUsageState>(),
       ],
       verify: (_) {
         verify(_taskInteractor.getTaskList(any));
-        verify(_taskInteractor.createNewTask(any, any, any, any));
+        verify(_taskInteractor.createNewTask(any, any, any, any, any, any));
       },
     );
 

@@ -15,7 +15,7 @@ void main() {
 
     final _currentBranchID = 'currentBranchID';
     final _currentTaskID = 'currentTaskID';
-    final _task = Task('id1', 'title1', {}, [], 1);
+    final _task = Task('id1', 'title1', {}, [], 1, 1, false);
 
     setUpAll(() {
       _innerTaskInteractor = MockInnerTaskInteractor();

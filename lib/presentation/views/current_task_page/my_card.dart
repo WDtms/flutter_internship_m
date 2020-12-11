@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'package:flutter_internship_v2/presentation/views/current_task_page/description.dart';
+import 'package:flutter_internship_v2/presentation/views/current_task_page/favor_button.dart';
 
 import 'create_inner_task.dart';
 import 'inner_task_card.dart';
@@ -43,7 +44,7 @@ class _MyCardState extends State<MyCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _displayDateOfCreation(widget.task.dateOfCreation),
+              _displayDateOfCreation(context, widget.task.dateOfCreation),
               for (int i = 0; i <widget.task.innerTasks.length; i++)
                 InnerTaskCard(
                   activeColor: widget.theme.keys.toList().first,
@@ -68,22 +69,33 @@ class _MyCardState extends State<MyCard> {
     );
   }
 
-  Widget _displayDateOfCreation(int dateOfCreation){
+  Widget _displayDateOfCreation(BuildContext context, int dateOfCreation){
     DateTime date = DateTime.fromMillisecondsSinceEpoch(dateOfCreation);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-            padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
             child: Text(
               "Создано: ${_decideHowToDisplay(date.day)}.${_decideHowToDisplay(date.month)}.${date.year.toString()}",
               style: TextStyle(
                   fontSize: 12
-                ),
-            )
+              ),
+            ),
           ),
-        ],
-      );
+          FavorButton(
+            isFavor: widget.task.favor,
+            toggleFavor: () async {
+              await context.bloc<CurrentTaskCubit>().toggleTaskFavor();
+              widget.updateTaskList();
+            },
+          ),
+          ],
+        ),
+    );
   }
 
   String _decideHowToDisplay(int val) {

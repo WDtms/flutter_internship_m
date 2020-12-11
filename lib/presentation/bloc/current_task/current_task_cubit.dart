@@ -121,4 +121,11 @@ class CurrentTaskCubit extends Cubit<CurrentTaskState>{
     emit(CurrentTaskInUsageState(task: task));
   }
 
+  //Изменение избранности задачи
+  Future<void> toggleTaskFavor() async {
+    await _innerTaskInteractor.toggleTaskFavor(currentBranchID, currentTaskID);
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    emit(CurrentTaskInUsageState(task: task));
+  }
+
 }

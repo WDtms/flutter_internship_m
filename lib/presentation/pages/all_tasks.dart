@@ -61,9 +61,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                           if (state is TaskInUsageState) {
                             return PopupMenu(
                               theme: theme,
-                              isHidden: state.isHidden,
-                              isNewest: state.isNewest,
-                              isImportance: state.isImportant,
+                              filterParameters: state.filterParameters,
                               updateBranchesInfo: widget.updateBranchesInfo,
                             );
                           }
@@ -79,8 +77,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
                           context: context,
                           builder: (BuildContext context0) {
                             return FormDialog(
-                              createTask: (String taskName, DateTime dateToComplete, DateTime notificationTime, int importance) async {
-                                await taskCubit.createNewTask(dateToComplete, notificationTime, taskName, importance);
+                              createTask: (String taskName, DateTime dateToComplete, DateTime notificationTime, int importance, bool favor) async {
+                                await taskCubit.createNewTask(dateToComplete, notificationTime, taskName, importance, favor);
                                 widget.updateBranchesInfo();
                               },
                             );
@@ -98,12 +96,11 @@ class _AllTasksPageState extends State<AllTasksPage> {
                       }
                       else if (state is TaskInUsageState) {
                         return TaskList(
-                          isFiltred: state.isHidden,
+                          filterParameters: state.filterParameters,
                           theme: theme,
                           updateBranchesInfo: widget.updateBranchesInfo,
                           branchID: widget.branchID,
                           taskList: state.taskList,
-                          isImportance: state.isImportant,
                         );
                       }
                       taskCubit.getTasks();

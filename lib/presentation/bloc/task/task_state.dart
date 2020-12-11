@@ -16,9 +16,7 @@ class TaskLoadingState extends TaskState{
 
 class TaskInUsageState extends TaskState{
   final List<TaskCardInfo> taskList;
-  final bool isHidden;
-  final bool isNewest;
-  final bool isImportant;
+  final FilterParameters filterParameters;
 
-  TaskInUsageState({this.taskList, this.isHidden, this.isNewest, this.isImportant});
+  TaskInUsageState({this.taskList, this.filterParameters});
 }

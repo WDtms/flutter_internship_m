@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
 import 'package:flutter_internship_v2/presentation/bloc/task/task_cubit.dart';
+import 'package:flutter_internship_v2/presentation/models/filter_parameters.dart';
 import 'package:flutter_internship_v2/presentation/pages/current_task.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/animated_backgound.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,20 +12,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskList extends StatelessWidget {
 
-  final bool isFiltred;
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
   final List<TaskCardInfo> taskList;
   final String branchID;
-  final bool isImportance;
+  final FilterParameters filterParameters;
 
-  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred, this.isImportance});
+  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.filterParameters});
 
   @override
   Widget build(BuildContext context) {
     return taskList.isEmpty ?
         AnimatedBackground(
-          isFiltred: isFiltred,
+          isFiltred: filterParameters.isHidden,
         )
         : Stack (children: [
           _displayLines(context),
@@ -162,8 +162,21 @@ class TaskList extends StatelessWidget {
                   ),
                 ),
                 Builder(
+                    builder: (_){
+                      if (filterParameters.isFavor)
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: Icon(
+                            Icons.star,
+                            color: Colors.orangeAccent,
+                          ),
+                        );
+                      return SizedBox.shrink();
+                    }
+                ),
+                Builder(
                   builder: (_){
-                    if (isImportance)
+                    if (filterParameters.isImportant)
                       return Padding(
                         padding: const EdgeInsets.only(right: 16),
                         child: Container(

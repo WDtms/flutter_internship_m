@@ -21,7 +21,10 @@ class Task{
   final int importance;
   //
   //Текст задачи
-  String title;
+  final String title;
+  //
+  //Избранность задачи
+  final bool favor;
 
 
   //Необязательные поля задачи
@@ -43,7 +46,7 @@ class Task{
 
 
   //Конструктор
-  Task(this.id, this.title, this.innerTasks, this.imagesPath, this.dateOfCreation, this.importance,
+  Task(this.id, this.title, this.innerTasks, this.imagesPath, this.dateOfCreation, this.importance, this.favor,
       {this.isDone = false, this.dateToComplete, this.notificationTime, this.description = "", this.selectedImage = ""});
 
 
@@ -59,6 +62,7 @@ class Task{
       DBConstants.taskDescription: description,
       DBConstants.branchId: branchID,
       DBConstants.taskImportance: importance,
+      DBConstants.taskFavor: favor ? 1: 0,
       DBConstants.taskDateOfCreation: dateOfCreation,
       DBConstants.taskDateToComplete: dateToComplete,
       DBConstants.taskNotificationTime: notificationTime,
@@ -96,6 +100,7 @@ class Task{
       _decodeImagesFromDB(row[DBConstants.taskImages]),
       row[DBConstants.taskDateOfCreation],
       row[DBConstants.taskImportance],
+      row[DBConstants.taskFavor] == 1? true : false,
       isDone: row[DBConstants.taskIsDone] == 1 ? true : false,
       dateToComplete: row[DBConstants.taskDateToComplete],
       notificationTime: row[DBConstants.taskNotificationTime],
@@ -127,6 +132,7 @@ class Task{
     int dateToComplete,
     int notificationTime,
     int importance,
+    bool favor,
     Map<String, InnerTask> innerTasks,
     String description,
     List<String> imagesPath,
@@ -139,6 +145,7 @@ class Task{
       imagesPath ?? this.imagesPath,
       dateOfCreation ?? this.dateOfCreation,
       importance ?? this.importance,
+      favor ?? this.favor,
       isDone: isDone ?? this.isDone,
       dateToComplete: dateToComplete ?? this.dateToComplete,
       notificationTime: notificationTime ?? this.notificationTime,

@@ -97,6 +97,13 @@ class InnerTaskInteractor {
     await _innerTaskRepository.editTask(branchID, task.copyWith(isDone: !task.isDone));
   }
 
+  //Изменение избранности задачи
+  Future<void> toggleTaskFavor(String branchID, String taskID) async {
+    final Task task = await _innerTaskRepository.getTask(branchID, taskID);
+    await _innerTaskRepository.editTask(branchID, task.copyWith(favor: !task.favor));
+  }
+
+
   //Добавление картинки в галерею
   Future<void> addImage(String branchID, String taskID, imagePath) async {
     final Task task = await _innerTaskRepository.getTask(branchID, taskID);
