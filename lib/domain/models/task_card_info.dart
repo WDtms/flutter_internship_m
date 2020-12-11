@@ -6,7 +6,8 @@ class TaskCardInfo {
   final int countAll;
   final bool isDone;
   final int dateOfCreation;
+  final int importance;
 
-  TaskCardInfo(this.taskID, this.title, this.countCompleted, this.countAll, this.isDone, this.dateOfCreation);
+  TaskCardInfo(this.taskID, this.title, this.countCompleted, this.countAll, this.isDone, this.dateOfCreation, this.importance);
 
 }

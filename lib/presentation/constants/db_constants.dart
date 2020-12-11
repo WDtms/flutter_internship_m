@@ -22,6 +22,7 @@ class DBConstants{
   static const taskDescription = 'taskDescription';
   static const taskImages = 'taskImages';
   static const taskSelectedImage = 'taskSelectedImage';
+  static const taskImportance = 'taskImportance';
   //
   //Поля таблицы внутренних задач
   static const innerTaskId = 'innerTaskID';

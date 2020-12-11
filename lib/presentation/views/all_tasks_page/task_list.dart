@@ -14,10 +14,11 @@ class TaskList extends StatelessWidget {
   final bool isFiltred;
   final Map<Color, Color> theme;
   final Function() updateBranchesInfo;
-  final List <TaskCardInfo> taskList;
+  final List<TaskCardInfo> taskList;
   final String branchID;
+  final bool isImportance;
 
-  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred});
+  TaskList({this.updateBranchesInfo, this.taskList, this.branchID, this.theme, this.isFiltred, this.isImportance});
 
   @override
   Widget build(BuildContext context) {
@@ -160,11 +161,36 @@ class TaskList extends StatelessWidget {
                     ),
                   ),
                 ),
+                Builder(
+                  builder: (_){
+                    if (isImportance)
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Container(
+                          height: 16,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _importanceColor(taskList[index].importance),
+                          ),
+                        ),
+                      );
+                    return SizedBox.shrink();
+                  }
+                )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Color _importanceColor(int importance) {
+    if(importance == 0)
+      return Colors.green;
+    if(importance == 1)
+      return Colors.orange;
+    return Colors.red;
   }
 }

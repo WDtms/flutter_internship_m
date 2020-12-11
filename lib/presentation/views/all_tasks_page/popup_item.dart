@@ -6,8 +6,9 @@ class PopupItem extends StatelessWidget {
   final IconData icon;
   final bool hiddenLogic;
   final bool newestLogic;
+  final bool importanceLogic;
 
-  PopupItem({this.icon, this.title, this.hiddenLogic, this.newestLogic});
+  PopupItem({this.icon, this.title, this.hiddenLogic, this.newestLogic, this.importanceLogic});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,27 @@ class PopupItem extends StatelessWidget {
               ),
               Text(
                 'Сначала старые',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          );
+        }
+        else if (importanceLogic != null && importanceLogic){
+          return Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  icon,
+                  size: 28,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Отключить важность',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black54,

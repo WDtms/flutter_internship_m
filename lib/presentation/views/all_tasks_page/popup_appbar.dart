@@ -13,8 +13,9 @@ class PopupMenu extends StatelessWidget {
   final Function() updateBranchesInfo;
   final bool isHidden;
   final bool isNewest;
+  final bool isImportance;
 
-  PopupMenu({this.updateBranchesInfo, this.isHidden, this.theme, this.isNewest});
+  PopupMenu({this.updateBranchesInfo, this.isHidden, this.theme, this.isNewest, this.isImportance});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,8 @@ class PopupMenu extends StatelessWidget {
         if (value == 4){
           context.bloc<TaskCubit>().toggleIsNewest();
         }
+        if (value == 5)
+          context.bloc<TaskCubit>().toggleImportance();
       },
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
@@ -76,6 +79,14 @@ class PopupMenu extends StatelessWidget {
             newestLogic: isNewest,
           ),
         ),
+        PopupMenuItem(
+          value: 5,
+          child: PopupItem(
+            icon: Icons.whatshot_outlined,
+            title: 'Сначала важные',
+            importanceLogic: isImportance,
+          ),
+        )
       ],
     );
   }

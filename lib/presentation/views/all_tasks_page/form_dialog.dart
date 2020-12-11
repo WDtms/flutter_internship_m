@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/presentation/views/all_tasks_page/importance_dialog.dart';
 
 class FormDialog extends StatefulWidget {
 
-  final Function(String value, DateTime dateToComplete, DateTime notificationTime) createTask;
+  final Function(String value, DateTime dateToComplete, DateTime notificationTime, int importance) createTask;
 
   FormDialog({this.createTask});
 
@@ -18,6 +19,7 @@ class _FormDialogState extends State<FormDialog> {
   DateTime dateTimeToComplete;
   bool completeDateChosen = false;
   bool notificationTimeChosen = false;
+  int importance = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class _FormDialogState extends State<FormDialog> {
             key: const ValueKey('Task creation'),
             maxLength: 40,
             onSaved: (String value) {
-              widget.createTask(value, dateTimeToComplete, notificationTime);
+              widget.createTask(value, dateTimeToComplete, notificationTime, importance);
               },
             validator: (value){
               if(value.length > 40){
@@ -53,6 +55,17 @@ class _FormDialogState extends State<FormDialog> {
               hintText: "Введите название задачи",
               border: InputBorder.none
             )
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ImportanceDialog(
+              importance: importance,
+              changeImportance: (int value) {
+                setState(() {
+                  importance = value;
+                });
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 50, 8),
