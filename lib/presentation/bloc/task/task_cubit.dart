@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/domain/interactors/task_interactor.dart';
 import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
+import 'package:flutter_internship_v2/presentation/models/filter_parameters.dart';
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState>{
@@ -18,6 +19,9 @@ class TaskCubit extends Cubit<TaskState>{
   //
   //Флаг, сигнализирующий о том, включена ли фильтрация по важности
   bool _isImportant = false;
+  //
+  //Флаг, сигнализирующий о том, включена ли фильтрация по избранности
+  bool _isFavor = false;
 
   //Смена флага фильтрации "свежести" задач на обратное ему значение
   void toggleIsNewest() async {
@@ -37,6 +41,12 @@ class TaskCubit extends Cubit<TaskState>{
     await updateTaskList();
   }
 
+  //Смена флага избранности на обратное ему значение
+  void toggleIsFavor() async {
+    _isFavor = !_isFavor;
+    await updateTaskList();
+  }
+
   //Метод для проверки, включен ли какой-либо фильтр
   List <TaskCardInfo> _checkIfIsHidden(List<TaskCardInfo> taskList){
     if (_isHidden){
@@ -50,6 +60,9 @@ class TaskCubit extends Cubit<TaskState>{
       taskList.sort((TaskCardInfo a, TaskCardInfo b) => a.importance.compareTo(b.importance));
       taskList = List.from(taskList.reversed);
     }
+    if (_isFavor){
+      taskList.removeWhere((taskCardInfo) => !taskCardInfo.favor);
+    }
     return taskList;
   }
 
@@ -59,21 +72,27 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+      filterParameters: FilterParameters(
+        _isHidden,
+        _isNewest,
+        _isImportant,
+        _isFavor,
+      )
     ));
   }
 
   //Создание новой задачи
-  Future<void> createNewTask(DateTime dateToComplete, DateTime notificationTime, String taskName, int importance) async {
-    await _taskInteractor.createNewTask(_currentBranchID, taskName, dateToComplete, notificationTime, importance);
+  Future<void> createNewTask(DateTime dateToComplete, DateTime notificationTime, String taskName, int importance, bool favor) async {
+    await _taskInteractor.createNewTask(_currentBranchID, taskName, dateToComplete, notificationTime, importance, favor);
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
-      taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+        taskList: _checkIfIsHidden(taskList),
+        filterParameters: FilterParameters(
+          _isHidden,
+          _isNewest,
+          _isImportant,
+          _isFavor,
+        )
     ));
   }
 
@@ -83,9 +102,12 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+        filterParameters: FilterParameters(
+          _isHidden,
+          _isNewest,
+          _isImportant,
+          _isFavor,
+        )
     ));
   }
 
@@ -95,9 +117,12 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+      filterParameters: FilterParameters(
+        _isHidden,
+        _isNewest,
+        _isImportant,
+        _isFavor,
+      ),
     ));
   }
 
@@ -106,9 +131,12 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+        filterParameters: FilterParameters(
+          _isHidden,
+          _isNewest,
+          _isImportant,
+          _isFavor,
+        )
     ));
   }
 
@@ -118,9 +146,12 @@ class TaskCubit extends Cubit<TaskState>{
     final taskList = await _taskInteractor.getTaskList(_currentBranchID);
     emit(TaskInUsageState(
       taskList: _checkIfIsHidden(taskList),
-      isHidden: _isHidden,
-      isNewest: _isNewest,
-      isImportant: _isImportant,
+        filterParameters: FilterParameters(
+          _isHidden,
+          _isNewest,
+          _isImportant,
+          _isFavor,
+        )
     ));
   }
 }

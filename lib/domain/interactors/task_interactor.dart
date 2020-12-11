@@ -17,7 +17,7 @@ class TaskInteractor {
   }
 
   //Создание новой задачи и, при необходимости, создание уведомления
-  Future<void> createNewTask(String branchID, String taskName, DateTime dateToComplete, DateTime notificationTime, int importance) async {
+  Future<void> createNewTask(String branchID, String taskName, DateTime dateToComplete, DateTime notificationTime, int importance, bool favor) async {
     Task task = Task(
       Uuid().v4(),
       taskName,
@@ -25,6 +25,7 @@ class TaskInteractor {
       [],
       DateTime.now().millisecondsSinceEpoch,
       importance,
+      favor,
       dateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
       notificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
     );
@@ -77,6 +78,7 @@ class TaskInteractor {
         taskList.values.elementAt(i).isDone,
         taskList.values.elementAt(i).dateOfCreation,
         taskList.values.elementAt(i).importance,
+          taskList.values.elementAt(i).favor
       ));
     }
     return allInfo;

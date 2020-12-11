@@ -3,7 +3,8 @@ import 'package:flutter_internship_v2/presentation/views/all_tasks_page/importan
 
 class FormDialog extends StatefulWidget {
 
-  final Function(String value, DateTime dateToComplete, DateTime notificationTime, int importance) createTask;
+  final Function(String value, DateTime dateToComplete,
+      DateTime notificationTime, int importance, bool favor) createTask;
 
   FormDialog({this.createTask});
 
@@ -17,9 +18,19 @@ class _FormDialogState extends State<FormDialog> {
 
   DateTime notificationTime;
   DateTime dateTimeToComplete;
-  bool completeDateChosen = false;
-  bool notificationTimeChosen = false;
-  int importance = 1;
+  bool completeDateChosen;
+  bool notificationTimeChosen;
+  int importance;
+  bool favor;
+
+  @override
+  void initState() {
+    importance = 1;
+    favor = false;
+    completeDateChosen = false;
+    notificationTimeChosen = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +41,59 @@ class _FormDialogState extends State<FormDialog> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              'Создать задачу',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.values[4],
-                color: Color(0xff424242),
-              ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Создать задачу',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.values[4],
+                      color: Color(0xff424242),
+                    ),
+                  ),
+                  Theme(
+                    data: ThemeData(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          favor = !favor;
+                        });
+                      },
+                      child: Builder(
+                        builder: (_) {
+                          if (favor){
+                            return Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.star,
+                                color: Colors.orangeAccent,
+                                size: 28,
+                              ),
+                            );
+                          }
+                          return Icon(
+                            Icons.star_border,
+                            color: Colors.black26,
+                            size: 28,
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                  ]
             ),
           ),
           TextFormField(
             key: const ValueKey('Task creation'),
             maxLength: 40,
             onSaved: (String value) {
-              widget.createTask(value, dateTimeToComplete, notificationTime, importance);
+              widget.createTask(value, dateTimeToComplete, notificationTime, importance, favor);
               },
             validator: (value){
               if(value.length > 40){

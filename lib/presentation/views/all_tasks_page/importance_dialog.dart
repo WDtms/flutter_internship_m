@@ -34,6 +34,7 @@ class _ImportanceDialogState extends State<ImportanceDialog> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           color: _displaySelectedColor(indexButton),
+            border: Border.all(color: Colors.black12)
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),

@@ -7,8 +7,9 @@ class PopupItem extends StatelessWidget {
   final bool hiddenLogic;
   final bool newestLogic;
   final bool importanceLogic;
+  final bool favorLogic;
 
-  PopupItem({this.icon, this.title, this.hiddenLogic, this.newestLogic, this.importanceLogic});
+  PopupItem({this.icon, this.title, this.hiddenLogic, this.newestLogic, this.importanceLogic, this.favorLogic});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,27 @@ class PopupItem extends StatelessWidget {
               ),
               Text(
                 'Отключить важность',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          );
+        }
+        else if (favorLogic != null && favorLogic){
+          return Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.star,
+                  size: 28,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Показать все',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black54,

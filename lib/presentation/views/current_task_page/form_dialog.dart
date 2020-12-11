@@ -49,7 +49,7 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
             children: <Widget>[
               SimpleDialogOption(
                 child: Text(
-                  'Отмена',
+                  'ОТМЕНА',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500
@@ -61,7 +61,7 @@ class _FormDialogState extends State<FormDialogCurrentTask> {
               ),
               SimpleDialogOption(
                 child: Text(
-                  'Выбрать',
+                  'ВЫБРАТЬ',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500

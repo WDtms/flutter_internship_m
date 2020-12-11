@@ -86,6 +86,8 @@ class BranchInteractor {
   }
 
 
+
+
   //Высчитывание информации по одной ветке
   Map<int, int> _calculateTaskInfo(Map<String, Task> taskList){
     int countCompleted = 0;

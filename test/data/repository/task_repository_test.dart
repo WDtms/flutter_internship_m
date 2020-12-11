@@ -28,11 +28,11 @@ void main() {
     final _taskIDList = ['id1', 'id2'];
 
     final _taskList = {
-      'id1' : Task('id1', 'title1', {}, [], DateTime.now().millisecondsSinceEpoch,),
-      'id2' : Task('id2', 'title2', {}, [], DateTime.now().millisecondsSinceEpoch,),
+      'id1' : Task('id1', 'title1', {}, [], DateTime.now().millisecondsSinceEpoch, 1, false),
+      'id2' : Task('id2', 'title2', {}, [], DateTime.now().millisecondsSinceEpoch, 1, false),
     };
 
-    final _task = Task('id3', 'title3', {}, [], DateTime.now().millisecondsSinceEpoch,);
+    final _task = Task('id3', 'title3', {}, [], DateTime.now().millisecondsSinceEpoch, 1, false);
 
     test('Получение списка задач', () {
       _taskRepository.getTaskList(_branchID);

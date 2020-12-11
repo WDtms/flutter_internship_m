@@ -2,6 +2,7 @@ import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
 import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
+import 'package:flutter_internship_v2/presentation/models/filter_parameters.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/task_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,9 +17,10 @@ void main() {
     final stepTextTask1 = '0 из 2';
     final stepTextTask2 = '1 из 2';
 
-    final task1 = TaskCardInfo(taskID1, 'title1', 0, 2, false, 1);
-    final task2 = TaskCardInfo(taskID2, 'title2', 1, 2, true, 1);
+    final task1 = TaskCardInfo(taskID1, 'title1', 0, 2, false, 1, 1, false);
+    final task2 = TaskCardInfo(taskID2, 'title2', 1, 2, true, 1, 1, false);
 
+    FilterParameters filterParameters = FilterParameters(false, false, false, false);
 
     final taskList = [
       task1,
@@ -30,7 +32,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: TaskList(
-              isFiltred: false,
+              filterParameters: filterParameters,
               theme: themes[0],
               taskList: taskList,
               branchID: branchID,
@@ -50,7 +52,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: TaskList(
-              isFiltred: false,
+              filterParameters: filterParameters,
               theme: themes[0],
               taskList: taskList,
               branchID: branchID,
