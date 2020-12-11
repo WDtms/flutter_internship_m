@@ -1,31 +1,14 @@
 import 'package:flutter/material.dart';
 
-class FavorButton extends StatefulWidget {
+class FavorButton extends StatelessWidget {
 
   final bool isFavor;
   final Function() toggleFavor;
 
   FavorButton({this.isFavor, this.toggleFavor});
 
-  @override
-  _FavorButtonState createState() => _FavorButtonState();
-}
-
-class _FavorButtonState extends State<FavorButton> {
-
-  bool _isFavor;
-
-  @override
-  void initState() {
-    _isFavor = widget.isFavor;
-    super.initState();
-  }
-
   void setFavor() {
-    setState(() {
-      _isFavor = !_isFavor;
-      widget.toggleFavor();
-    });
+    toggleFavor();
   }
 
   @override
@@ -36,7 +19,7 @@ class _FavorButtonState extends State<FavorButton> {
       },
       child: Builder(
         builder: (_) {
-          if (_isFavor)
+          if (isFavor)
             return Icon(
               Icons.star,
               color: Colors.orangeAccent,
