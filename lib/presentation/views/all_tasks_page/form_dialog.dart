@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internship_v2/presentation/views/all_tasks_page/add_date_to_complete.dart';
-import 'package:flutter_internship_v2/presentation/views/all_tasks_page/add_notification.dart';
+import 'package:flutter_internship_v2/presentation/views/all_tasks_page/complete_date_selector.dart';
+import 'package:flutter_internship_v2/presentation/views/all_tasks_page/notification_selector.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/importance_dialog.dart';
-import 'package:flutter_internship_v2/presentation/views/all_tasks_page/set_favor_task.dart';
+import 'package:flutter_internship_v2/presentation/views/all_tasks_page/favor_selector.dart';
 
 class FormDialog extends StatefulWidget {
 
@@ -36,7 +36,7 @@ class _FormDialogState extends State<FormDialog> {
       child: SimpleDialog(
         contentPadding: EdgeInsets.all(12),
         children: <Widget>[
-          SetFavorTask(
+          TaskFavorSelector(
             setFavor: (bool isFavor) {
               favor = isFavor;
             },
@@ -63,12 +63,12 @@ class _FormDialogState extends State<FormDialog> {
               importance = value;
             },
           ),
-          AddNotification(
+          NotificationDateSelector(
             setNotification: (DateTime date) {
               notificationTime = date;
             },
           ),
-          AddDateToComplete(
+          DateToCompleteSelector(
             setDateToComplete: (DateTime date) {
               dateTimeToComplete = date;
             },

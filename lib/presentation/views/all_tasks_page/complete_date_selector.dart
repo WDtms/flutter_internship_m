@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-class AddNotification extends StatefulWidget {
+class DateToCompleteSelector extends StatefulWidget {
 
-  final Function(DateTime notificationTime) setNotification;
+  final Function(DateTime dateToComplete) setDateToComplete;
 
-  AddNotification({this.setNotification});
+  DateToCompleteSelector({this.setDateToComplete});
 
   @override
-  _AddNotificationState createState() => _AddNotificationState();
+  _DateToCompleteSelectorState createState() => _DateToCompleteSelectorState();
 }
 
-class _AddNotificationState extends State<AddNotification> {
+class _DateToCompleteSelectorState extends State<DateToCompleteSelector> {
 
-  DateTime notificationTime;
-  bool notificationTimeChosen;
+  bool completeDateChosen;
+  DateTime dateTimeToComplete;
 
   @override
   void initState() {
-    notificationTimeChosen = false;
+    completeDateChosen = false;
     super.initState();
   }
 
@@ -26,25 +26,22 @@ class _AddNotificationState extends State<AddNotification> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 50, 8),
       child: InkWell(
-        onTap: () async {
-          DateTime date = await showDatePicker(
+        onTap: () {
+          showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime.now(),
             lastDate: DateTime(2022),
-          );
-          TimeOfDay time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-          );
-          if (date != null && time != null) {
-            notificationTime = DateTime(
-                date.year, date.month, date.day, time.hour, time.minute);
-            widget.setNotification(notificationTime);
-            setState(() {
-              notificationTimeChosen = true;
-            });
-          }
+          ).then((date) {
+            if (date != null) {
+              dateTimeToComplete =
+                  DateTime(date.year, date.month, date.day, 23, 59, 59);
+              widget.setDateToComplete(dateTimeToComplete);
+              setState(() {
+                completeDateChosen = true;
+              });
+            }
+          });
         },
         child: Container(
           decoration: BoxDecoration(
@@ -56,7 +53,7 @@ class _AddNotificationState extends State<AddNotification> {
             child: Row(
               children: [
                 Icon(
-                  Icons.notifications_active_outlined,
+                  Icons.calendar_today_outlined,
                   color: Colors.black54,
                   size: 26,
                 ),
@@ -64,13 +61,11 @@ class _AddNotificationState extends State<AddNotification> {
                   child: Center(
                     child: Builder(
                         builder: (context) {
-                          if (notificationTimeChosen){
+                          if (completeDateChosen){
                             return Text(
-                              '${notificationTime.year}.'
-                                  '${_decideHowToDisplay(notificationTime.month)}'
-                                  '.${_decideHowToDisplay(notificationTime.day)}'
-                                  ' в ${_decideHowToDisplay(notificationTime.hour)}'
-                                  ':${_decideHowToDisplay(notificationTime.minute)}',
+                              '${dateTimeToComplete.year}.'
+                                  '${_decideHowToDisplay(dateTimeToComplete.month)}.'
+                                  '${_decideHowToDisplay(dateTimeToComplete.day)}',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 16,
@@ -79,7 +74,7 @@ class _AddNotificationState extends State<AddNotification> {
                             );
                           }
                           return Text(
-                            'Напомнить',
+                            'Дата выполнения',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 16,

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SetFavorTask extends StatefulWidget {
+class TaskFavorSelector extends StatefulWidget {
 
   final Function(bool isFavor) setFavor;
 
-  SetFavorTask({this.setFavor});
+  TaskFavorSelector({this.setFavor});
 
   @override
-  _SetFavorTaskState createState() => _SetFavorTaskState();
+  _TaskFavorSelectorState createState() => _TaskFavorSelectorState();
 }
 
-class _SetFavorTaskState extends State<SetFavorTask> {
+class _TaskFavorSelectorState extends State<TaskFavorSelector> {
 
   bool favor;
 

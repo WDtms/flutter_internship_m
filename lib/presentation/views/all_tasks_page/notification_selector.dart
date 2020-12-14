@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-class AddDateToComplete extends StatefulWidget {
+class NotificationDateSelector extends StatefulWidget {
 
-  final Function(DateTime dateToComplete) setDateToComplete;
+  final Function(DateTime notificationTime) setNotification;
 
-  AddDateToComplete({this.setDateToComplete});
+  NotificationDateSelector({this.setNotification});
 
   @override
-  _AddDateToCompleteState createState() => _AddDateToCompleteState();
+  _NotificationDateSelectorState createState() => _NotificationDateSelectorState();
 }
 
-class _AddDateToCompleteState extends State<AddDateToComplete> {
+class _NotificationDateSelectorState extends State<NotificationDateSelector> {
 
-  bool completeDateChosen;
-  DateTime dateTimeToComplete;
+  DateTime notificationTime;
+  bool notificationTimeChosen;
 
   @override
   void initState() {
-    completeDateChosen = false;
+    notificationTimeChosen = false;
     super.initState();
   }
 
@@ -26,22 +26,25 @@ class _AddDateToCompleteState extends State<AddDateToComplete> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 50, 8),
       child: InkWell(
-        onTap: () {
-          showDatePicker(
+        onTap: () async {
+          DateTime date = await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime.now(),
             lastDate: DateTime(2022),
-          ).then((date) {
-            if (date != null) {
-              dateTimeToComplete =
-                  DateTime(date.year, date.month, date.day, 23, 59, 59);
-              widget.setDateToComplete(dateTimeToComplete);
-              setState(() {
-                completeDateChosen = true;
-              });
-            }
-          });
+          );
+          TimeOfDay time = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.now(),
+          );
+          if (date != null && time != null) {
+            notificationTime = DateTime(
+                date.year, date.month, date.day, time.hour, time.minute);
+            widget.setNotification(notificationTime);
+            setState(() {
+              notificationTimeChosen = true;
+            });
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -53,7 +56,7 @@ class _AddDateToCompleteState extends State<AddDateToComplete> {
             child: Row(
               children: [
                 Icon(
-                  Icons.calendar_today_outlined,
+                  Icons.notifications_active_outlined,
                   color: Colors.black54,
                   size: 26,
                 ),
@@ -61,11 +64,13 @@ class _AddDateToCompleteState extends State<AddDateToComplete> {
                   child: Center(
                     child: Builder(
                         builder: (context) {
-                          if (completeDateChosen){
+                          if (notificationTimeChosen){
                             return Text(
-                              '${dateTimeToComplete.year}.'
-                                  '${_decideHowToDisplay(dateTimeToComplete.month)}.'
-                                  '${_decideHowToDisplay(dateTimeToComplete.day)}',
+                              '${notificationTime.year}.'
+                                  '${_decideHowToDisplay(notificationTime.month)}'
+                                  '.${_decideHowToDisplay(notificationTime.day)}'
+                                  ' в ${_decideHowToDisplay(notificationTime.hour)}'
+                                  ':${_decideHowToDisplay(notificationTime.minute)}',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 16,
@@ -74,7 +79,7 @@ class _AddDateToCompleteState extends State<AddDateToComplete> {
                             );
                           }
                           return Text(
-                            'Дата выполнения',
+                            'Напомнить',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 16,
