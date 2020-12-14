@@ -31,6 +31,7 @@ class _DescriptionState extends State<Description> {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "Заметки по задаче...",
+            labelText: "Заметки по задаче...",
           ),
           onFieldSubmitted: (String value) {
             widget.onSubmitDescription(value);

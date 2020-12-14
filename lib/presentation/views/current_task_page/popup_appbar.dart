@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/presentation/bloc/current_task/current_task_cubit.dart';
 import 'form_dialog.dart';
 
@@ -10,10 +11,10 @@ class PopupMenuCurrentTask extends StatelessWidget {
 
   final Function() updateBranchesInfo;
   final Function() updateTaskList;
-  final String taskName;
+  final Task task;
   final double opacity;
 
-  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.taskName, this.opacity});
+  PopupMenuCurrentTask({this.updateTaskList, this.updateBranchesInfo, this.task, this.opacity});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class PopupMenuCurrentTask extends StatelessWidget {
             context: context,
             builder: (context1) {
               return FormDialogCurrentTask(
-                taskName: taskName,
+                taskName: task.title,
                 editTaskName: (String newTitle) async {
                   await context.bloc<CurrentTaskCubit>().editTaskName(newTitle);
                   updateTaskList();
@@ -45,7 +46,7 @@ class PopupMenuCurrentTask extends StatelessWidget {
               );
             }
           );
-        } else {
+        } else if (value == 2) {
           await showDialog(
             context: context,
             builder: (context1) {
@@ -95,6 +96,9 @@ class PopupMenuCurrentTask extends StatelessWidget {
               );
             }
           );
+        } else {
+          final RenderBox box = context.findRenderObject();
+          context.bloc<CurrentTaskCubit>().shareFile(box);
         }
       },
       color: Colors.white,
@@ -142,8 +146,31 @@ class PopupMenuCurrentTask extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.share,
+                  size: 32,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Поделиться',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
         )
       ],
     );
   }
+
 }

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class ImportanceDialog extends StatefulWidget {
 
-  final int importance;
-  final Function(int value) changeImportance;
+  final Function(int value) setImportance;
 
-  ImportanceDialog({this.importance, this.changeImportance});
+  ImportanceDialog({this.setImportance});
 
   @override
   _ImportanceDialogState createState() => _ImportanceDialogState();
@@ -13,22 +12,35 @@ class ImportanceDialog extends StatefulWidget {
 
 class _ImportanceDialogState extends State<ImportanceDialog> {
 
+  int importance;
+
+  @override
+  void initState() {
+    importance = 1;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        for (int i = 0; i<3; i++)
-          _displayImportanceButton(i),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          for (int i = 0; i<3; i++)
+            _displayImportanceButton(i),
+        ],
+      ),
     );
   }
 
   Widget _displayImportanceButton(int indexButton) {
     return InkWell(
       onTap: () {
-        widget.changeImportance(indexButton);
+        setState(() {
+          importance = indexButton;
+        });
+        widget.setImportance(importance);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -71,7 +83,7 @@ class _ImportanceDialogState extends State<ImportanceDialog> {
   }
 
   Color _displaySelectedColor(int indexButton) {
-    if (indexButton == widget.importance){
+    if (indexButton == importance){
       if (indexButton == 0)
         return Colors.green;
       if (indexButton == 1)
@@ -83,7 +95,7 @@ class _ImportanceDialogState extends State<ImportanceDialog> {
   }
 
   Color _textColor(int indexButton) {
-    if (indexButton == widget.importance)
+    if (indexButton == importance)
       return Colors.white;
     return Colors.black87;
   }

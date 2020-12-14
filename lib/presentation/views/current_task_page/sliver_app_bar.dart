@@ -140,7 +140,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
             PopupMenuCurrentTask(
               updateBranchesInfo: updateBranchesInfo,
               updateTaskList: updateTaskList,
-              taskName: task.title,
+              task: task,
               opacity: task.selectedImage != "" ? _calculateFabScale(shrinkOffset)
               : 0,
             ),

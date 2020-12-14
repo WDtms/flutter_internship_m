@@ -1,7 +1,9 @@
 
 
 
-import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
+
+
+import 'package:flutter_internship_v2/data/constants/db_constants.dart';
 
 class InnerTask{
 

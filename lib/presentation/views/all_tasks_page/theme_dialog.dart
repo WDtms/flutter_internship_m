@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
+import 'package:flutter_internship_v2/data/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/selected_circle.dart';
 
 class ThemeDialog extends StatefulWidget {

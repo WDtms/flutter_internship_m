@@ -1,9 +1,9 @@
 
 
+import 'package:flutter_internship_v2/data/constants/db_constants.dart';
 import 'package:flutter_internship_v2/data/models/branch.dart';
 import 'package:flutter_internship_v2/data/models/inner_task.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
-import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
 import 'db_wrapper.dart';
 import 'package:sqflite/sqflite.dart';
 
