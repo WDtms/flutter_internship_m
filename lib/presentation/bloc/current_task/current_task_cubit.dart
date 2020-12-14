@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
 import 'package:flutter_internship_v2/domain/interactors/innertask_interactor.dart';
+import 'package:share/share.dart';
 
 
 part 'current_task_state.dart';
@@ -126,6 +127,41 @@ class CurrentTaskCubit extends Cubit<CurrentTaskState>{
     await _innerTaskInteractor.toggleTaskFavor(currentBranchID, currentTaskID);
     final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
     emit(CurrentTaskInUsageState(task: task));
+  }
+
+  //Поделиться задачей
+  Future<void> shareFile(RenderBox box) async {
+    final task = await _innerTaskInteractor.getTask(currentBranchID, currentTaskID);
+    String tasksToComplete = "";
+
+    if (task.innerTasks.isNotEmpty){
+      for (int i = 0; i<task.innerTasks.length; i++){
+        if (!task.innerTasks.values.elementAt(i).isDone)
+          tasksToComplete += "${task.innerTasks.values.elementAt(i).title}\n";
+      }
+    }
+
+    if (task.selectedImage != null && task.selectedImage != "")
+      Share.shareFiles(
+        [task.selectedImage],
+        text: tasksToComplete == "" ?
+        '${task.title}\n'
+            'Все задачи выполнены!'
+            : '${task.title}\n'
+            'Осталось сделать: \n'
+            '$tasksToComplete',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+      );
+    else
+      Share.share(
+        tasksToComplete == "" ?
+        '${task.title}\n'
+            'Все задачи выполнены!'
+            : '${task.title}\n'
+            'Осталось сделать: \n'
+            '$tasksToComplete',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+      );
   }
 
 }
