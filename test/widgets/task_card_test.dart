@@ -1,7 +1,8 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/domain/models/task_card_info.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
+
 import 'package:flutter_internship_v2/presentation/models/filter_parameters.dart';
 import 'package:flutter_internship_v2/presentation/views/all_tasks_page/task_list.dart';
 import 'package:flutter_test/flutter_test.dart';

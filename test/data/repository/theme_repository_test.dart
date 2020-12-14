@@ -1,8 +1,8 @@
+import 'package:flutter_internship_v2/data/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/data/database/db_wrappers/branch_db_wrapper.dart';
 import 'package:flutter_internship_v2/data/models/branch.dart';
 import 'package:flutter_internship_v2/data/repository/theme_repository.dart';
 import 'package:flutter_internship_v2/data/storage/theme_wrapper.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

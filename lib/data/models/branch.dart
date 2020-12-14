@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/constants/db_constants.dart';
+import 'package:flutter_internship_v2/data/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/data/models/task.dart';
-import 'package:flutter_internship_v2/presentation/constants/db_constants.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
 
 
 class Branch{

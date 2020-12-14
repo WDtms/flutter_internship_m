@@ -1,10 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/constants/my_themes_colors.dart';
 import 'package:flutter_internship_v2/domain/interactors/branch_interactor.dart';
 import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
 import 'package:flutter_internship_v2/domain/models/one_branch_info.dart';
 import 'package:flutter_internship_v2/presentation/bloc/branch/branch_cubit.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_themes_colors.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

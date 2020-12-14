@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internship_v2/data/constants/my_images.dart';
 import 'package:flutter_internship_v2/domain/models/all_branch_info.dart';
-import 'package:flutter_internship_v2/presentation/constants/my_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'horizontal_progress_bar.dart';
 
