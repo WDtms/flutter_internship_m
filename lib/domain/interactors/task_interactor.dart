@@ -24,8 +24,8 @@ class TaskInteractor {
       {},
       [],
       DateTime.now().millisecondsSinceEpoch,
-      importance,
-      favor,
+      importance ?? 1,
+      favor ?? false,
       dateToComplete: dateToComplete == null ? 0 : dateToComplete.millisecondsSinceEpoch,
       notificationTime: notificationTime == null ? 0 : notificationTime.millisecondsSinceEpoch,
     );
