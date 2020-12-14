@@ -22,7 +22,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
     super.initState();
     _progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 220));
     _animation = Tween<double>(begin: 0.01, end: 1).animate(_progressController);
-    _progressController.forward();
+    _progressController.forward().orCancel;
   }
 
   @override
@@ -90,5 +90,11 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _progressController.dispose();
+    super.dispose();
   }
 }
