@@ -54,6 +54,7 @@ void main(){
 
     test('Удаление внутренней задачи', () async {
       when(_innerTaskWrapper.getTask(_branchID, _taskID)).thenAnswer((_) => _task);
+      when(_innerTaskWrapper.getInnerTask(any, any, any)).thenReturn(_innerTask);
       await _innerTaskRepository.deleteInnerTask(_branchID, _taskID, _innerTaskID);
       verify(_innerTaskWrapper.deleteInnerTask(_branchID, _taskID, _innerTaskID));
       verify(_innerTaskDBStorage.deleteObject(_innerTaskID));
